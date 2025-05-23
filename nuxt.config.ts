@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
-  modules: ["@nuxt/fonts", "@nuxt/eslint"],
+  modules: ["@nuxt/fonts", "@nuxt/eslint", "@nuxt/ui"],
   eslint: {
     config: {
       standalone: false,
@@ -16,4 +16,7 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
   css: ["~/assets/css/main.css"],
+  ui: {
+    colorMode: false,
+  },
 });
