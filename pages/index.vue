@@ -27,7 +27,10 @@ const registerForm = ref<AppFormItems[]>([
     <section
       class="w-full max-w-[500px] mx-auto mt-4"
     >
-      <AppForm v-model:items="registerForm" submit-label="Sign up" />
+      <AppForm
+        v-model:items="registerForm"
+        submit-label="Sign up"
+      />
     </section>
   </section>
 </template>
