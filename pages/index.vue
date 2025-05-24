@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {
+  AppButton,
+} from "#components";
+
 const registerForm = reactive({
   name: "",
   email: "",
@@ -85,14 +89,13 @@ function checkStrength(str: string) {
             :type="showPassword ? 'text' : 'password'"
           >
             <template #trailing>
-              <UButton
+              <AppButton
                 variant="link"
                 size="lg"
-                :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                :icon="showPassword ? 'i-tabler-eye-closed' : 'i-tabler-eye'"
                 :aria-label="showPassword ? 'Hide password' : 'Show password'"
                 :aria-pressed="showPassword"
                 aria-controls="password"
-                class="cursor-pointer text-black hover:text-black"
                 @click="showPassword = !showPassword"
               />
             </template>

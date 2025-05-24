@@ -4,6 +4,9 @@ const props = defineProps({
   label: String,
   theme: String,
   to: String,
+  variant: String,
+  icon: String,
+  size: String,
 });
 </script>
 
@@ -16,6 +19,9 @@ const props = defineProps({
     ]"
     :label="label"
     :to="to"
+    :variant="variant"
+    :icon="icon"
+    :size="size"
   >
     <slot />
   </UButton>
