@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   AppButton,
+  AppInput,
 } from "#components";
 
 const registerForm = reactive({
@@ -69,7 +70,7 @@ function checkStrength(str: string) {
     >
       <UForm :state="registerForm">
         <UFormField label="Name" name="name">
-          <UInput
+          <AppInput
             v-model="registerForm.name"
             placeholder="Enter your name"
             type="text"
