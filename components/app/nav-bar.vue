@@ -6,7 +6,7 @@ const authLinks = [
   },
   {
     label: "Log in",
-    to: "/login",
+    to: "/log-in",
     theme: "secondary",
   },
 ];
@@ -19,7 +19,12 @@ const authLinks = [
       Ventiii
     </h1>
     <nav class="flex gap-2 items-center">
-      <AppButton v-for="link in authLinks" :key="link.label" :label="link.label" :to="link.to" :theme="link?.theme" />
+      <AppButton
+        v-for="link in authLinks"
+        :key="link.label" :label="link.label"
+        :to="link.to"
+        :theme="link?.theme"
+      />
     </nav>
   </section>
 </template>
