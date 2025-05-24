@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   AppButton,
+  AppFormField,
   AppInput,
 } from "#components";
 
@@ -69,13 +70,13 @@ function checkStrength(str: string) {
       class="w-full max-w-[500px] mx-auto mt-4"
     >
       <UForm :state="registerForm">
-        <UFormField label="Name" name="name">
+        <AppFormField label="Name" name="name">
           <AppInput
             v-model="registerForm.name"
             placeholder="Enter your name"
             type="text"
           />
-        </UFormField>
+        </AppFormField>
         <UFormField label="Email" name="email">
           <UInput
             v-model="registerForm.email"
