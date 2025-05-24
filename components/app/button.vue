@@ -3,6 +3,7 @@ const props = defineProps({
   class: String,
   label: String,
   theme: String,
+  to: String,
 });
 </script>
 
@@ -14,6 +15,7 @@ const props = defineProps({
       theme === 'secondary' ? 'bg-slate-200 text-black hover:bg-slate-100' : '',
     ]"
     :label="label"
+    :to="to"
   >
     <slot />
   </UButton>
