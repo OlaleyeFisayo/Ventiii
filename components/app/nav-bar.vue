@@ -4,5 +4,9 @@
       <img src="../../assets/images/logo.png" alt="logo" class="w-5 h-5">
       Ventiii
     </h1>
+    <nav class="flex gap-2 items-center">
+      <AppButton label="Sign up" />
+      <AppButton label="Log in" theme="secondary" />
+    </nav>
   </section>
 </template>
