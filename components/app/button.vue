@@ -7,6 +7,7 @@ const props = defineProps({
   variant: String,
   icon: String,
   size: String,
+  disabled: Boolean,
 });
 </script>
 
@@ -22,6 +23,7 @@ const props = defineProps({
     :variant="variant"
     :icon="icon"
     :size="size"
+    :disabled="disabled"
   >
     <slot />
   </UButton>
