@@ -1,3 +1,3 @@
 <template>
-  <AppNavBar />
+  <h1>Sign up</h1>
 </template>
