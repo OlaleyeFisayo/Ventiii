@@ -4,3 +4,7 @@
 :root {
   --ui-radius: 0.125rem;
 }
+
+html {
+  font-family: "Space Grotesk", sans-serif;
+}
