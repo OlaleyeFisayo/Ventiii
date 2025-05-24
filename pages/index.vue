@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {
+  NuxtLink,
+} from "#components";
+
 const registerForm = ref<AppFormItems[]>([
   {
     tag: "name",
@@ -31,6 +35,16 @@ const registerForm = ref<AppFormItems[]>([
         v-model:items="registerForm"
         submit-label="Sign up"
       />
+      <AppSeperator label="or" class="my-4" />
+      <AppButton
+        label="Continue with Google"
+        class="w-full flex items-center justify-center p-3 mb-4"
+        theme="secondary"
+        trailing-icon="i-tabler-brand-google-filled"
+      />
+      <NuxtLink to="/log-in" class="underline flex items-center justify-center text-purple-900">
+        Already have an account? Log in
+      </NuxtLink>
     </section>
   </section>
 </template>

@@ -8,6 +8,7 @@ const props = defineProps({
   icon: String,
   size: String,
   disabled: Boolean,
+  trailingIcon: String,
 });
 </script>
 
@@ -24,6 +25,7 @@ const props = defineProps({
     :icon="icon"
     :size="size"
     :disabled="disabled"
+    :trailing-icon="trailingIcon"
   >
     <slot />
   </UButton>
