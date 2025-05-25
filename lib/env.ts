@@ -1,3 +1,4 @@
+// This checks if the valid env file is passed
 import {
   z,
 } from "zod";
