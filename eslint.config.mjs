@@ -16,6 +16,7 @@ export default withNuxt(
     },
   }, {
     rules: {
+      "ts/no-redeclare": "off",
       "ts/consistent-type-definitions": ["error", "type"],
       "object-curly-newline": ["error", "always"],
       "no-console": ["warn"],
