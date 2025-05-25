@@ -10,27 +10,16 @@ const showPassword = ref(false);
 
 // State for Uform
 const state = computed(() =>
-  items.value?.reduce((acc: any, item: AppFormItems) => {
-    acc[item.tag] = item.value;
-    return acc;
-  }, {
-  } as Record<string, any>),
+  Object.fromEntries(items.value!.map((i: AppFormItems) => [i.tag, i.value])),
 );
 
 // Secure password check
-const strength = computed(() => useCheckPasswardStrength(state.value?.password));
+const strength = computed(() => useCheckPasswordStrength(state.value?.password));
 const score = computed(() => strength.value.filter((req: any) => req.met).length);
-const color = computed(() => {
-  if (score.value === 0)
-    return "neutral";
-  if (score.value <= 1)
-    return "error";
-  if (score.value <= 2)
-    return "warning";
-  if (score.value === 3)
-    return "warning";
-  return "success";
+const color = computed<ComponentColor>(() => {
+  return ["neutral", "error", "warning", "warning", "success"][score.value] ?? "neutral";
 });
+
 const text = computed(() => {
   if (score.value === 0)
     return "Enter a password";
@@ -45,16 +34,15 @@ const text = computed(() => {
 const isAllFilled = computed(() => useAllFilled(state.value));
 
 // check if submitting is disabled
-const isSubmitDisabled = computed(() => {
-  if (!isAllFilled.value)
-    return true;
+const hasSecurePassword = computed(() =>
+  items.value?.some((i: AppFormItems) => i.tag === "password" && i.securePassword),
+);
 
-  const pwItem = items.value?.find((i: AppFormItems) => i.tag === "password" && i.securePassword);
-  if (pwItem && score.value < 4)
-    return true;
+const isPasswordValid = computed(() => score.value >= 4);
 
-  return false;
-});
+const isSubmitDisabled = computed(() =>
+  !isAllFilled.value || (hasSecurePassword.value && !isPasswordValid.value),
+);
 </script>
 
 <template>
@@ -132,6 +120,7 @@ const isSubmitDisabled = computed(() => {
       :label="submitLabel ?? 'Submit'"
       class="w-full flex items-center justify-center mt-6 p-3"
       :disabled="isSubmitDisabled"
+      type="submit"
     />
   </UForm>
 </template>

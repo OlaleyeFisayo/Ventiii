@@ -1,4 +1,4 @@
-export function useCheckPasswardStrength(str: string) {
+export function useCheckPasswordStrength(str: string) {
   const requirements = [
     {
       regex: /.{8,}/,

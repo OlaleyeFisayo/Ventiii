@@ -1,14 +1,23 @@
 <script setup lang="ts">
+type ButtonType = "button" | "submit" | undefined;
+
 const props = defineProps({
   class: String,
   label: String,
   theme: String,
   to: String,
-  variant: String,
+  variant: {
+    type: String as PropType<ComponentVariant>,
+  },
   icon: String,
-  size: String,
+  size: {
+    type: String as PropType<ComponentSize>,
+  },
   disabled: Boolean,
   trailingIcon: String,
+  type: {
+    type: String as PropType<ButtonType>,
+  },
 });
 </script>
 
@@ -26,6 +35,7 @@ const props = defineProps({
     :size="size"
     :disabled="disabled"
     :trailing-icon="trailingIcon"
+    :type="type"
   >
     <slot />
   </UButton>
