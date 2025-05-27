@@ -6,6 +6,7 @@ import {
 } from "better-auth/adapters/drizzle";
 
 import db from "./db/index";
+import env from "./env";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -13,5 +14,14 @@ export const auth = betterAuth({
   }),
   advanced: {
     generateId: false,
+  },
+  emailAndPassword: {
+    enabled: true,
+  },
+  socialProviders: {
+    google: {
+      clientId: env.GOOGLE_ClIENT_ID,
+      clientSecret: env.GOOGLE_ClIENT_SECRET,
+    },
   },
 });
