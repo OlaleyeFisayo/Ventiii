@@ -21,4 +21,15 @@ export default defineNuxtConfig({
   ui: {
     colorMode: false,
   },
+  app: {
+    head: {
+      title: "Ventiii",
+      link: [
+        {
+          rel: "icon",
+          href: "logo.png",
+        },
+      ],
+    },
+  },
 });
