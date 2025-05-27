@@ -1,14 +1,5 @@
 <script lang="ts" setup>
-import {
-  authClient,
-} from "~/lib/auth-client";
-
-async function signIn() {
-  await authClient.signIn.social({
-    provider: "google",
-    callbackURL: "/dashboard",
-  });
-}
+const authStore = useAuthStore();
 </script>
 
 <template>
@@ -17,6 +8,7 @@ async function signIn() {
     class="w-full flex items-center justify-center p-3 mb-4"
     theme="secondary"
     trailing-icon="i-tabler-brand-google-filled"
-    @click="signIn"
+    :loading="authStore.loading"
+    @click="authStore.googleSignIn"
   />
 </template>

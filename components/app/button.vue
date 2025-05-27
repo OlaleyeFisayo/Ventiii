@@ -18,6 +18,7 @@ const props = defineProps({
   type: {
     type: String as PropType<ButtonType>,
   },
+  loading: Boolean,
 });
 
 const emits = defineEmits(["click"]);
@@ -32,7 +33,7 @@ function handleClick(event: Event) {
     class="cursor-pointer"
     :class="[
       props.class,
-      theme === 'secondary' ? 'bg-slate-200 text-black hover:bg-slate-100' : '',
+      theme === 'secondary' ? 'bg-slate-200 disabled:bg-gray-200 text-black hover:bg-slate-300' : '',
     ]"
     :label="label"
     :to="to"
@@ -42,6 +43,8 @@ function handleClick(event: Event) {
     :disabled="disabled"
     :trailing-icon="trailingIcon"
     :type="type"
+    :loading="loading"
+    loading-auto
     @click="handleClick"
   >
     <slot />

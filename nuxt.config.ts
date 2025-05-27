@@ -8,7 +8,12 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true,
   },
-  modules: ["@nuxt/fonts", "@nuxt/eslint", "@nuxt/ui"],
+  modules: [
+    "@nuxt/fonts",
+    "@nuxt/eslint",
+    "@nuxt/ui",
+    "@pinia/nuxt",
+  ],
   eslint: {
     config: {
       standalone: false,
