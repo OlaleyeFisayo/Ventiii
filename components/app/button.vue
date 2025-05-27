@@ -19,6 +19,12 @@ const props = defineProps({
     type: String as PropType<ButtonType>,
   },
 });
+
+const emits = defineEmits(["click"]);
+
+function handleClick(event: Event) {
+  emits("click", event);
+}
 </script>
 
 <template>
@@ -36,6 +42,7 @@ const props = defineProps({
     :disabled="disabled"
     :trailing-icon="trailingIcon"
     :type="type"
+    @click="handleClick"
   >
     <slot />
   </UButton>
