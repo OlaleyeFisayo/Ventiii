@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import {
-  createAuthClient,
-} from "better-auth/client";
-
-const authClient = createAuthClient();
+  authClient,
+} from "~/lib/auth-client";
 
 async function signIn() {
   await authClient.signIn.social({
