@@ -11,6 +11,7 @@ const props = defineProps({
   accept: String,
   baseClass: String,
   rootClass: String,
+  disabled: Boolean,
 });
 
 const emit = defineEmits(["update:modelValue", "keyup"]);
@@ -38,6 +39,7 @@ function onKeyup(e: KeyboardEvent) {
       root: `w-full ${rootClass}`,
       base: `p-4 bg-inherit text-black ${baseClass}`,
     }"
+    :disabled="disabled"
     @change="onFileChange"
   />
 
@@ -54,6 +56,7 @@ function onKeyup(e: KeyboardEvent) {
       root: `w-full ${rootClass}`,
       base: `p-4 bg-inherit ${baseClass}`,
     }"
+    :disabled="disabled"
     @keyup="onKeyup"
   >
     <template #trailing>

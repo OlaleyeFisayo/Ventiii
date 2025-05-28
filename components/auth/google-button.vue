@@ -9,6 +9,7 @@ const authStore = useAuthStore();
     theme="secondary"
     trailing-icon="i-tabler-brand-google-filled"
     :loading="authStore.loading"
+    loading-auto
     @click="authStore.googleSignIn"
   />
 </template>

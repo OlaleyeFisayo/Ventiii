@@ -19,6 +19,7 @@ const props = defineProps({
     type: String as PropType<ButtonType>,
   },
   loading: Boolean,
+  loadingAuto: Boolean,
 });
 
 const emits = defineEmits(["click"]);
@@ -44,7 +45,7 @@ function handleClick(event: Event) {
     :trailing-icon="trailingIcon"
     :type="type"
     :loading="loading"
-    loading-auto
+    :loading-auto="loadingAuto"
     @click="handleClick"
   >
     <slot />

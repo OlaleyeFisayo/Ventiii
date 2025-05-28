@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const authStore = useAuthStore();
+
 const registerForm = ref<AppFormItems[]>([
   {
     tag: "name",
@@ -30,6 +32,8 @@ const registerForm = ref<AppFormItems[]>([
       <AppForm
         v-model:items="registerForm"
         submit-label="Sign up"
+        :loading="authStore.loading"
+        @submit="authStore.signUp"
       />
       <AppSeperator label="or" class="my-4" />
       <AuthGoogleButton />
