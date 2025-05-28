@@ -2,9 +2,12 @@ import {
   authClient,
 } from "~/lib/auth-client";
 
-type SignUpPayload = {
+type SignInPayload = {
   email: string;
-  password: string;
+  passard: string;
+};
+
+type SignUpPayload = SignInPayload & {
   name: string;
 };
 
@@ -28,6 +31,20 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     loading.value = false;
   }
 
+  async function signIn(payload: SignUpPayload) {
+    loading.value = true;
+    const {
+      error,
+    } = await authClient.signIn.email({
+      ...payload,
+    });
+    if (error)
+      errorToast(error?.message as string);
+    else await navigateTo("/dashboard");
+
+    loading.value = false;
+  }
+
   async function googleSignIn() {
     loading.value = true;
     await authClient.signIn.social({
@@ -41,5 +58,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     loading,
     googleSignIn,
     signUp,
+    signIn,
   };
 });

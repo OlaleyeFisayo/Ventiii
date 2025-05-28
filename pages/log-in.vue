@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const authStore = useAuthStore();
+
 const loginForm = ref<AppFormItems[]>([
   {
     tag: "email",
@@ -24,6 +26,8 @@ const loginForm = ref<AppFormItems[]>([
       <AppForm
         v-model:items="loginForm"
         submit-label="Log in"
+        :loading="authStore.loading"
+        @submit="authStore.signIn"
       />
       <!-- TODO: Add Forgot password section -->
       <AppSeperator label="or" class="my-4" />
