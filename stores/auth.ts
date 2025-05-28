@@ -9,14 +9,22 @@ type SignUpPayload = {
 };
 
 export const useAuthStore = defineStore("useAuthStore", () => {
+  const {
+    errorToast,
+  } = useAppToast();
   const loading = ref(false);
 
   async function signUp(payload: SignUpPayload) {
     loading.value = true;
-    await authClient.signUp.email({
+    const {
+      error,
+    } = await authClient.signUp.email({
       ...payload,
-      callbackURL: "/log-in",
     });
+    if (error)
+      errorToast(error?.message as string);
+    else await navigateTo("/log-in");
+
     loading.value = false;
   }
 
