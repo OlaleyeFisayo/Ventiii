@@ -1,7 +1,15 @@
 <script setup lang="ts">
+import type {
+  FormSubmitEvent,
+} from "@nuxt/ui";
+
 defineProps({
   submitLabel: String,
+  loading: Boolean,
+  disabled: Boolean,
 });
+
+const emits = defineEmits(["submit"]);
 
 const items = defineModel<AppFormItems[]>("items");
 
@@ -43,10 +51,17 @@ const isPasswordValid = computed(() => score.value >= 4);
 const isSubmitDisabled = computed(() =>
   !isAllFilled.value || (hasSecurePassword.value && !isPasswordValid.value),
 );
+
+// Handling submits
+type Schema = ReturnType<typeof state>;
+
+function handleSubmit(event: FormSubmitEvent<Schema>) {
+  emits("submit", event.data);
+}
 </script>
 
 <template>
-  <UForm :state="state">
+  <UForm :state="state" @submit="handleSubmit">
     <div class="flex flex-col gap-2">
       <AppFormField
         v-for="item in items"
@@ -55,18 +70,14 @@ const isSubmitDisabled = computed(() =>
         :label="item.tag"
       >
         <AppInput
-          v-if="item.type !== 'password'"
           v-model="item.value"
           :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
-          :type="item.type"
-        />
-        <AppInput
-          v-else
-          v-model="item.value"
-          :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
-          :type="showPassword ? 'text' : 'password'"
+          :type="item.type === 'password'
+            ? (showPassword ? 'text' : 'password')
+            : item.type"
+          :disabled="loading"
         >
-          <template #trailing>
+          <template v-if="item.type === 'password'" #trailing>
             <AppButton
               variant="link"
               size="xl"
@@ -74,6 +85,7 @@ const isSubmitDisabled = computed(() =>
               :aria-label="showPassword ? 'Hide password' : 'Show password'"
               :aria-pressed="showPassword"
               aria-controls="password"
+              :disabled="loading"
               @click="showPassword = !showPassword"
             />
           </template>
@@ -121,6 +133,8 @@ const isSubmitDisabled = computed(() =>
       class="w-full flex items-center justify-center mt-6 p-3"
       :disabled="isSubmitDisabled"
       type="submit"
+      loading-auto
+      :loading="loading"
     />
   </UForm>
 </template>

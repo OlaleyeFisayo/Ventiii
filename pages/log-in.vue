@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const authStore = useAuthStore();
+
 const loginForm = ref<AppFormItems[]>([
   {
     tag: "email",
@@ -24,15 +26,12 @@ const loginForm = ref<AppFormItems[]>([
       <AppForm
         v-model:items="loginForm"
         submit-label="Log in"
+        :loading="authStore.loading"
+        @submit="authStore.signIn"
       />
       <!-- TODO: Add Forgot password section -->
       <AppSeperator label="or" class="my-4" />
-      <AppButton
-        label="Continue with Google"
-        class="w-full flex items-center justify-center p-3 mb-4"
-        theme="secondary"
-        trailing-icon="i-tabler-brand-google-filled"
-      />
+      <AuthGoogleButton />
       <NuxtLink to="/" class="underline flex items-center justify-center text-purple-900">
         Don't have an account? Sign up
       </NuxtLink>
