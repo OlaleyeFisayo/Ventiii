@@ -70,20 +70,14 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         :label="item.tag"
       >
         <AppInput
-          v-if="item.type !== 'password'"
           v-model="item.value"
           :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
-          :type="item.type"
-          :disabled="loading"
-        />
-        <AppInput
-          v-else
-          v-model="item.value"
-          :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
-          :type="showPassword ? 'text' : 'password'"
+          :type="item.type === 'password'
+            ? (showPassword ? 'text' : 'password')
+            : item.type"
           :disabled="loading"
         >
-          <template #trailing>
+          <template v-if="item.type === 'password'" #trailing>
             <AppButton
               variant="link"
               size="xl"

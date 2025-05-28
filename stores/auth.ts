@@ -4,7 +4,7 @@ import {
 
 type SignInPayload = {
   email: string;
-  passard: string;
+  password: string;
 };
 
 type SignUpPayload = SignInPayload & {
@@ -51,7 +51,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       provider: "google",
       callbackURL: "/dashboard",
     });
-    loading.value = false;
   };
 
   return {
