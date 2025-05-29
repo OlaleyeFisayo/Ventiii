@@ -6,6 +6,9 @@ import {
 } from "better-auth/adapters/drizzle";
 
 import db from "./db/index";
+import {
+  sendEmail,
+} from "./email";
 import env from "./env";
 
 export const auth = betterAuth({
@@ -19,6 +22,22 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: true,
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({
+      user,
+      url,
+    }) => {
+      const verificationUrl = new URL(url);
+      verificationUrl.searchParams.set("callbackURL", "/log-in");
+      await sendEmail({
+        to: user.email,
+        subject: "Verify your email address",
+        text: `Click the link to verify your email: ${verificationUrl.toString()}`,
+      });
+    },
+    sendOnSignUp: true,
   },
   socialProviders: {
     google: {

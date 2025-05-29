@@ -14,6 +14,7 @@ type SignUpPayload = SignInPayload & {
 export const useAuthStore = defineStore("useAuthStore", () => {
   const {
     errorToast,
+    successToast,
   } = useAppToast();
   const loading = ref(false);
 
@@ -26,7 +27,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     });
     if (error)
       errorToast(error?.message as string);
-    else await navigateTo("/log-in");
+    else successToast("Verify your Email before you log in");
 
     loading.value = false;
   }
