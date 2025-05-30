@@ -33,7 +33,7 @@ export function resetPasswordTemplate(otp: string) {
 
               <!-- Info -->
               <p style="font-size: 14px; color: #180e1b; text-align: center; line-height: 1.5; margin-top: 20px;">
-                Enter this OTP on the password reset page to verify your identity and set a new password. This OTP is valid for the next 15 minutes.
+                Enter this OTP on the password reset page to verify your identity and set a new password. This OTP is valid for the next 5 minutes.
               </p>
               <p style="font-size: 14px; color: #180e1b; text-align: center; line-height: 1.5;">
                 If you did not request a password reset, please ignore this email or contact our support team immediately to ensure the security of your account.

@@ -35,7 +35,6 @@ const loginForm = ref<AppFormItems[]>([
           </NuxtLink>
         </div>
       </AppForm>
-      <!-- TODO: Add Forgot password section -->
       <AppSeperator label="or" class="my-4" />
       <AuthGoogleButton />
       <NuxtLink to="/" class="underline flex items-center justify-center text-purple-900">

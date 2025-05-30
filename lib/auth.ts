@@ -4,6 +4,9 @@ import {
 import {
   drizzleAdapter,
 } from "better-auth/adapters/drizzle";
+import {
+  emailOTP,
+} from "better-auth/plugins";
 
 import db from "./db/index";
 import {
@@ -43,4 +46,20 @@ export const auth = betterAuth({
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
+  plugins: [emailOTP({
+    otpLength: 6,
+    expiresIn: 300,
+    allowedAttempts: 5,
+    async sendVerificationOTP({
+      email,
+      otp,
+      type,
+    }) {
+      if (type === "forget-password") {
+        await sendEmail(email, "reset-password", {
+          otp,
+        });
+      }
+    },
+  })],
 });

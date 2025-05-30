@@ -46,11 +46,40 @@ const hasSecurePassword = computed(() =>
   items.value?.some((i: AppFormItems) => i.tag === "password" && i.securePassword),
 );
 
-const isPasswordValid = computed(() => score.value >= 4);
-
-const isSubmitDisabled = computed(() =>
-  !isAllFilled.value || (hasSecurePassword.value && !isPasswordValid.value),
+const hasConfirmPassword = computed(() =>
+  items.value?.some((i: AppFormItems) => i.tag === "confirmPassword"),
 );
+
+const passwordsMatch = computed(() => {
+  const pw = state.value.password;
+  const cpw = state.value.confirmPassword;
+  return !hasConfirmPassword.value || pw === cpw;
+});
+
+const hasOtp = computed(() =>
+  items.value?.some((i: AppFormItems) => i.type === "otp"),
+);
+
+const isOtpValid = computed(() => {
+  const otp = state.value?.otp;
+  if (!hasOtp.value)
+    return true;
+  return Array.isArray(otp)
+    && otp.length === 6
+    && otp.every(val => typeof val === "string" && val.trim().length > 0);
+});
+
+const isSubmitDisabled = computed(() => {
+  if (!isAllFilled.value)
+    return true;
+  if (hasSecurePassword.value && score.value < 4)
+    return true;
+  if (hasConfirmPassword.value && !passwordsMatch.value)
+    return true;
+  if (hasOtp.value && !isOtpValid.value)
+    return true;
+  return false;
+});
 
 // Handling submits
 type Schema = ReturnType<typeof state>;
@@ -67,9 +96,13 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         v-for="item in items"
         :key="item.tag"
         :name="item.tag"
-        :label="item.tag"
+        :label="item?.label ?? item.tag"
       >
+        <template v-if="item.type === 'otp'">
+          <AppOtpInput v-model="item.value" :disabled="loading" />
+        </template>
         <AppInput
+          v-else
           v-model="item.value"
           :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
           :type="item.type === 'password'
