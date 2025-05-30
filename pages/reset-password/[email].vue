@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const authStore = useAuthStore();
+
 const resetPasswordForm = ref<AppFormItems[]>([
   {
     label: "Enter OTP",
@@ -22,6 +24,22 @@ const resetPasswordForm = ref<AppFormItems[]>([
     placeholder: "Confirm New Password",
   },
 ]);
+
+const route = useRoute();
+
+async function resetPassword(state: {
+  email: string;
+  otp: string[];
+  password: string;
+}) {
+  const payload = {
+    email: route.params.email as string,
+    otp: state.otp.join(""),
+    password: state.password,
+  };
+
+  await authStore.resetPassword(payload);
+};
 </script>
 
 <template>
@@ -35,6 +53,8 @@ const resetPasswordForm = ref<AppFormItems[]>([
       <AppForm
         v-model:items="resetPasswordForm"
         submit-label="Reset Password"
+        :loading="authStore.loading"
+        @submit="resetPassword"
       />
     </section>
   </section>

@@ -99,7 +99,7 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         :label="item?.label ?? item.tag"
       >
         <template v-if="item.type === 'otp'">
-          <AppOtpInput v-model="item.value" />
+          <AppOtpInput v-model="item.value" :disabled="loading" />
         </template>
         <AppInput
           v-else

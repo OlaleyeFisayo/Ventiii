@@ -1,4 +1,8 @@
 <script setup lang="ts">
+defineProps({
+  disabled: Boolean,
+});
+
 const model = defineModel({
   default: [],
 });
@@ -44,6 +48,7 @@ onMounted(() => {
     <UPinInput
       v-model="model"
       type="number"
+      :disabled="disabled"
       otp
       :length="6"
       size="xl"

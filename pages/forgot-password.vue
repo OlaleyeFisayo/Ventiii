@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const authStore = useAuthStore();
+
 const forgotPasswordForm = ref<AppFormItems[]>([
   {
     tag: "email",
@@ -22,6 +24,8 @@ const forgotPasswordForm = ref<AppFormItems[]>([
       <AppForm
         v-model:items="forgotPasswordForm"
         submit-label="Send OTP"
+        :loading="authStore.loading"
+        @submit="authStore.forgetPasswordOTP"
       />
       <NuxtLink to="/log-in" class="underline flex items-center justify-center mt-4 text-purple-900">
         Remember your password?
