@@ -56,19 +56,28 @@ const passwordsMatch = computed(() => {
   return !hasConfirmPassword.value || pw === cpw;
 });
 
+const hasOtp = computed(() =>
+  items.value?.some((i: AppFormItems) => i.type === "otp"),
+);
+
+const isOtpValid = computed(() => {
+  const otp = state.value?.otp;
+  if (!hasOtp.value)
+    return true;
+  return Array.isArray(otp)
+    && otp.length === 6
+    && otp.every(val => typeof val === "string" && val.trim().length > 0);
+});
+
 const isSubmitDisabled = computed(() => {
-  // any empty field?
   if (!isAllFilled.value)
     return true;
-
-  // secure-password strength
   if (hasSecurePassword.value && score.value < 4)
     return true;
-
-  // confirm-password mismatch
   if (hasConfirmPassword.value && !passwordsMatch.value)
     return true;
-
+  if (hasOtp.value && !isOtpValid.value)
+    return true;
   return false;
 });
 
@@ -89,7 +98,11 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         :name="item.tag"
         :label="item?.label ?? item.tag"
       >
+        <template v-if="item.type === 'otp'">
+          <AppOtpInput v-model="item.value" />
+        </template>
         <AppInput
+          v-else
           v-model="item.value"
           :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
           :type="item.type === 'password'

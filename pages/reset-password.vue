@@ -1,6 +1,12 @@
 <script setup lang="ts">
 const resetPasswordForm = ref<AppFormItems[]>([
   {
+    label: "Enter OTP",
+    tag: "otp",
+    type: "otp",
+    value: [],
+  },
+  {
     label: "New Password",
     tag: "password",
     type: "password",
