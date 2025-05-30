@@ -1,6 +1,14 @@
 import nodemailer from "nodemailer";
 
+import type {
+  EmailTemplateData,
+  EmailTemplateType,
+} from "./types";
+
 import env from "../env";
+import {
+  getEmailTemplate,
+} from "./template";
 
 const transporter = nodemailer.createTransport({
   host: env.SMTP_HOST,
@@ -12,15 +20,18 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendEmail(opts: {
-  to: string;
-  subject: string;
-  text: string;
-}) {
+export async function sendEmail(to: string, type: EmailTemplateType, data: EmailTemplateData) {
+  const {
+    subject,
+    text,
+    html,
+  } = getEmailTemplate(type, data);
+
   await transporter.sendMail({
     from: env.SMTP_USER,
-    to: opts.to,
-    subject: opts.subject,
-    text: opts.text,
+    to,
+    subject,
+    text,
+    html,
   });
 }
