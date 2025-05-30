@@ -130,7 +130,7 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
 
     <AppButton
       :label="submitLabel ?? 'Submit'"
-      class="w-full flex items-center justify-center mt-6 p-3"
+      class="w-full flex items-center justify-center mt-4 p-3"
       :disabled="isSubmitDisabled"
       type="submit"
       loading-auto

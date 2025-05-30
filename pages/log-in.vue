@@ -28,7 +28,13 @@ const loginForm = ref<AppFormItems[]>([
         submit-label="Log in"
         :loading="authStore.loading"
         @submit="authStore.signIn"
-      />
+      >
+        <div class="mt-2">
+          <NuxtLink to="/forgot-password" class="underline text-purple-900">
+            Forgot Password?
+          </NuxtLink>
+        </div>
+      </AppForm>
       <!-- TODO: Add Forgot password section -->
       <AppSeperator label="or" class="my-4" />
       <AuthGoogleButton />
