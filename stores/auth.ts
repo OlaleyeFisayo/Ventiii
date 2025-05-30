@@ -11,6 +11,16 @@ type SignUpPayload = SignInPayload & {
   name: string;
 };
 
+type ForgetPasswordOTPPayload = {
+  email: string;
+};
+
+type ResetPasswordPayload = {
+  email: string;
+  otp: string;
+  password: string;
+};
+
 export const useAuthStore = defineStore("useAuthStore", () => {
   const {
     errorToast,
@@ -54,10 +64,45 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     });
   };
 
+  async function forgetPasswordOTP(payload: ForgetPasswordOTPPayload) {
+    loading.value = true;
+    const {
+      error,
+    } = await authClient.emailOtp.sendVerificationOtp({
+      email: payload.email,
+      type: "forget-password",
+    });
+    if (error)
+      errorToast(error?.message as string);
+    else await navigateTo(`/reset-password/${payload.email}`);
+
+    loading.value = false;
+  }
+
+  async function resetPassword(payload: ResetPasswordPayload) {
+    loading.value = true;
+
+    const {
+      error,
+    } = await authClient.emailOtp.resetPassword({
+      email: payload.email,
+      otp: payload.otp,
+      password: payload.password,
+    });
+
+    if (error)
+      errorToast(error?.message as string);
+    else await navigateTo(`/log-in`);
+
+    loading.value = false;
+  }
+
   return {
     loading,
     googleSignIn,
     signUp,
     signIn,
+    forgetPasswordOTP,
+    resetPassword,
   };
 });
