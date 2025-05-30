@@ -31,10 +31,8 @@ export const auth = betterAuth({
     }) => {
       const verificationUrl = new URL(url);
       verificationUrl.searchParams.set("callbackURL", "/log-in");
-      await sendEmail({
-        to: user.email,
-        subject: "Verify your email address",
-        text: `Click the link to verify your email: ${verificationUrl.toString()}`,
+      await sendEmail(user.email, "verify-email", {
+        url: verificationUrl.toString(),
       });
     },
     sendOnSignUp: true,
