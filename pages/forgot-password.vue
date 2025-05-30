@@ -21,7 +21,7 @@ const forgotPasswordForm = ref<AppFormItems[]>([
     >
       <AppForm
         v-model:items="forgotPasswordForm"
-        submit-label="Send Reset Link"
+        submit-label="Send OTP"
       />
       <NuxtLink to="/log-in" class="underline flex items-center justify-center mt-4 text-purple-900">
         Remember your password?

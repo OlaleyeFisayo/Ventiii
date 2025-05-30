@@ -4,4 +4,5 @@ export type AppFormItems = {
   value: any;
   placeholder?: string;
   securePassword?: boolean;
+  label?: string;
 };

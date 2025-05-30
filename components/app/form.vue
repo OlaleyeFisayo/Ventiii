@@ -46,11 +46,31 @@ const hasSecurePassword = computed(() =>
   items.value?.some((i: AppFormItems) => i.tag === "password" && i.securePassword),
 );
 
-const isPasswordValid = computed(() => score.value >= 4);
-
-const isSubmitDisabled = computed(() =>
-  !isAllFilled.value || (hasSecurePassword.value && !isPasswordValid.value),
+const hasConfirmPassword = computed(() =>
+  items.value?.some((i: AppFormItems) => i.tag === "confirmPassword"),
 );
+
+const passwordsMatch = computed(() => {
+  const pw = state.value.password;
+  const cpw = state.value.confirmPassword;
+  return !hasConfirmPassword.value || pw === cpw;
+});
+
+const isSubmitDisabled = computed(() => {
+  // any empty field?
+  if (!isAllFilled.value)
+    return true;
+
+  // secure-password strength
+  if (hasSecurePassword.value && score.value < 4)
+    return true;
+
+  // confirm-password mismatch
+  if (hasConfirmPassword.value && !passwordsMatch.value)
+    return true;
+
+  return false;
+});
 
 // Handling submits
 type Schema = ReturnType<typeof state>;
@@ -67,7 +87,7 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         v-for="item in items"
         :key="item.tag"
         :name="item.tag"
-        :label="item.tag"
+        :label="item?.label ?? item.tag"
       >
         <AppInput
           v-model="item.value"
