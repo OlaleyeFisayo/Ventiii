@@ -23,6 +23,9 @@ const dropdownMenuItems = ref<DropdownMenuItem[]>([
       label: "Logout",
       icon: "i-tabler-logout-2",
       color: "error",
+      onSelect: () => {
+        authStore.logout();
+      },
     },
   ],
 ]);
@@ -49,6 +52,9 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
       label: "Logout",
       icon: "i-tabler-logout-2",
       color: "error",
+      onSelect: () => {
+        authStore.logout();
+      },
     },
   ],
 ]));

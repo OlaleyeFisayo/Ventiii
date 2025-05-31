@@ -100,6 +100,16 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     loading.value = false;
   }
 
+  async function logout() {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: async () => {
+          await navigateTo("/log-in");
+        },
+      },
+    });
+  }
+
   return {
     loading,
     googleSignIn,
@@ -107,6 +117,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     signIn,
     forgetPasswordOTP,
     resetPassword,
+    logout,
     user,
   };
 });

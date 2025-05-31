@@ -17,7 +17,7 @@ defineProps({
       align: 'start',
     }"
     :ui="{
-      item: 'text-md',
+      item: 'text-md cursor-pointer',
     }"
   >
     <slot />
