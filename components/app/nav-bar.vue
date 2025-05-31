@@ -26,6 +26,32 @@ const dropdownMenuItems = ref<DropdownMenuItem[]>([
     },
   ],
 ]);
+
+const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
+  [
+    {
+      label: authStore.user?.name,
+      avatar: {
+        src: authStore.user?.image ?? "",
+        alt: authStore.user?.image ? "" : authStore.user?.name.toUpperCase(),
+      },
+      type: "label",
+    },
+  ],
+  [
+    {
+      label: "New Event",
+      icon: "i-tabler-plus",
+    },
+  ],
+  [
+    {
+      label: "Logout",
+      icon: "i-tabler-logout-2",
+      color: "error",
+    },
+  ],
+]));
 </script>
 
 <template>
@@ -34,18 +60,33 @@ const dropdownMenuItems = ref<DropdownMenuItem[]>([
       <img src="../../assets/images/logo.png" alt="logo" class="w-5 h-5">
       Ventiii
     </h1>
-    <div v-if="authStore.user" class="flex gap-3">
-      <AppButton label="New Event" />
-      <AppDropdownMenu
-        :items="dropdownMenuItems"
-      >
-        <AppAvatar
-          :src="authStore.user.image ?? ''"
-          :alt="authStore.user.image ? '' : authStore.user.name.toUpperCase()"
-          size="lg"
+    <section v-if="authStore.user">
+      <div class="hidden sm:flex gap-3 items-center">
+        <AppButton
+          label="New Event"
+          icon="i-tabler-plus"
         />
-      </AppDropdownMenu>
-    </div>
+        <p>Hi, {{ authStore.user.name }}</p>
+        <AppDropdownMenu
+          :items="dropdownMenuItems"
+        >
+          <AppAvatar
+            :src="authStore.user.image ?? ''"
+            :alt="authStore.user.image ? '' : authStore.user.name.toUpperCase()"
+            size="lg"
+          />
+        </AppDropdownMenu>
+      </div>
+      <div class="sm:hidden">
+        <AppDropdownMenu
+          :items="mobileDropdownMenuItems"
+        >
+          <AppButton
+            icon="i-tabler-menu-2"
+          />
+        </AppDropdownMenu>
+      </div>
+    </section>
     <nav v-else class="flex gap-2 items-center">
       <AppButton
         v-for="link in authLinks"

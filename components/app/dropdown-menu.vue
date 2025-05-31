@@ -16,6 +16,9 @@ defineProps({
     :content="{
       align: 'start',
     }"
+    :ui="{
+      item: 'text-md',
+    }"
   >
     <slot />
   </UDropdownMenu>
