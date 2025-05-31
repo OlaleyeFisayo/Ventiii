@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+const authStore = useAuthStore();
+
 const authLinks = [
   {
     label: "Sign up",
@@ -18,7 +20,10 @@ const authLinks = [
       <img src="../../assets/images/logo.png" alt="logo" class="w-5 h-5">
       Ventiii
     </h1>
-    <nav class="flex gap-2 items-center">
+    <div v-if="authStore.user">
+      <AppButton label="New Event" />
+    </div>
+    <nav v-else class="flex gap-2 items-center">
       <AppButton
         v-for="link in authLinks"
         :key="link.label" :label="link.label"

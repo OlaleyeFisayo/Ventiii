@@ -26,6 +26,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     errorToast,
     successToast,
   } = useAppToast();
+  const session = authClient.useSession();
+  const user = computed(() => session.value?.data?.user);
   const loading = ref(false);
 
   async function signUp(payload: SignUpPayload) {
@@ -105,5 +107,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     signIn,
     forgetPasswordOTP,
     resetPassword,
+    user,
   };
 });
