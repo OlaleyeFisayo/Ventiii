@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import type {
+  DropdownMenuItem,
+} from "@nuxt/ui";
+
 const authStore = useAuthStore();
 
 const authLinks = [
@@ -12,6 +16,16 @@ const authLinks = [
     theme: "secondary",
   },
 ];
+
+const dropdownMenuItems = ref<DropdownMenuItem[]>([
+  [
+    {
+      label: "Logout",
+      icon: "i-tabler-logout-2",
+      color: "error",
+    },
+  ],
+]);
 </script>
 
 <template>
@@ -22,11 +36,15 @@ const authLinks = [
     </h1>
     <div v-if="authStore.user" class="flex gap-3">
       <AppButton label="New Event" />
-      <AppAvatar
-        :src="authStore.user.image ?? ''"
-        :alt="authStore.user.image ? '' : authStore.user.name.toUpperCase()"
-        size="lg"
-      />
+      <AppDropdownMenu
+        :items="dropdownMenuItems"
+      >
+        <AppAvatar
+          :src="authStore.user.image ?? ''"
+          :alt="authStore.user.image ? '' : authStore.user.name.toUpperCase()"
+          size="lg"
+        />
+      </AppDropdownMenu>
     </div>
     <nav v-else class="flex gap-2 items-center">
       <AppButton
