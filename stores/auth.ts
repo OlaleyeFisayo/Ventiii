@@ -26,6 +26,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     errorToast,
     successToast,
   } = useAppToast();
+  const session = authClient.useSession();
+  const sessionLoading = computed(() => session.value.isPending || session.value.isRefetching);
+  const user = computed(() => session.value?.data?.user);
   const loading = ref(false);
 
   async function signUp(payload: SignUpPayload) {
@@ -98,6 +101,16 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     loading.value = false;
   }
 
+  async function logout() {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: async () => {
+          await navigateTo("/log-in");
+        },
+      },
+    });
+  }
+
   return {
     loading,
     googleSignIn,
@@ -105,5 +118,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     signIn,
     forgetPasswordOTP,
     resetPassword,
+    logout,
+    sessionLoading,
+    user,
   };
 });

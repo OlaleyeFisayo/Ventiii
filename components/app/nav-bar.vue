@@ -1,4 +1,10 @@
 <script lang="ts" setup>
+import type {
+  DropdownMenuItem,
+} from "@nuxt/ui";
+
+const authStore = useAuthStore();
+
 const authLinks = [
   {
     label: "Sign up",
@@ -10,6 +16,48 @@ const authLinks = [
     theme: "secondary",
   },
 ];
+
+const dropdownMenuItems = ref<DropdownMenuItem[]>([
+  [
+    {
+      label: "Logout",
+      icon: "i-tabler-logout-2",
+      color: "error",
+      onSelect: () => {
+        authStore.logout();
+      },
+    },
+  ],
+]);
+
+const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
+  [
+    {
+      label: authStore.user?.name,
+      avatar: {
+        src: authStore.user?.image ?? "",
+        alt: authStore.user?.image ? "" : authStore.user?.name.toUpperCase(),
+      },
+      type: "label",
+    },
+  ],
+  [
+    {
+      label: "New Event",
+      icon: "i-tabler-plus",
+    },
+  ],
+  [
+    {
+      label: "Logout",
+      icon: "i-tabler-logout-2",
+      color: "error",
+      onSelect: () => {
+        authStore.logout();
+      },
+    },
+  ],
+]));
 </script>
 
 <template>
@@ -18,7 +66,38 @@ const authLinks = [
       <img src="../../assets/images/logo.png" alt="logo" class="w-5 h-5">
       Ventiii
     </h1>
-    <nav class="flex gap-2 items-center">
+    <section v-if="authStore.sessionLoading" class="flex gap-2 items-center">
+      <USkeleton class="h-10 w-10 rounded-full" />
+      <USkeleton class="h-10 w-[100px]" />
+    </section>
+    <section v-else-if="authStore.user && !authStore.sessionLoading">
+      <div class="hidden sm:flex gap-2 items-center">
+        <AppButton
+          label="New Event"
+          icon="i-tabler-plus"
+        />
+        <p>Hi, {{ authStore.user.name }}</p>
+        <AppDropdownMenu
+          :items="dropdownMenuItems"
+        >
+          <AppAvatar
+            :src="authStore.user.image ?? ''"
+            :alt="authStore.user.image ? '' : authStore.user.name.toUpperCase()"
+            size="lg"
+          />
+        </AppDropdownMenu>
+      </div>
+      <div class="sm:hidden">
+        <AppDropdownMenu
+          :items="mobileDropdownMenuItems"
+        >
+          <AppButton
+            icon="i-tabler-menu-2"
+          />
+        </AppDropdownMenu>
+      </div>
+    </section>
+    <nav v-else class="flex gap-2 items-center">
       <AppButton
         v-for="link in authLinks"
         :key="link.label" :label="link.label"
