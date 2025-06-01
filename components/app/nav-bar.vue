@@ -66,8 +66,12 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
       <img src="../../assets/images/logo.png" alt="logo" class="w-5 h-5">
       Ventiii
     </h1>
-    <section v-if="authStore.user">
-      <div class="hidden sm:flex gap-3 items-center">
+    <section v-if="authStore.sessionLoading" class="flex gap-2 items-center">
+      <USkeleton class="h-10 w-10 rounded-full" />
+      <USkeleton class="h-10 w-[100px]" />
+    </section>
+    <section v-else-if="authStore.user && !authStore.sessionLoading">
+      <div class="hidden sm:flex gap-2 items-center">
         <AppButton
           label="New Event"
           icon="i-tabler-plus"

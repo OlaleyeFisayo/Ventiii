@@ -27,6 +27,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     successToast,
   } = useAppToast();
   const session = authClient.useSession();
+  const sessionLoading = computed(() => session.value.isPending || session.value.isRefetching);
   const user = computed(() => session.value?.data?.user);
   const loading = ref(false);
 
@@ -118,6 +119,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     forgetPasswordOTP,
     resetPassword,
     logout,
+    sessionLoading,
     user,
   };
 });
