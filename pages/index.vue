@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: ["guest"],
+});
+
 const authStore = useAuthStore();
 
 const registerForm = ref<AppFormItems[]>([
@@ -19,15 +23,6 @@ const registerForm = ref<AppFormItems[]>([
     securePassword: true,
   },
 ]);
-
-watch(
-  () => authStore.user,
-  async (newUser: any) => {
-    if (newUser) {
-      await navigateTo("/dashboard");
-    }
-  },
-);
 </script>
 
 <template>
