@@ -1,13 +1,17 @@
 <script lang="ts" setup>
 const route = useRoute();
-const error = route.query.error || "Unknown Error Occured";
+const error: any = route.query.error || "Unknown Error Occured";
 </script>
 
 <template>
   <section class="h-full flex flex-col justify-center items-center gap-6">
-    <p class="bg-red-600 w-fit p-3 rounded text-white text-2xl mt-8">
-      {{ error }}
-    </p>
+    <AppAlert
+      class="mt-8"
+      color="error"
+      title="Error"
+      :description="error"
+      icon="i-tabler-info-square-rounded-filled"
+    />
     <AppButton
       label="Go Back"
       class="w-fit"
