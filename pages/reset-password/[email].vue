@@ -40,6 +40,15 @@ async function resetPassword(state: {
 
   await authStore.resetPassword(payload);
 };
+
+watch(
+  () => authStore.user,
+  async (newUser: any) => {
+    if (newUser) {
+      await navigateTo("/dashboard");
+    }
+  },
+);
 </script>
 
 <template>
