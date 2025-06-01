@@ -24,14 +24,15 @@ type ResetPasswordPayload = {
 export const useAuthStore = defineStore("useAuthStore", () => {
   const {
     errorToast,
-    successToast,
   } = useAppToast();
   const session = authClient.useSession();
   const sessionLoading = computed(() => session.value.isPending || session.value.isRefetching);
   const user = computed(() => session.value?.data?.user);
   const loading = ref(false);
+  const success = ref(false);
 
   async function signUp(payload: SignUpPayload) {
+    success.value = false;
     loading.value = true;
     const {
       error,
@@ -40,12 +41,13 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     });
     if (error)
       errorToast(error?.message as string);
-    else successToast("Verify your Email before you log in");
+    else success.value = true;
 
     loading.value = false;
   }
 
   async function signIn(payload: SignUpPayload) {
+    success.value = false;
     loading.value = true;
     const {
       error,
@@ -60,6 +62,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function googleSignIn() {
+    success.value = false;
     loading.value = true;
     await authClient.signIn.social({
       provider: "google",
@@ -69,6 +72,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
 
   async function forgetPasswordOTP(payload: ForgetPasswordOTPPayload) {
+    success.value = false;
     loading.value = true;
     const {
       error,
@@ -84,6 +88,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function resetPassword(payload: ResetPasswordPayload) {
+    success.value = false;
     loading.value = true;
 
     const {
@@ -102,6 +107,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function logout() {
+    success.value = false;
     await authClient.signOut({
       fetchOptions: {
         onSuccess: async () => {
@@ -121,5 +127,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     logout,
     sessionLoading,
     user,
+    success,
   };
 });

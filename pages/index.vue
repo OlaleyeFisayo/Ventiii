@@ -29,6 +29,14 @@ const registerForm = ref<AppFormItems[]>([
     <section
       class="w-full max-w-[500px] mx-auto mt-4"
     >
+      <AppAlert
+        v-if="authStore.success"
+        color="success"
+        title="Success"
+        description="Verify your Email before you log in"
+        icon="i-tabler-info-square-rounded-filled"
+        class="mb-4"
+      />
       <AppForm
         v-model:items="registerForm"
         submit-label="Sign up"
