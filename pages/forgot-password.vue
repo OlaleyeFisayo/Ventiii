@@ -8,15 +8,6 @@ const forgotPasswordForm = ref<AppFormItems[]>([
     value: "",
   },
 ]);
-
-watch(
-  () => authStore.user,
-  async (newUser: any) => {
-    if (newUser) {
-      await navigateTo("/dashboard");
-    }
-  },
-);
 </script>
 
 <template>
