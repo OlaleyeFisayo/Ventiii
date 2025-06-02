@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import type {
+  TabsItem,
+} from "@nuxt/ui";
+
+const items = ref<TabsItem[]>([
+  {
+    label: "Upcoming",
+  },
+  {
+    label: "Past",
+  },
+]);
+</script>
+
 <template>
   <section class="pt-8 pb-4 flex flex-col sm:gap-8 gap-4">
     <div class="flex items-center justify-between gap-2">
@@ -15,6 +30,10 @@
       placeholder="Search Event"
       icon="i-tabler-search"
       base-class="pl-9"
+    />
+    <AppTabs
+      :items="items"
+      size="xl"
     />
   </section>
 </template>
