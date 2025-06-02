@@ -34,6 +34,7 @@ export default withNuxt(
         case: "kebabCase",
         ignore: ["README.md"],
       }],
+      "vue/multi-word-component-names": "off",
     },
   }),
 );
