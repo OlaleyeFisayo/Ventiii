@@ -3,6 +3,10 @@ import type {
   FormSubmitEvent,
 } from "@nuxt/ui";
 
+import {
+  AppCalendar,
+} from "#components";
+
 defineProps({
   submitLabel: String,
   loading: Boolean,
@@ -13,7 +17,7 @@ const emits = defineEmits(["submit"]);
 
 const items = defineModel<AppFormItems[]>("items");
 
-// show passard statr
+// show passard state
 const showPassword = ref(false);
 
 // State for Uform
@@ -98,7 +102,12 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         :name="item.tag"
         :label="item?.label ?? item.tag"
       >
-        <template v-if="item.type === 'textarea'">
+        <template v-if="item.type === 'date'">
+          <AppCalendar
+            v-model="item.value"
+          />
+        </template>
+        <template v-else-if="item.type === 'textarea'">
           <AppTextarea
             v-model="item.value"
             :disabled="loading"

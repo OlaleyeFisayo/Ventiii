@@ -14,13 +14,19 @@ const createEventForm = ref<AppFormItems[]>([
     placeholder: "Enter description",
     value: "",
   },
+  {
+    label: "Event Date",
+    tag: "date",
+    type: "date",
+    value: null,
+  },
 ]);
 </script>
 
 <template>
   <section class="flex flex-col sm:gap-8 gap-4 items-center">
     <h1 class="font-bold text-3xl text-black">
-      Create New Event
+      Create Event
     </h1>
 
     <section class="w-full max-w-[500px]">

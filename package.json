@@ -17,6 +17,7 @@
     "db:studio": "npx drizzle-kit studio"
   },
   "dependencies": {
+    "@internationalized/date": "^3.8.1",
     "@libsql/client": "^0.15.7",
     "@nuxt/eslint": "^1.4.1",
     "@nuxt/fonts": "^0.11.4",
