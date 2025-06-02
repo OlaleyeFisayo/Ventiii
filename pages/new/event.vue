@@ -1,24 +1,33 @@
 <script lang="ts" setup>
 const createEventForm = ref<AppFormItems[]>([
   {
-    label: "Event Name",
+    label: "Title",
     tag: "title",
     type: "text",
     placeholder: "Enter name",
     value: "",
   },
   {
-    label: "Event Description",
+    label: "Description",
     tag: "description",
     type: "textarea",
     placeholder: "Enter description",
     value: "",
   },
   {
-    label: "Event Date",
+    label: "Date",
     tag: "date",
     type: "date",
     value: null,
+  },
+  {
+    label: "Time",
+    tag: "time",
+    type: "time",
+    value: {
+      start: null,
+      end: null,
+    },
   },
 ]);
 </script>

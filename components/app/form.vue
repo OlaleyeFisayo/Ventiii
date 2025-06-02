@@ -5,6 +5,7 @@ import type {
 
 import {
   AppCalendar,
+  AppTime,
 } from "#components";
 
 defineProps({
@@ -102,7 +103,14 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         :name="item.tag"
         :label="item?.label ?? item.tag"
       >
-        <template v-if="item.type === 'date'">
+        <template v-if="item.type === 'time'">
+          <AppTime
+            v-model:start="item.value.start"
+            v-model:end="item.value.end"
+            :disabled="loading"
+          />
+        </template>
+        <template v-else-if="item.type === 'date'">
           <AppCalendar
             v-model="item.value"
           />
