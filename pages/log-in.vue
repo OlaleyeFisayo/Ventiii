@@ -20,7 +20,7 @@ const loginForm = ref<AppFormItems[]>([
 </script>
 
 <template>
-  <section class="text-black pt-16 pb-8">
+  <section class="text-black pt-8">
     <h1 class="text-3xl font-bold text-center">
       Welcome back
     </h1>

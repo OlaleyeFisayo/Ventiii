@@ -6,7 +6,6 @@ const error: any = route.query.error || "Unknown Error Occured";
 <template>
   <section class="h-full flex flex-col justify-center items-center gap-6">
     <AppAlert
-      class="mt-8"
       color="error"
       title="Error"
       :description="error"

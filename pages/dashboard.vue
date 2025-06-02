@@ -14,7 +14,7 @@ const items = ref<TabsItem[]>([
 </script>
 
 <template>
-  <section class="pt-8 pb-4 flex flex-col sm:gap-8 gap-4">
+  <section class="text-black flex flex-col sm:gap-8 gap-4">
     <div class="flex items-center justify-between gap-2">
       <h1 class="font-bold sm:text-4xl text-xl">
         Your Events
@@ -24,6 +24,7 @@ const items = ref<TabsItem[]>([
         icon="i-tabler-plus"
         theme="secondary"
         class="sm:text-lg text-md"
+        to="/new/event"
       />
     </div>
     <AppInput

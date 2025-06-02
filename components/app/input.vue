@@ -55,6 +55,7 @@ function onKeyup(e: KeyboardEvent) {
     :min="min"
     :ui="{
       trailing: 'pe-1',
+      root: `w-full ${rootClass}`,
       base: `p-4 bg-inherit ${baseClass}`,
     }"
     :disabled="disabled"

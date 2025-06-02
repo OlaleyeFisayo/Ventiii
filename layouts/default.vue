@@ -2,7 +2,7 @@
   <section class="flex flex-col min-h-[100dvh]">
     <AppNavBar />
     <main class="px-8 flex-1 flex flex-col">
-      <section class="container mx-auto h-full flex-1">
+      <section class="text-black container mx-auto h-full flex-1 pt-8 pb-4 ">
         <slot />
       </section>
     </main>

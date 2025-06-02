@@ -45,6 +45,7 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
     {
       label: "New Event",
       icon: "i-tabler-plus",
+      to: "/new/event",
     },
   ],
   [
@@ -71,14 +72,15 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
       Ventiii
     </h1>
     <section v-if="authStore.sessionLoading" class="flex gap-2 items-center">
-      <USkeleton class="h-10 w-10 rounded-full" />
       <USkeleton class="h-10 w-[100px]" />
+      <USkeleton class="h-10 w-10 rounded-full" />
     </section>
     <section v-else-if="authStore.user && !authStore.sessionLoading">
       <div class="hidden sm:flex gap-2 items-center">
         <AppButton
           label="New Event"
           icon="i-tabler-plus"
+          to="/new/event"
         />
         <p>Hi, {{ authStore.user.name }}</p>
         <AppDropdownMenu
