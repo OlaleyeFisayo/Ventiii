@@ -4,7 +4,14 @@ const createEventForm = ref<AppFormItems[]>([
     label: "Event Name",
     tag: "title",
     type: "text",
-    placeholder: "Enter Event name",
+    placeholder: "Enter name",
+    value: "",
+  },
+  {
+    label: "Event Description",
+    tag: "description",
+    type: "textarea",
+    placeholder: "Enter description",
     value: "",
   },
 ]);

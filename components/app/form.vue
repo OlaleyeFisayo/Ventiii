@@ -98,8 +98,18 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         :name="item.tag"
         :label="item?.label ?? item.tag"
       >
-        <template v-if="item.type === 'otp'">
-          <AppOtpInput v-model="item.value" :disabled="loading" />
+        <template v-if="item.type === 'textarea'">
+          <AppTextarea
+            v-model="item.value"
+            :disabled="loading"
+            :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
+          />
+        </template>
+        <template v-else-if="item.type === 'otp'">
+          <AppOtpInput
+            v-model="item.value"
+            :disabled="loading"
+          />
         </template>
         <AppInput
           v-else
