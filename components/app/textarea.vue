@@ -19,6 +19,7 @@ const model = defineModel<any>();
     :disabled="disabled"
     :ui="{
       root: 'w-full',
+      base: 'p-4',
     }"
   />
 </template>
