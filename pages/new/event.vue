@@ -29,6 +29,14 @@ const createEventForm = ref<AppFormItems[]>([
       end: null,
     },
   },
+  {
+    label: "Location",
+    tag: "location",
+    type: "text",
+    placeholder: "Enter location",
+    value: "",
+    icon: "i-tabler-map-pin",
+  },
 ]);
 </script>
 

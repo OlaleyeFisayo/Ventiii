@@ -3,11 +3,6 @@ import type {
   FormSubmitEvent,
 } from "@nuxt/ui";
 
-import {
-  AppCalendar,
-  AppTime,
-} from "#components";
-
 defineProps({
   submitLabel: String,
   loading: Boolean,
@@ -74,6 +69,21 @@ const isOtpValid = computed(() => {
     && otp.every(val => typeof val === "string" && val.trim().length > 0);
 });
 
+const hasTimeField = computed(() =>
+  items.value?.some((i: AppFormItems) => i.type === "time"),
+);
+
+const isTimeValid = computed(() => {
+  if (!hasTimeField.value)
+    return true;
+  const timeValue = state.value.time;
+  return (
+    timeValue != null
+    && typeof timeValue.start === "string" && timeValue.start.trim() !== ""
+    && typeof timeValue.end === "string" && timeValue.end.trim() !== ""
+  );
+});
+
 const isSubmitDisabled = computed(() => {
   if (!isAllFilled.value)
     return true;
@@ -82,6 +92,8 @@ const isSubmitDisabled = computed(() => {
   if (hasConfirmPassword.value && !passwordsMatch.value)
     return true;
   if (hasOtp.value && !isOtpValid.value)
+    return true;
+  if (hasTimeField.value && !isTimeValid.value)
     return true;
   return false;
 });
@@ -136,6 +148,8 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
             ? (showPassword ? 'text' : 'password')
             : item.type"
           :disabled="loading"
+          :icon="item.icon"
+          :base-class="item.icon ? 'pl-9' : ''"
         >
           <template v-if="item.type === 'password'" #trailing>
             <AppButton
