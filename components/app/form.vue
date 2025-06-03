@@ -84,6 +84,17 @@ const isTimeValid = computed(() => {
   );
 });
 
+const hasImageField = computed(() =>
+  items.value?.some((i: AppFormItems) => i.tag === "img"),
+);
+
+const isImageValid = computed(() => {
+  if (!hasImageField.value)
+    return true;
+  const imgValue = state.value.img;
+  return Array.isArray(imgValue) && imgValue.length > 0;
+});
+
 const isSubmitDisabled = computed(() => {
   if (!isAllFilled.value)
     return true;
@@ -94,6 +105,8 @@ const isSubmitDisabled = computed(() => {
   if (hasOtp.value && !isOtpValid.value)
     return true;
   if (hasTimeField.value && !isTimeValid.value)
+    return true;
+  if (hasImageField.value && !isImageValid.value)
     return true;
   return false;
 });
@@ -115,7 +128,14 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         :name="item.tag"
         :label="item?.label ?? item.tag"
       >
-        <template v-if="item.type === 'time'">
+        <template v-if="item.type === 'img'">
+          <AppImageDnd
+            v-model="item.value"
+            :max-files="item.maxFile"
+            :max-file-size="item.maxFileSize"
+          />
+        </template>
+        <template v-else-if="item.type === 'time'">
           <AppTime
             v-model:start="item.value.start"
             v-model:end="item.value.end"

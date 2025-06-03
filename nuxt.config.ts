@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@nuxt/ui",
     "@pinia/nuxt",
+    "@nuxt/image",
   ],
   eslint: {
     config: {

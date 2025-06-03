@@ -6,4 +6,6 @@ export type AppFormItems = {
   securePassword?: boolean;
   label?: string;
   icon?: string;
+  maxFile?: number;
+  maxFileSize?: number;
 };

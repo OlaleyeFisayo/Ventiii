@@ -37,6 +37,14 @@ const createEventForm = ref<AppFormItems[]>([
     value: "",
     icon: "i-tabler-map-pin",
   },
+  {
+    label: "Cover Picture",
+    tag: "coverPicture",
+    type: "img",
+    value: null,
+    maxFile: 1,
+    maxFileSize: 5 * 1024 * 1024,
+  },
 ]);
 </script>
 
