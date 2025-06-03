@@ -13,7 +13,7 @@ const emits = defineEmits(["submit"]);
 
 const items = defineModel<AppFormItems[]>("items");
 
-// show passard statr
+// show passard state
 const showPassword = ref(false);
 
 // State for Uform
@@ -69,6 +69,21 @@ const isOtpValid = computed(() => {
     && otp.every(val => typeof val === "string" && val.trim().length > 0);
 });
 
+const hasTimeField = computed(() =>
+  items.value?.some((i: AppFormItems) => i.type === "time"),
+);
+
+const isTimeValid = computed(() => {
+  if (!hasTimeField.value)
+    return true;
+  const timeValue = state.value.time;
+  return (
+    timeValue != null
+    && typeof timeValue.start === "string" && timeValue.start.trim() !== ""
+    && typeof timeValue.end === "string" && timeValue.end.trim() !== ""
+  );
+});
+
 const isSubmitDisabled = computed(() => {
   if (!isAllFilled.value)
     return true;
@@ -77,6 +92,8 @@ const isSubmitDisabled = computed(() => {
   if (hasConfirmPassword.value && !passwordsMatch.value)
     return true;
   if (hasOtp.value && !isOtpValid.value)
+    return true;
+  if (hasTimeField.value && !isTimeValid.value)
     return true;
   return false;
 });
@@ -98,8 +115,30 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         :name="item.tag"
         :label="item?.label ?? item.tag"
       >
-        <template v-if="item.type === 'otp'">
-          <AppOtpInput v-model="item.value" :disabled="loading" />
+        <template v-if="item.type === 'time'">
+          <AppTime
+            v-model:start="item.value.start"
+            v-model:end="item.value.end"
+            :disabled="loading"
+          />
+        </template>
+        <template v-else-if="item.type === 'date'">
+          <AppCalendar
+            v-model="item.value"
+          />
+        </template>
+        <template v-else-if="item.type === 'textarea'">
+          <AppTextarea
+            v-model="item.value"
+            :disabled="loading"
+            :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
+          />
+        </template>
+        <template v-else-if="item.type === 'otp'">
+          <AppOtpInput
+            v-model="item.value"
+            :disabled="loading"
+          />
         </template>
         <AppInput
           v-else
@@ -109,6 +148,8 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
             ? (showPassword ? 'text' : 'password')
             : item.type"
           :disabled="loading"
+          :icon="item.icon"
+          :base-class="item.icon ? 'pl-9' : ''"
         >
           <template v-if="item.type === 'password'" #trailing>
             <AppButton

@@ -12,6 +12,7 @@ const props = defineProps({
   baseClass: String,
   rootClass: String,
   disabled: Boolean,
+  icon: String,
 });
 
 const emit = defineEmits(["update:modelValue", "keyup"]);
@@ -47,6 +48,7 @@ function onKeyup(e: KeyboardEvent) {
     v-else
     v-model="model"
     :type="type"
+    :icon="icon"
     :placeholder="placeholder"
     :class="[props.class]"
     :max="max"
@@ -59,7 +61,7 @@ function onKeyup(e: KeyboardEvent) {
     :disabled="disabled"
     @keyup="onKeyup"
   >
-    <template #trailing>
+    <template v-if="$slots.trailing" #trailing>
       <slot name="trailing" />
     </template>
   </UInput>

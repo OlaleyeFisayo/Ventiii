@@ -4,6 +4,7 @@ import {
 
 const protectedRoutes = [
   "/dashboard",
+  "/new",
 ];
 
 export default defineEventHandler(async (event) => {
