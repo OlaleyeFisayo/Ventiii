@@ -85,13 +85,13 @@ const isTimeValid = computed(() => {
 });
 
 const hasImageField = computed(() =>
-  items.value?.some((i: AppFormItems) => i.tag === "img"),
+  items.value?.some((i: AppFormItems) => i.type === "img"),
 );
 
 const isImageValid = computed(() => {
   if (!hasImageField.value)
     return true;
-  const imgValue = state.value.img;
+  const imgValue = items.value?.find((i: AppFormItems) => i.type === "img")?.value;
   return Array.isArray(imgValue) && imgValue.length > 0;
 });
 

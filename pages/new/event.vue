@@ -41,7 +41,7 @@ const createEventForm = ref<AppFormItems[]>([
     label: "Cover Picture",
     tag: "coverPicture",
     type: "img",
-    value: null,
+    value: [],
     maxFile: 1,
     maxFileSize: 5 * 1024 * 1024,
   },
