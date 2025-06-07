@@ -1,5 +1,5 @@
 import {
-  integer,
+  int,
   sqliteTable,
   text,
 } from "drizzle-orm/sqlite-core";
@@ -14,14 +14,13 @@ export const event = sqliteTable("event", {
   endTime: text(),
   location: text().notNull(),
   coverPictureUrl: text().notNull(),
-  createdAt: integer({
-    mode: "timestamp",
-  })
-    .$defaultFn(() => new Date())
+  createdAt: int(
+  )
+    .$default(() => Date.now())
     .notNull(),
-  updatedAt: integer({
-    mode: "timestamp",
-  })
-    .$defaultFn(() => new Date())
+  updatedAt: int(
+  )
+    .$default(() => Date.now())
+    .$onUpdate(() => Date.now())
     .notNull(),
 });

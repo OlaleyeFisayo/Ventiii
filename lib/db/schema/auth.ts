@@ -17,16 +17,8 @@ export const user = sqliteTable("user", {
     .$defaultFn(() => false)
     .notNull(),
   image: text(),
-  createdAt: integer({
-    mode: "timestamp",
-  })
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
-  updatedAt: integer({
-    mode: "timestamp",
-  })
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
+  createdAt: integer().notNull(),
+  updatedAt: integer().notNull(),
 });
 
 export const session = sqliteTable("session", {
@@ -37,12 +29,8 @@ export const session = sqliteTable("session", {
     mode: "timestamp",
   }).notNull(),
   token: text().notNull().unique(),
-  createdAt: integer({
-    mode: "timestamp",
-  }).notNull(),
-  updatedAt: integer({
-    mode: "timestamp",
-  }).notNull(),
+  createdAt: integer().notNull(),
+  updatedAt: integer().notNull(),
   ipAddress: text(),
   userAgent: text(),
   userId: text()
@@ -74,12 +62,8 @@ export const account = sqliteTable("account", {
   }),
   scope: text(),
   password: text(),
-  createdAt: integer({
-    mode: "timestamp",
-  }).notNull(),
-  updatedAt: integer({
-    mode: "timestamp",
-  }).notNull(),
+  createdAt: integer().notNull(),
+  updatedAt: integer().notNull(),
 });
 
 export const verification = sqliteTable("verification", {
@@ -91,10 +75,6 @@ export const verification = sqliteTable("verification", {
   expiresAt: integer({
     mode: "timestamp",
   }).notNull(),
-  createdAt: integer({
-    mode: "timestamp",
-  }).$defaultFn(() => /* @__PURE__ */ new Date()),
-  updatedAt: integer({
-    mode: "timestamp",
-  }).$defaultFn(() => /* @__PURE__ */ new Date()),
+  createdAt: integer().notNull(),
+  updatedAt: integer().notNull(),
 });
