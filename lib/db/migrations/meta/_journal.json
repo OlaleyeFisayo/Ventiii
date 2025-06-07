@@ -8,6 +8,13 @@
       "when": 1748379938216,
       "tag": "0000_salty_ultimo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1749313241774,
+      "tag": "0001_serious_iron_fist",
+      "breakpoints": true
     }
   ]
 }
