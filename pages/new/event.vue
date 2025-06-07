@@ -58,6 +58,26 @@ onBeforeRouteLeave(() => {
   }
   return true;
 });
+
+async function createEvent(state: {
+  title: string;
+  description: string;
+  date: {
+    startDate: string;
+    endDate: string | null;
+  };
+  time: {
+    start: string;
+    end: string;
+  };
+  location: string;
+  coverPicture: string;
+}) {
+  await $fetch("/api/event", {
+    method: "post",
+    body: state,
+  });
+};
 </script>
 
 <template>
@@ -71,6 +91,7 @@ onBeforeRouteLeave(() => {
         v-model:is-dirty="isDirty"
         v-model:items="createEventForm"
         submit-label="Create Event"
+        @submit="createEvent"
       />
     </section>
   </section>
