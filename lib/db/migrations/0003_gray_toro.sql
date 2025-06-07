@@ -1,0 +1,1 @@
+ALTER TABLE `event` ADD `user_id` integer NOT NULL REFERENCES user(id);
