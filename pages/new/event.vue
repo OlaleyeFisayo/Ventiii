@@ -46,6 +46,18 @@ const createEventForm = ref<AppFormItems[]>([
     maxFileSize: 5 * 1024 * 1024,
   },
 ]);
+
+const isDirty = ref(false);
+
+onBeforeRouteLeave(() => {
+  if (isDirty.value) {
+    // eslint-disable-next-line no-alert
+    const confirm = window.confirm("Are you sure you want to leave? All unsaved changes will be gone");
+    if (!confirm)
+      return false;
+  }
+  return true;
+});
 </script>
 
 <template>
@@ -56,6 +68,7 @@ const createEventForm = ref<AppFormItems[]>([
 
     <section class="w-full max-w-[500px]">
       <AppForm
+        v-model:is-dirty="isDirty"
         v-model:items="createEventForm"
         submit-label="Create Event"
       />

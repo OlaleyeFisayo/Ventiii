@@ -117,6 +117,29 @@ type Schema = ReturnType<typeof state>;
 function handleSubmit(event: FormSubmitEvent<Schema>) {
   emits("submit", event.data);
 }
+
+// THis is to check whether the form is filled or not
+const isDirty = computed(() => {
+  return Object.values(state.value).some((val) => {
+    // handle image, time, otp, string, and number values
+    if (Array.isArray(val))
+      return val.length > 0;
+    if (val && typeof val === "object" && "start" in val && "end" in val)
+      return val.start?.trim?.() || val.end?.trim?.();
+    return typeof val === "string"
+      ? val.trim().length > 0
+      : val != null;
+  });
+});
+
+const isDirtyModel = defineModel<boolean>("isDirty", {
+  local: true,
+  default: false,
+});
+
+watch(isDirty, (val: boolean) => {
+  isDirtyModel.value = val;
+});
 </script>
 
 <template>
