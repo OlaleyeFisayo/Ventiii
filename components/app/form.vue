@@ -120,7 +120,10 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <UForm :state="state" @submit="handleSubmit">
+  <UForm
+    :state="state"
+    @submit="handleSubmit"
+  >
     <div class="flex flex-col gap-2">
       <AppFormField
         v-for="item in items"
@@ -171,7 +174,10 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
           :icon="item.icon"
           :base-class="item.icon ? 'pl-9' : ''"
         >
-          <template v-if="item.type === 'password'" #trailing>
+          <template
+            v-if="item.type === 'password'"
+            #trailing
+          >
             <AppButton
               variant="link"
               size="xl"
@@ -193,7 +199,10 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
             size="sm"
             class="mt-2"
           />
-          <p id="password-strength" class="text-sm font-medium text-black mt-1">
+          <p
+            id="password-strength"
+            class="text-sm font-medium text-black mt-1"
+          >
             {{ text }}. Must contain:
           </p>
           <ul

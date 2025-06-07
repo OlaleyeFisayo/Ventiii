@@ -47,9 +47,15 @@ const registerForm = ref<AppFormItems[]>([
         :loading="authStore.loading"
         @submit="authStore.signUp"
       />
-      <AppSeperator label="or" class="my-4" />
+      <AppSeperator
+        label="or"
+        class="my-4"
+      />
       <AuthGoogleButton />
-      <NuxtLink to="/log-in" class="underline flex items-center justify-center text-purple-900">
+      <NuxtLink
+        to="/log-in"
+        class="underline flex items-center justify-center text-purple-900"
+      >
         Already have an account? Log in
       </NuxtLink>
     </section>

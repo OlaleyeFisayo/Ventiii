@@ -71,7 +71,10 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
       >
       Ventiii
     </h1>
-    <section v-if="authStore.sessionLoading" class="flex gap-2 items-center">
+    <section
+      v-if="authStore.sessionLoading"
+      class="flex gap-2 items-center"
+    >
       <USkeleton class="h-10 w-[100px]" />
       <USkeleton class="h-10 w-10 rounded-full" />
     </section>
@@ -103,10 +106,14 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
         </AppDropdownMenu>
       </div>
     </section>
-    <nav v-else class="flex gap-2 items-center">
+    <nav
+      v-else
+      class="flex gap-2 items-center"
+    >
       <AppButton
         v-for="link in authLinks"
-        :key="link.label" :label="link.label"
+        :key="link.label"
+        :label="link.label"
         :to="link.to"
         :theme="link?.theme"
       />

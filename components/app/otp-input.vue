@@ -64,7 +64,10 @@ onMounted(() => {
         :disabled="isButtonDisabled"
         @click="handleResend"
       />
-      <span v-if="isButtonDisabled" class="text-sm text-gray-500">
+      <span
+        v-if="isButtonDisabled"
+        class="text-sm text-gray-500"
+      >
         (Wait {{ formattedTimeLeft }})
       </span>
     </p>

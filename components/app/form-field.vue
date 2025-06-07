@@ -7,7 +7,9 @@ defineProps({
 
 <template>
   <UFormField
-    :label="label" :name="name" :ui="{
+    :label="label"
+    :name="name"
+    :ui="{
       label: 'capitalize text-lg text-black',
     }"
   >
