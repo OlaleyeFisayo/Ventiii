@@ -63,8 +63,8 @@ async function createEvent(state: {
   title: string;
   description: string;
   date: {
-    startDate: string;
-    endDate: string | null;
+    start: string;
+    end: string;
   };
   time: {
     start: string;
@@ -73,9 +73,16 @@ async function createEvent(state: {
   location: string;
   coverPicture: string;
 }) {
+  const payload = {
+    ...state,
+    date: {
+      start: state.date.start.toString(),
+      end: state.date.end.toString(),
+    },
+  };
   await $fetch("/api/event", {
     method: "post",
-    body: state,
+    body: payload,
   });
 };
 </script>
