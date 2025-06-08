@@ -32,6 +32,7 @@
     "eslint": "^9.27.0",
     "nodemailer": "^7.0.3",
     "nuxt": "^3.17.4",
+    "nuxt-csurf": "^1.6.5",
     "pinia": "^3.0.2",
     "tailwindcss": "^4.1.7",
     "uuid": "^11.1.0",

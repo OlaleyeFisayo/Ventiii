@@ -6,6 +6,9 @@ export const useEventStore = defineStore("useEventStore", () => {
   const {
     errorToast,
   } = useAppToast();
+  const {
+    $csrfFetch,
+  } = useNuxtApp();
 
   const loading = ref(false);
   const success = ref(false);
@@ -24,7 +27,7 @@ export const useEventStore = defineStore("useEventStore", () => {
       loading.value = true;
       success.value = false;
 
-      await $fetch("/api/event", {
+      await $csrfFetch("/api/event", {
         method: "post",
         body: payload,
       });
