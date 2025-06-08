@@ -17,8 +17,6 @@ const EnvSchema = z.object({
   SMTP_PORT: z.string(),
   SMTP_USER: z.string(),
   SMTP_PASS: z.string(),
-  CLOUDINARY_CLOUD_NAME: z.string(),
-  CLOUDINARY_PRESET: z.string(),
 });
 
 export type EnvSchema = z.infer<typeof EnvSchema>;

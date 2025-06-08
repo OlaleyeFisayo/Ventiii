@@ -8,6 +8,7 @@ export const useEventStore = defineStore("useEventStore", () => {
   } = useAppToast();
 
   const loading = ref(false);
+  const success = ref(false);
 
   async function createEvent(payload: {
     title: string;
@@ -21,11 +22,14 @@ export const useEventStore = defineStore("useEventStore", () => {
   }) {
     try {
       loading.value = true;
+      success.value = false;
 
       await $fetch("/api/event", {
         method: "post",
         body: payload,
       });
+
+      success.value = true;
     }
     catch (e) {
       loading.value = false;
@@ -40,5 +44,6 @@ export const useEventStore = defineStore("useEventStore", () => {
   return {
     createEvent,
     loading,
+    success,
   };
 });
