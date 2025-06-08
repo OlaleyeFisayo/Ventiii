@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@pinia/nuxt",
     "@nuxt/image",
+    "nuxt-csurf",
   ],
   eslint: {
     config: {
@@ -33,7 +34,7 @@ export default defineNuxtConfig({
       link: [
         {
           rel: "icon",
-          href: "./public/logo.png",
+          href: "/logo.png",
         },
       ],
     },
