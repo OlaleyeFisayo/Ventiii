@@ -7,9 +7,18 @@ export const useEventStore = defineStore("useEventStore", () => {
     errorToast,
   } = useAppToast();
 
-  const loading = ref(true);
+  const loading = ref(false);
 
-  async function createEvent(payload: CreateEventPayload) {
+  async function createEvent(payload: {
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    startTime: string;
+    endTime: string;
+    location: string;
+    coverPictureUrl: string;
+  }) {
     try {
       loading.value = true;
 

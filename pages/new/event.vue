@@ -63,11 +63,14 @@ onBeforeRouteLeave(() => {
 
 async function createEvent(state: CreateEventPayload) {
   const payload = {
-    ...state,
-    date: {
-      start: state.date.start.toString(),
-      end: state.date.end.toString(),
-    },
+    title: state.title,
+    description: state.description,
+    startDate: state.date.start.toString(),
+    endDate: state.date.end.toString(),
+    startTime: state.time.start,
+    endTime: state.time.end,
+    location: state.location,
+    coverPictureUrl: state.coverPicture,
   };
 
   await eventStore.createEvent(payload);

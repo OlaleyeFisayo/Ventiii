@@ -1,24 +1,21 @@
 import {
-  z,
-} from "zod/v4";
+  v4 as uuidv4,
+} from "uuid";
 
-const createEventSchema = z.object({
-  title: z.string().min(1),
-  description: z.string().min(1),
-  date: z.object({
-    start: z.iso.date(),
-    end: z.iso.date(),
-  }),
-  time: z.object({
-    start: z.string().regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/),
-    end: z.string().regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/),
-  }),
-  location: z.string().min(1),
-  coverPictureUrl: z.url(),
-});
+import db from "~/lib/db";
+import {
+  event as eventTable,
+  InsertEvent,
+} from "~/lib/db/schema";
 
 export default defineEventHandler(async (event) => {
-  const result = await readValidatedBody(event, body => createEventSchema.safeParse(body));
+  if (!event.context.user) {
+    return sendError(event, createError({
+      statusCode: 401,
+      statusMessage: "Unauthorised",
+    }));
+  }
+  const result = await readValidatedBody(event, InsertEvent.safeParse);
 
   if (!result.success) {
     const statusMessage = result
@@ -43,5 +40,11 @@ export default defineEventHandler(async (event) => {
     }));
   }
 
-  return result.data;
+  const [created] = await db.insert(eventTable).values({
+    ...result.data,
+    id: uuidv4(),
+    userId: event.context.user.id,
+  }).returning();
+
+  return created;
 });

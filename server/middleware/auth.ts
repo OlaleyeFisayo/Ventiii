@@ -8,14 +8,12 @@ const protectedRoutes = [
 ];
 
 export default defineEventHandler(async (event) => {
+  const session = await auth.api.getSession({
+    headers: event.headers,
+  });
+  event.context.user = session?.user;
   const isProtected = protectedRoutes.some((route: string) => event.path.startsWith(route));
-  if (isProtected) {
-    const session = await auth.api.getSession({
-      headers: event.headers,
-    });
-
-    if (!session) {
-      await sendRedirect(event, "/log-in", 302);
-    }
+  if (isProtected && !session) {
+    await sendRedirect(event, "/log-in", 302);
   }
 });
