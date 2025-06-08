@@ -23,8 +23,15 @@ type ResetPasswordPayload = {
 
 export const useAuthStore = defineStore("useAuthStore", () => {
   const {
+    csrf,
+  } = useCsrf();
+  const headers = new Headers();
+  headers.append("csrf-token", csrf);
+
+  const {
     errorToast,
   } = useAppToast();
+
   const session = authClient.useSession();
   const sessionLoading = computed(() => session.value.isPending || session.value.isRefetching);
   const user = computed(() => session.value?.data?.user);
@@ -38,6 +45,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       error,
     } = await authClient.signUp.email({
       ...payload,
+      fetchOptions: {
+        headers,
+      },
     });
     if (error)
       errorToast(error?.message as string);
@@ -53,6 +63,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       error,
     } = await authClient.signIn.email({
       ...payload,
+      fetchOptions: {
+        headers,
+      },
     });
     if (error)
       errorToast(error?.message as string);
@@ -68,6 +81,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       provider: "google",
       callbackURL: "/dashboard",
       errorCallbackURL: "/error",
+      fetchOptions: {
+        headers,
+      },
     });
   };
 
@@ -79,6 +95,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     } = await authClient.emailOtp.sendVerificationOtp({
       email: payload.email,
       type: "forget-password",
+      fetchOptions: {
+        headers,
+      },
     });
     if (error)
       errorToast(error?.message as string);
@@ -97,6 +116,9 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       email: payload.email,
       otp: payload.otp,
       password: payload.password,
+      fetchOptions: {
+        headers,
+      },
     });
 
     if (error)
@@ -110,6 +132,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     success.value = false;
     await authClient.signOut({
       fetchOptions: {
+        headers,
         onSuccess: async () => {
           await navigateTo("/log-in");
         },

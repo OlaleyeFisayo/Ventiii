@@ -15,7 +15,7 @@ const error: any = route.query.error || "Unknown Error Occured";
       label="Go Back"
       class="w-fit"
       icon="i-tabler-arrow-narrow-left"
-      @click="$router.back()"
+      to="/"
     />
   </section>
 </template>
