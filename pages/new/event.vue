@@ -49,10 +49,11 @@ const createEventForm = ref<AppFormItems[]>([
   },
 ]);
 
+const isSubmitted = ref(false);
 const isDirty = ref(false);
 
 onBeforeRouteLeave(() => {
-  if (isDirty.value) {
+  if (!isSubmitted.value && isDirty.value) {
     // eslint-disable-next-line no-alert
     const confirm = window.confirm("Are you sure you want to leave? All unsaved changes will be gone");
     if (!confirm)
@@ -74,6 +75,7 @@ async function createEvent(state: CreateEventPayload) {
   };
 
   await eventStore.createEvent(payload);
+  isSubmitted.value = true;
 };
 </script>
 
