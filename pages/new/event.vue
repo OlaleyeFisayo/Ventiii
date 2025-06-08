@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+const eventStore = useEventStore();
+
 const createEventForm = ref<AppFormItems[]>([
   {
     label: "Title",
@@ -59,20 +61,7 @@ onBeforeRouteLeave(() => {
   return true;
 });
 
-async function createEvent(state: {
-  title: string;
-  description: string;
-  date: {
-    start: string;
-    end: string;
-  };
-  time: {
-    start: string;
-    end: string;
-  };
-  location: string;
-  coverPicture: string;
-}) {
+async function createEvent(state: CreateEventPayload) {
   const payload = {
     ...state,
     date: {
@@ -80,10 +69,8 @@ async function createEvent(state: {
       end: state.date.end.toString(),
     },
   };
-  await $fetch("/api/event", {
-    method: "post",
-    body: payload,
-  });
+
+  await eventStore.createEvent(payload);
 };
 </script>
 
@@ -98,6 +85,7 @@ async function createEvent(state: {
         v-model:is-dirty="isDirty"
         v-model:items="createEventForm"
         submit-label="Create Event"
+        :loading="eventStore.loading"
         @submit="createEvent"
       />
     </section>

@@ -159,6 +159,7 @@ watch(isDirty, (val: boolean) => {
             v-model="item.value"
             :max-files="item.maxFile"
             :max-file-size="item.maxFileSize"
+            :disabled="loading"
           />
         </template>
         <template v-else-if="item.type === 'time'">
@@ -171,6 +172,7 @@ watch(isDirty, (val: boolean) => {
         <template v-else-if="item.type === 'date'">
           <AppCalendar
             v-model="item.value"
+            :disabled="loading"
           />
         </template>
         <template v-else-if="item.type === 'textarea'">

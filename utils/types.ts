@@ -9,3 +9,18 @@ export type AppFormItems = {
   maxFile?: number;
   maxFileSize?: number;
 };
+
+export type CreateEventPayload = {
+  title: string;
+  description: string;
+  date: {
+    start: string;
+    end: string;
+  };
+  time: {
+    start: string;
+    end: string;
+  };
+  location: string;
+  coverPicture: string;
+};

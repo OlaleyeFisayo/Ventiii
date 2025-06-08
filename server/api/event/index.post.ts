@@ -21,11 +21,24 @@ export default defineEventHandler(async (event) => {
   const result = await readValidatedBody(event, body => createEventSchema.safeParse(body));
 
   if (!result.success) {
-    const data = result.error.issues.map(issue => `${issue.path.join("")}: ${issue.message}`);
+    const statusMessage = result
+      .error
+      .issues
+      .map(issue => `${issue.path.join("")}: ${issue.message}`)
+      .join(", \n");
+
+    const data = result
+      .error
+      .issues
+      .reduce((errors, issue) => {
+        errors[issue.path.join("")] = issue.message;
+        return errors;
+      }, {
+      } as Record<string, string>);
 
     return sendError(event, createError({
       statusCode: 422,
-      statusMessage: "Invalid Data",
+      statusMessage,
       data,
     }));
   }

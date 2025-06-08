@@ -11,6 +11,7 @@ type Props = {
   acceptedTypes?: string[];
   modelValue?: File[];
   preview?: boolean;
+  disabled?: boolean;
 };
 
 type Emits = {
@@ -24,6 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxFileSize: 10 * 1024 * 1024, // 10MB default
   acceptedTypes: () => ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"],
   preview: false,
+  disabled: false,
 });
 
 const emit = defineEmits<Emits>();
@@ -290,6 +292,7 @@ defineExpose({
         'border-primary-500 bg-primary-50 dark:bg-primary-950': isDragging,
         'hover:border-gray-400 dark:hover:border-gray-500': !isDragging,
       }"
+      :disabled="disabled"
       @dragenter.prevent="handleDragEnter"
       @dragover.prevent="handleDragOver"
       @dragleave.prevent="handleDragLeave"
@@ -306,6 +309,7 @@ defineExpose({
             <UButton
               variant="link"
               class="font-medium text-primary-600 hover:text-primary-500"
+              :disabled="disabled"
               @click="triggerFileInput"
             >
               Click to upload
