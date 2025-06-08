@@ -10,7 +10,7 @@ export type AppFormItems = {
   maxFileSize?: number;
 };
 
-export type CreateEventPayload = {
+export type CreateEventState = {
   title: string;
   description: string;
   date: {
@@ -22,5 +22,5 @@ export type CreateEventPayload = {
     end: string;
   };
   location: string;
-  coverPicture: string;
+  coverPicture: File[];
 };

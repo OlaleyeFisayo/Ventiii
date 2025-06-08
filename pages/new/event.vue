@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const eventStore = useEventStore();
+const cloudinaryStore = useCloudinaryStore();
 
 const createEventForm = ref<AppFormItems[]>([
   {
@@ -62,7 +63,11 @@ onBeforeRouteLeave(() => {
   return true;
 });
 
-async function createEvent(state: CreateEventPayload) {
+async function createEvent(state: CreateEventState) {
+  const {
+    url,
+  } = await cloudinaryStore.upload(state.coverPicture[0] as File);
+
   const payload = {
     title: state.title,
     description: state.description,
@@ -71,11 +76,15 @@ async function createEvent(state: CreateEventPayload) {
     startTime: state.time.start,
     endTime: state.time.end,
     location: state.location,
-    coverPictureUrl: state.coverPicture,
+    coverPictureUrl: url,
   };
 
   await eventStore.createEvent(payload);
-  isSubmitted.value = true;
+
+  if (eventStore.success) {
+    isSubmitted.value = true;
+    await navigateTo("/dashboard");
+  }
 };
 </script>
 
@@ -90,7 +99,7 @@ async function createEvent(state: CreateEventPayload) {
         v-model:is-dirty="isDirty"
         v-model:items="createEventForm"
         submit-label="Create Event"
-        :loading="eventStore.loading"
+        :loading="eventStore.loading || cloudinaryStore.loading"
         @submit="createEvent"
       />
     </section>
