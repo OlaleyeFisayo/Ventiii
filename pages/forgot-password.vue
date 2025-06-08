@@ -31,7 +31,10 @@ const forgotPasswordForm = ref<AppFormItems[]>([
         :loading="authStore.loading"
         @submit="authStore.forgetPasswordOTP"
       />
-      <NuxtLink to="/log-in" class="underline flex items-center justify-center mt-4 text-purple-900">
+      <NuxtLink
+        to="/log-in"
+        class="underline flex items-center justify-center mt-4 text-purple-900"
+      >
         Remember your password?
       </NuxtLink>
     </section>

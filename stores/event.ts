@@ -1,0 +1,44 @@
+import type {
+  FetchError,
+} from "ofetch";
+
+export const useEventStore = defineStore("useEventStore", () => {
+  const {
+    errorToast,
+  } = useAppToast();
+
+  const loading = ref(false);
+
+  async function createEvent(payload: {
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+    startTime: string;
+    endTime: string;
+    location: string;
+    coverPictureUrl: string;
+  }) {
+    try {
+      loading.value = true;
+
+      await $fetch("/api/event", {
+        method: "post",
+        body: payload,
+      });
+    }
+    catch (e) {
+      loading.value = false;
+      const error = e as FetchError;
+      errorToast(error.statusMessage || "An unknown issue occured");
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
+  return {
+    createEvent,
+    loading,
+  };
+});

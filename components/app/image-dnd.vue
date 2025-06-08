@@ -11,6 +11,7 @@ type Props = {
   acceptedTypes?: string[];
   modelValue?: File[];
   preview?: boolean;
+  disabled?: boolean;
 };
 
 type Emits = {
@@ -24,6 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxFileSize: 10 * 1024 * 1024, // 10MB default
   acceptedTypes: () => ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"],
   preview: false,
+  disabled: false,
 });
 
 const emit = defineEmits<Emits>();
@@ -290,6 +292,7 @@ defineExpose({
         'border-primary-500 bg-primary-50 dark:bg-primary-950': isDragging,
         'hover:border-gray-400 dark:hover:border-gray-500': !isDragging,
       }"
+      :disabled="disabled"
       @dragenter.prevent="handleDragEnter"
       @dragover.prevent="handleDragOver"
       @dragleave.prevent="handleDragLeave"
@@ -297,12 +300,16 @@ defineExpose({
     >
       <!-- Upload Area Content -->
       <div class="text-center">
-        <UIcon name="i-tabler-photo" class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+        <UIcon
+          name="i-tabler-photo"
+          class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
+        />
         <div class="mt-4">
           <p class="text-sm text-gray-600 dark:text-gray-400">
             <UButton
               variant="link"
               class="font-medium text-primary-600 hover:text-primary-500"
+              :disabled="disabled"
               @click="triggerFileInput"
             >
               Click to upload
@@ -332,7 +339,10 @@ defineExpose({
         class="absolute inset-0 bg-white/80 dark:bg-gray-900/80 flex items-center justify-center rounded-lg"
       >
         <div class="text-center">
-          <UIcon name="i-tabler-loader-2" class="animate-spin h-8 w-8 text-primary-500 mx-auto" />
+          <UIcon
+            name="i-tabler-loader-2"
+            class="animate-spin h-8 w-8 text-primary-500 mx-auto"
+          />
           <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Processing images...
           </p>
@@ -341,7 +351,10 @@ defineExpose({
     </div>
 
     <!-- Error Messages -->
-    <div v-if="errors.length > 0" class="mt-4">
+    <div
+      v-if="errors.length > 0"
+      class="mt-4"
+    >
       <UAlert
         v-for="(error, index) in errors"
         :key="index"
@@ -354,7 +367,10 @@ defineExpose({
     </div>
 
     <!-- Image Previews -->
-    <div v-if="images.length > 0" class="mt-6">
+    <div
+      v-if="images.length > 0"
+      class="mt-6"
+    >
       <h3 class="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
         Selected Images ({{ images.length }}{{ maxFiles > 0 ? `/${maxFiles}` : '' }})
       </h3>
@@ -401,7 +417,10 @@ defineExpose({
 
           <!-- Image Info -->
           <div class="mt-2">
-            <p class="text-xs text-gray-600 dark:text-gray-400 truncate" :title="image.file.name">
+            <p
+              class="text-xs text-gray-600 dark:text-gray-400 truncate"
+              :title="image.file.name"
+            >
               {{ image.file.name }}
             </p>
             <p class="text-xs text-gray-500 dark:text-gray-500">
@@ -413,7 +432,11 @@ defineExpose({
     </div>
 
     <!-- Image Preview Modal (only if preview prop is true) -->
-    <UModal v-if="preview" v-model="showPreview" :ui="{ width: 'max-w-4xl' }">
+    <UModal
+      v-if="preview"
+      v-model="showPreview"
+      :ui="{ width: 'max-w-4xl' }"
+    >
       <div class="p-6">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">

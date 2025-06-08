@@ -1,0 +1,50 @@
+import {
+  v4 as uuidv4,
+} from "uuid";
+
+import db from "~/lib/db";
+import {
+  event as eventTable,
+  InsertEvent,
+} from "~/lib/db/schema";
+
+export default defineEventHandler(async (event) => {
+  if (!event.context.user) {
+    return sendError(event, createError({
+      statusCode: 401,
+      statusMessage: "Unauthorised",
+    }));
+  }
+  const result = await readValidatedBody(event, InsertEvent.safeParse);
+
+  if (!result.success) {
+    const statusMessage = result
+      .error
+      .issues
+      .map(issue => `${issue.path.join("")}: ${issue.message}`)
+      .join(", \n");
+
+    const data = result
+      .error
+      .issues
+      .reduce((errors, issue) => {
+        errors[issue.path.join("")] = issue.message;
+        return errors;
+      }, {
+      } as Record<string, string>);
+
+    return sendError(event, createError({
+      statusCode: 422,
+      statusMessage,
+      data,
+    }));
+  }
+
+  const [created] = await db.insert(eventTable).values({
+    ...result.data,
+    id: uuidv4(),
+    userId: event.context.user.id,
+  }).returning();
+
+  return created;
+});

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+const eventStore = useEventStore();
+
 const createEventForm = ref<AppFormItems[]>([
   {
     label: "Title",
@@ -41,11 +43,38 @@ const createEventForm = ref<AppFormItems[]>([
     label: "Cover Picture",
     tag: "coverPicture",
     type: "img",
-    value: null,
+    value: [],
     maxFile: 1,
     maxFileSize: 5 * 1024 * 1024,
   },
 ]);
+
+const isDirty = ref(false);
+
+onBeforeRouteLeave(() => {
+  if (isDirty.value) {
+    // eslint-disable-next-line no-alert
+    const confirm = window.confirm("Are you sure you want to leave? All unsaved changes will be gone");
+    if (!confirm)
+      return false;
+  }
+  return true;
+});
+
+async function createEvent(state: CreateEventPayload) {
+  const payload = {
+    title: state.title,
+    description: state.description,
+    startDate: state.date.start.toString(),
+    endDate: state.date.end.toString(),
+    startTime: state.time.start,
+    endTime: state.time.end,
+    location: state.location,
+    coverPictureUrl: state.coverPicture,
+  };
+
+  await eventStore.createEvent(payload);
+};
 </script>
 
 <template>
@@ -56,8 +85,11 @@ const createEventForm = ref<AppFormItems[]>([
 
     <section class="w-full max-w-[500px]">
       <AppForm
+        v-model:is-dirty="isDirty"
         v-model:items="createEventForm"
         submit-label="Create Event"
+        :loading="eventStore.loading"
+        @submit="createEvent"
       />
     </section>
   </section>

@@ -61,7 +61,10 @@ function onKeyup(e: KeyboardEvent) {
     :disabled="disabled"
     @keyup="onKeyup"
   >
-    <template v-if="$slots.trailing" #trailing>
+    <template
+      v-if="$slots.trailing"
+      #trailing
+    >
       <slot name="trailing" />
     </template>
   </UInput>

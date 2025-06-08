@@ -34,14 +34,23 @@ const loginForm = ref<AppFormItems[]>([
         @submit="authStore.signIn"
       >
         <div class="mt-2">
-          <NuxtLink to="/forgot-password" class="underline text-purple-900">
+          <NuxtLink
+            to="/forgot-password"
+            class="underline text-purple-900"
+          >
             Forgot Password?
           </NuxtLink>
         </div>
       </AppForm>
-      <AppSeperator label="or" class="my-4" />
+      <AppSeperator
+        label="or"
+        class="my-4"
+      />
       <AuthGoogleButton />
-      <NuxtLink to="/" class="underline flex items-center justify-center text-purple-900">
+      <NuxtLink
+        to="/"
+        class="underline flex items-center justify-center text-purple-900"
+      >
         Don't have an account? Sign up
       </NuxtLink>
     </section>

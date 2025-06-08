@@ -85,13 +85,13 @@ const isTimeValid = computed(() => {
 });
 
 const hasImageField = computed(() =>
-  items.value?.some((i: AppFormItems) => i.tag === "img"),
+  items.value?.some((i: AppFormItems) => i.type === "img"),
 );
 
 const isImageValid = computed(() => {
   if (!hasImageField.value)
     return true;
-  const imgValue = state.value.img;
+  const imgValue = items.value?.find((i: AppFormItems) => i.type === "img")?.value;
   return Array.isArray(imgValue) && imgValue.length > 0;
 });
 
@@ -117,10 +117,36 @@ type Schema = ReturnType<typeof state>;
 function handleSubmit(event: FormSubmitEvent<Schema>) {
   emits("submit", event.data);
 }
+
+// THis is to check whether the form is filled or not
+const isDirty = computed(() => {
+  return Object.values(state.value).some((val) => {
+    // handle image, time, otp, string, and number values
+    if (Array.isArray(val))
+      return val.length > 0;
+    if (val && typeof val === "object" && "start" in val && "end" in val)
+      return val.start?.trim?.() || val.end?.trim?.();
+    return typeof val === "string"
+      ? val.trim().length > 0
+      : val != null;
+  });
+});
+
+const isDirtyModel = defineModel<boolean>("isDirty", {
+  local: true,
+  default: false,
+});
+
+watch(isDirty, (val: boolean) => {
+  isDirtyModel.value = val;
+});
 </script>
 
 <template>
-  <UForm :state="state" @submit="handleSubmit">
+  <UForm
+    :state="state"
+    @submit="handleSubmit"
+  >
     <div class="flex flex-col gap-2">
       <AppFormField
         v-for="item in items"
@@ -133,6 +159,7 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
             v-model="item.value"
             :max-files="item.maxFile"
             :max-file-size="item.maxFileSize"
+            :disabled="loading"
           />
         </template>
         <template v-else-if="item.type === 'time'">
@@ -145,6 +172,7 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
         <template v-else-if="item.type === 'date'">
           <AppCalendar
             v-model="item.value"
+            :disabled="loading"
           />
         </template>
         <template v-else-if="item.type === 'textarea'">
@@ -171,7 +199,10 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
           :icon="item.icon"
           :base-class="item.icon ? 'pl-9' : ''"
         >
-          <template v-if="item.type === 'password'" #trailing>
+          <template
+            v-if="item.type === 'password'"
+            #trailing
+          >
             <AppButton
               variant="link"
               size="xl"
@@ -193,7 +224,10 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
             size="sm"
             class="mt-2"
           />
-          <p id="password-strength" class="text-sm font-medium text-black mt-1">
+          <p
+            id="password-strength"
+            class="text-sm font-medium text-black mt-1"
+          >
             {{ text }}. Must contain:
           </p>
           <ul
