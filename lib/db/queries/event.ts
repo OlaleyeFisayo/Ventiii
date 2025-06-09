@@ -23,6 +23,13 @@ export async function createEvent(data: InsertEvent, id: string, userId: number)
 
 export async function getEvents(userId: number) {
   return await db.query.event.findMany({
+    columns: {
+      id: true,
+      coverPictureUrl: true,
+      title: true,
+      startDate: true,
+      endDate: true,
+    },
     where: eq(event.userId, userId),
   });
 }
