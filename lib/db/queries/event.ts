@@ -1,3 +1,7 @@
+import {
+  eq,
+} from "drizzle-orm";
+
 import type {
   InsertEvent,
 } from "../schema";
@@ -15,4 +19,10 @@ export async function createEvent(data: InsertEvent, id: string, userId: number)
   });
 
   return created;
+}
+
+export async function getEvents(userId: number) {
+  return await db.query.event.findMany({
+    where: eq(event.userId, userId),
+  });
 }
