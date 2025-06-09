@@ -3,6 +3,8 @@ import type {
   TabsItem,
 } from "@nuxt/ui";
 
+const eventStore = useEventStore();
+
 const items = ref<TabsItem[]>([
   {
     label: "Upcoming",
@@ -11,6 +13,10 @@ const items = ref<TabsItem[]>([
     label: "Past",
   },
 ]);
+
+onMounted(async () => {
+  await eventStore.getEvents();
+});
 </script>
 
 <template>
@@ -36,5 +42,6 @@ const items = ref<TabsItem[]>([
       :items="items"
       size="xl"
     />
+    {{ eventStore.events }}
   </section>
 </template>
