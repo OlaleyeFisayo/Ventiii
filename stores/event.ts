@@ -37,7 +37,7 @@ export const useEventStore = defineStore("useEventStore", () => {
     catch (e) {
       loading.value = false;
       const error = e as FetchError;
-      errorToast(error.statusMessage || "An unknown issue occured");
+      errorToast(error.data?.statusMessage || error.statusMessage || "An unknown issue occured");
     }
     finally {
       loading.value = false;
