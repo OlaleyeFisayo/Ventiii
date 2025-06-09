@@ -51,3 +51,5 @@ export const InsertEvent = createInsertSchema(event, {
   createdAt: true,
   updatedAt: true,
 });
+
+export type InsertEvent = z.infer<typeof InsertEvent>;
