@@ -1,3 +1,7 @@
+import type {
+  User,
+} from "better-auth";
+
 import {
   betterAuth,
 } from "better-auth";
@@ -13,6 +17,10 @@ import {
   sendEmail,
 } from "./email";
 import env from "./env";
+
+export type UserWithId = Omit<User, "id"> & {
+  id: number;
+};
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
