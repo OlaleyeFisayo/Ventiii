@@ -1,20 +1,21 @@
+import type {
+  DrizzleError,
+
+} from "drizzle-orm";
+
 import {
   v4 as uuidv4,
 } from "uuid";
 
-import db from "~/lib/db";
 import {
-  event as eventTable,
+  createEvent,
+} from "~/lib/db/queries/event";
+import {
   InsertEvent,
 } from "~/lib/db/schema";
+import defineAuthenticatedEventHandler from "~/utils/define-authenticated-event-handler";
 
-export default defineEventHandler(async (event) => {
-  if (!event.context.user) {
-    return sendError(event, createError({
-      statusCode: 401,
-      statusMessage: "Unauthorised",
-    }));
-  }
+export default defineAuthenticatedEventHandler(async (event) => {
   const result = await readValidatedBody(event, InsertEvent.safeParse);
 
   if (!result.success) {
@@ -40,11 +41,15 @@ export default defineEventHandler(async (event) => {
     }));
   }
 
-  const [created] = await db.insert(eventTable).values({
-    ...result.data,
-    id: uuidv4(),
-    userId: event.context.user.id,
-  }).returning();
-
-  return created;
+  try {
+    const id = uuidv4();
+    return createEvent(result.data, id, event.context.user.id);
+  }
+  catch (e: any) {
+    const error = e as DrizzleError;
+    return sendError(event, createError({
+      statusCode: 409,
+      statusMessage: error.message,
+    }));
+  }
 });

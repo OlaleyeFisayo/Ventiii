@@ -12,6 +12,7 @@ export const useEventStore = defineStore("useEventStore", () => {
 
   const loading = ref(false);
   const success = ref(false);
+  const events = ref<GetEventsResponse[]>([]);
 
   async function createEvent(payload: {
     title: string;
@@ -37,7 +38,29 @@ export const useEventStore = defineStore("useEventStore", () => {
     catch (e) {
       loading.value = false;
       const error = e as FetchError;
-      errorToast(error.statusMessage || "An unknown issue occured");
+      errorToast(error.data?.statusMessage || error.statusMessage || "An unknown issue occured");
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
+  async function getEvents() {
+    try {
+      loading.value = true;
+      success.value = false;
+
+      const data = await $fetch("/api/events", {
+        method: "get",
+      }) as GetEventsResponse[];
+
+      events.value = data;
+      success.value = true;
+    }
+    catch (e) {
+      loading.value = false;
+      const error = e as FetchError;
+      errorToast(error.data?.statusMessage || error.statusMessage || "An unknown issue occured");
     }
     finally {
       loading.value = false;
@@ -48,5 +71,7 @@ export const useEventStore = defineStore("useEventStore", () => {
     createEvent,
     loading,
     success,
+    getEvents,
+    events,
   };
 });

@@ -24,3 +24,11 @@ export type CreateEventState = {
   location: string;
   coverPicture: File[];
 };
+
+export type GetEventsResponse = {
+  id: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  coverPictureUrl: string;
+};

@@ -2,7 +2,7 @@ CREATE TABLE `account` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`account_id` text NOT NULL,
 	`provider_id` text NOT NULL,
-	`user_id` text NOT NULL,
+	`user_id` integer NOT NULL,
 	`access_token` text,
 	`refresh_token` text,
 	`id_token` text,
@@ -23,7 +23,7 @@ CREATE TABLE `session` (
 	`updated_at` integer NOT NULL,
 	`ip_address` text,
 	`user_agent` text,
-	`user_id` text NOT NULL,
+	`user_id` integer NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -44,6 +44,22 @@ CREATE TABLE `verification` (
 	`identifier` text NOT NULL,
 	`value` text NOT NULL,
 	`expires_at` integer NOT NULL,
-	`created_at` integer,
-	`updated_at` integer
+	`created_at` integer NOT NULL,
+	`updated_at` integer NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `event` (
+	`id` text PRIMARY KEY NOT NULL,
+	`title` text NOT NULL,
+	`description` text NOT NULL,
+	`start_date` text NOT NULL,
+	`end_date` text NOT NULL,
+	`start_time` text NOT NULL,
+	`end_time` text NOT NULL,
+	`location` text NOT NULL,
+	`cover_picture_url` text NOT NULL,
+	`user_id` integer NOT NULL,
+	`created_at` integer NOT NULL,
+	`updated_at` integer NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );

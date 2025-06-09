@@ -23,12 +23,6 @@ type ResetPasswordPayload = {
 
 export const useAuthStore = defineStore("useAuthStore", () => {
   const {
-    csrf,
-  } = useCsrf();
-  const headers = new Headers();
-  headers.append("csrf-token", csrf);
-
-  const {
     errorToast,
   } = useAppToast();
 
@@ -39,6 +33,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const success = ref(false);
 
   async function signUp(payload: SignUpPayload) {
+    const {
+      csrf,
+    } = useCsrf();
+    const headers = new Headers();
+    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
     const {
@@ -57,6 +56,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function signIn(payload: SignUpPayload) {
+    const {
+      csrf,
+    } = useCsrf();
+    const headers = new Headers();
+    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
     const {
@@ -75,6 +79,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function googleSignIn() {
+    const {
+      csrf,
+    } = useCsrf();
+    const headers = new Headers();
+    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
     await authClient.signIn.social({
@@ -88,6 +97,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   };
 
   async function forgetPasswordOTP(payload: ForgetPasswordOTPPayload) {
+    const {
+      csrf,
+    } = useCsrf();
+    const headers = new Headers();
+    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
     const {
@@ -107,6 +121,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function resetPassword(payload: ResetPasswordPayload) {
+    const {
+      csrf,
+    } = useCsrf();
+    const headers = new Headers();
+    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
 
@@ -129,6 +148,11 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   async function logout() {
+    const {
+      csrf,
+    } = useCsrf();
+    const headers = new Headers();
+    headers.append("csrf-token", csrf);
     success.value = false;
     await authClient.signOut({
       fetchOptions: {

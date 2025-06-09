@@ -3,6 +3,8 @@ import type {
   TabsItem,
 } from "@nuxt/ui";
 
+const eventStore = useEventStore();
+
 const items = ref<TabsItem[]>([
   {
     label: "Upcoming",
@@ -11,6 +13,10 @@ const items = ref<TabsItem[]>([
     label: "Past",
   },
 ]);
+
+onMounted(async () => {
+  await eventStore.getEvents();
+});
 </script>
 
 <template>
@@ -36,5 +42,37 @@ const items = ref<TabsItem[]>([
       :items="items"
       size="xl"
     />
+    <div v-if="eventStore.events.length === 0 && !eventStore.loading">
+      <h1 class="w-full text-2xl text-center">
+        No Event Created yet
+      </h1>
+    </div>
+    <div
+      v-if="eventStore.events && !eventStore.loading"
+      class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 place-items-center gap-4"
+    >
+      <EventCard
+        v-for="event in eventStore.events"
+        :id="event.id"
+        :key="event.id"
+        :title="event.title"
+        :img="event.coverPictureUrl"
+        :start-date="event.startDate"
+        :end-date="event.endDate"
+      />
+    </div>
+    <div
+      v-if="eventStore.loading"
+      class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 place-items-center gap-4"
+    >
+      <div
+        v-for="i in 2"
+        :key="i"
+        class="shadow w-full max-w-[300px] p-4 rounded-2xl"
+      >
+        <AppSkeleton class="w-full max-w-[300px] h-[200px] rounded-md" />
+        <AppSkeleton class="w-full max-w-[300px] h-9 mt-2 rounded-md" />
+      </div>
+    </div>
   </section>
 </template>
