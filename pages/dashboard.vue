@@ -42,6 +42,11 @@ onMounted(async () => {
       :items="items"
       size="xl"
     />
+    <div v-if="eventStore.events.length === 0 && !eventStore.loading">
+      <h1 class="w-full text-2xl text-center">
+        No Event Created yet
+      </h1>
+    </div>
     <div
       v-if="eventStore.events && !eventStore.loading"
       class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 place-items-center gap-4"
