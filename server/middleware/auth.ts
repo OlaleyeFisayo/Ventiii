@@ -2,12 +2,12 @@ import {
   auth,
 } from "~/lib/auth";
 
-const protectedRoutes = [
-  "/dashboard",
-  "/new",
-];
-
 export default defineEventHandler(async (event) => {
+  const protectedRoutes = [
+    "/dashboard",
+    "/new",
+  ];
+
   const session = await auth.api.getSession({
     headers: event.headers,
   });
