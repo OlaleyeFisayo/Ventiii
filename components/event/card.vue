@@ -19,7 +19,6 @@ const cardWidth = ref(300);
     <NuxtImg
       :src="img"
       :width="cardWidth"
-      height="250"
       :alt="`${title} image`"
       class="rounded-md"
     />

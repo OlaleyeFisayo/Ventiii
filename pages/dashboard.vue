@@ -42,7 +42,10 @@ onMounted(async () => {
       :items="items"
       size="xl"
     />
-    <div class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 place-items-center gap-4">
+    <div
+      v-if="eventStore.events && !eventStore.loading"
+      class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 place-items-center gap-4"
+    >
       <EventCard
         v-for="event in eventStore.events"
         :id="event.id"
@@ -52,6 +55,19 @@ onMounted(async () => {
         :start-date="event.startDate"
         :end-date="event.endDate"
       />
+    </div>
+    <div
+      v-if="eventStore.loading"
+      class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 place-items-center gap-4"
+    >
+      <div
+        v-for="i in 2"
+        :key="i"
+        class="shadow w-full max-w-[300px] p-4 rounded-2xl"
+      >
+        <AppSkeleton class="w-full max-w-[300px] h-[200px] rounded-md" />
+        <AppSkeleton class="w-full max-w-[300px] h-9 mt-2 rounded-md" />
+      </div>
     </div>
   </section>
 </template>
