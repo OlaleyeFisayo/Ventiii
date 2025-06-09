@@ -1,3 +1,11 @@
+import type {
+  DrizzleError,
+
+} from "drizzle-orm";
+
+import {
+  eq,
+} from "drizzle-orm";
 import {
   v4 as uuidv4,
 } from "uuid";
@@ -40,11 +48,20 @@ export default defineEventHandler(async (event) => {
     }));
   }
 
-  const [created] = await db.insert(eventTable).values({
-    ...result.data,
-    id: uuidv4(),
-    userId: event.context.user.id,
-  }).returning();
+  try {
+    const [created] = await db.insert(eventTable).values({
+      ...result.data,
+      id: uuidv4(),
+      userId: event.context.user.id,
+    }).returning();
 
-  return created;
+    return created;
+  }
+  catch (e: any) {
+    const error = e as DrizzleError;
+    return sendError(event, createError({
+      statusCode: 409,
+      statusMessage: error.message,
+    }));
+  }
 });
