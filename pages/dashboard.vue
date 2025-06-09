@@ -42,6 +42,16 @@ onMounted(async () => {
       :items="items"
       size="xl"
     />
-    {{ eventStore.events }}
+    <div class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 place-items-center gap-4">
+      <EventCard
+        v-for="event in eventStore.events"
+        :id="event.id"
+        :key="event.id"
+        :title="event.title"
+        :img="event.coverPictureUrl"
+        :start-date="event.startDate"
+        :end-date="event.endDate"
+      />
+    </div>
   </section>
 </template>

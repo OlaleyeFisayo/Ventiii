@@ -12,7 +12,7 @@ export const useEventStore = defineStore("useEventStore", () => {
 
   const loading = ref(false);
   const success = ref(false);
-  const events = ref([]);
+  const events = ref<GetEventsResponse[]>([]);
 
   async function createEvent(payload: {
     title: string;
@@ -52,7 +52,7 @@ export const useEventStore = defineStore("useEventStore", () => {
 
       const data = await $fetch("/api/events", {
         method: "get",
-      });
+      }) as GetEventsResponse[];
 
       events.value = data;
       success.value = true;
