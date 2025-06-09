@@ -24,13 +24,13 @@ const cardWidth = ref(300);
       class="rounded-md"
     />
     <div class="mt-2">
-      <h1 class="w-full font-bold text-lg">
+      <h1 class="w-full font-bold text-md">
         {{ title }}
       </h1>
-      <p>
-        <span>{{ startDate }}</span>
-        to
-        <span>{{ endDate }}</span>
+      <p class="text-sm">
+        <span class="font-light">{{ startDate }}</span>
+        -
+        <span class="font-light">{{ endDate }}</span>
       </p>
     </div>
   </NuxtLink>
