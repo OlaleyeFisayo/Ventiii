@@ -34,12 +34,14 @@ const activeTab = computed({
 });
 
 onMounted(async () => {
-  router.push({
-    path: "/dashboard",
-    query: {
-      option: items.value[0].value,
-    },
-  });
+  if (!route.query.option) {
+    router.push({
+      path: "/dashboard",
+      query: {
+        option: items.value[0].value,
+      },
+    });
+  }
   await eventStore.getEvents();
 });
 </script>
