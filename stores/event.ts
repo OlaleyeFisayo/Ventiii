@@ -45,12 +45,12 @@ export const useEventStore = defineStore("useEventStore", () => {
     }
   }
 
-  async function getEvents() {
+  async function getEvents(filter: GetEventFilterOptions = "all") {
     try {
       loading.value = true;
       success.value = false;
 
-      const data = await $fetch("/api/events", {
+      const data = await $fetch(`/api/events?filter=${filter}`, {
         method: "get",
       }) as GetEventsResponse[];
 

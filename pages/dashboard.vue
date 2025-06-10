@@ -7,6 +7,10 @@ const eventStore = useEventStore();
 
 const items = ref<TabsItem[]>([
   {
+    label: "All",
+    value: "all",
+  },
+  {
     label: "Upcoming",
     value: "upcoming",
   },
@@ -23,7 +27,7 @@ const activeTab = computed({
   get() {
     return (route.query.option as string) || items.value[0].value;
   },
-  set(option: string) {
+  async set(option: string) {
     router.push({
       path: "/dashboard",
       query: {
@@ -31,6 +35,14 @@ const activeTab = computed({
       },
     });
   },
+});
+
+watch(() => route.query.option, async (newOption) => {
+  if (newOption) {
+    await eventStore.getEvents(newOption as string);
+  }
+}, {
+  immediate: true,
 });
 
 onMounted(async () => {
@@ -42,7 +54,6 @@ onMounted(async () => {
       },
     });
   }
-  await eventStore.getEvents();
 });
 </script>
 
@@ -70,9 +81,24 @@ onMounted(async () => {
       :items="items"
       size="xl"
     />
-    <div v-if="eventStore.events.length === 0 && !eventStore.loading">
-      <h1 class="w-full text-2xl text-center">
+    <div>
+      <h1
+        v-if="route.query.option === 'all' && eventStore.events.length === 0 && !eventStore.loading"
+        class="w-full text-2xl text-center"
+      >
         No Event Created yet
+      </h1>
+      <h1
+        v-if="route.query.option === 'upcoming' && eventStore.events.length === 0 && !eventStore.loading"
+        class="w-full text-2xl text-center"
+      >
+        No Upcoming Event
+      </h1>
+      <h1
+        v-if="route.query.option === 'past' && eventStore.events.length === 0 && !eventStore.loading"
+        class="w-full text-2xl text-center"
+      >
+        No Past Event
       </h1>
     </div>
     <div
