@@ -17,14 +17,14 @@ const items = defineModel<AppFormItems[]>("items");
 const showPassword = ref(false);
 
 // State for Uform
-const state = computed(() =>
+const state = computed<Record<string, any>>(() =>
   Object.fromEntries(items.value!.map((i: AppFormItems) => [i.tag, i.value])),
 );
 
 // Secure password check
 const strength = computed(() => useCheckPasswordStrength(state.value?.password));
 const score = computed(() => strength.value.filter((req: any) => req.met).length);
-const color = computed<ComponentColor>(() => {
+const color = computed<any | ComponentColor>(() => {
   return ["neutral", "error", "warning", "warning", "success"][score.value] ?? "neutral";
 });
 
@@ -38,78 +38,8 @@ const text = computed(() => {
   return "Strong password";
 });
 
-// Check if Form is filled up
-const isAllFilled = computed(() => useAllFilled(state.value));
-
 // check if submitting is disabled
-const hasSecurePassword = computed(() =>
-  items.value?.some((i: AppFormItems) => i.tag === "password" && i.securePassword),
-);
-
-const hasConfirmPassword = computed(() =>
-  items.value?.some((i: AppFormItems) => i.tag === "confirmPassword"),
-);
-
-const passwordsMatch = computed(() => {
-  const pw = state.value.password;
-  const cpw = state.value.confirmPassword;
-  return !hasConfirmPassword.value || pw === cpw;
-});
-
-const hasOtp = computed(() =>
-  items.value?.some((i: AppFormItems) => i.type === "otp"),
-);
-
-const isOtpValid = computed(() => {
-  const otp = state.value?.otp;
-  if (!hasOtp.value)
-    return true;
-  return Array.isArray(otp)
-    && otp.length === 6
-    && otp.every(val => typeof val === "string" && val.trim().length > 0);
-});
-
-const hasTimeField = computed(() =>
-  items.value?.some((i: AppFormItems) => i.type === "time"),
-);
-
-const isTimeValid = computed(() => {
-  if (!hasTimeField.value)
-    return true;
-  const timeValue = state.value.time;
-  return (
-    timeValue != null
-    && typeof timeValue.start === "string" && timeValue.start.trim() !== ""
-    && typeof timeValue.end === "string" && timeValue.end.trim() !== ""
-  );
-});
-
-const hasImageField = computed(() =>
-  items.value?.some((i: AppFormItems) => i.type === "img"),
-);
-
-const isImageValid = computed(() => {
-  if (!hasImageField.value)
-    return true;
-  const imgValue = items.value?.find((i: AppFormItems) => i.type === "img")?.value;
-  return Array.isArray(imgValue) && imgValue.length > 0;
-});
-
-const isSubmitDisabled = computed(() => {
-  if (!isAllFilled.value)
-    return true;
-  if (hasSecurePassword.value && score.value < 4)
-    return true;
-  if (hasConfirmPassword.value && !passwordsMatch.value)
-    return true;
-  if (hasOtp.value && !isOtpValid.value)
-    return true;
-  if (hasTimeField.value && !isTimeValid.value)
-    return true;
-  if (hasImageField.value && !isImageValid.value)
-    return true;
-  return false;
-});
+const isSubmitDisabled = computed(() => useFormValidation(items, state, score));
 
 // Handling submits
 type Schema = ReturnType<typeof state>;
@@ -121,7 +51,6 @@ function handleSubmit(event: FormSubmitEvent<Schema>) {
 // THis is to check whether the form is filled or not
 const isDirty = computed(() => {
   return Object.values(state.value).some((val) => {
-    // handle image, time, otp, string, and number values
     if (Array.isArray(val))
       return val.length > 0;
     if (val && typeof val === "object" && "start" in val && "end" in val)
@@ -154,40 +83,35 @@ watch(isDirty, (val: boolean) => {
         :name="item.tag"
         :label="item?.label ?? item.tag"
       >
-        <template v-if="item.type === 'img'">
-          <AppImageDnd
-            v-model="item.value"
-            :max-files="item.maxFile"
-            :max-file-size="item.maxFileSize"
-            :disabled="loading"
-          />
-        </template>
-        <template v-else-if="item.type === 'time'">
-          <AppTime
-            v-model:start="item.value.start"
-            v-model:end="item.value.end"
-            :disabled="loading"
-          />
-        </template>
-        <template v-else-if="item.type === 'date'">
-          <AppCalendar
-            v-model="item.value"
-            :disabled="loading"
-          />
-        </template>
-        <template v-else-if="item.type === 'textarea'">
-          <AppTextarea
-            v-model="item.value"
-            :disabled="loading"
-            :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
-          />
-        </template>
-        <template v-else-if="item.type === 'otp'">
-          <AppOtpInput
-            v-model="item.value"
-            :disabled="loading"
-          />
-        </template>
+        <AppImageDnd
+          v-if="item.type === 'img'"
+          v-model="item.value"
+          :max-files="item.maxFile"
+          :max-file-size="item.maxFileSize"
+          :disabled="loading"
+        />
+        <AppTime
+          v-else-if="item.type === 'time'"
+          v-model:start="item.value.start"
+          v-model:end="item.value.end"
+          :disabled="loading"
+        />
+        <AppCalendar
+          v-else-if="item.type === 'date'"
+          v-model="item.value"
+          :disabled="loading"
+        />
+        <AppTextarea
+          v-else-if="item.type === 'textarea'"
+          v-model="item.value"
+          :disabled="loading"
+          :placeholder="item?.placeholder ?? `Enter your ${item.tag}`"
+        />
+        <AppOtpInput
+          v-else-if="item.type === 'otp'"
+          v-model="item.value"
+          :disabled="loading"
+        />
         <AppInput
           v-else
           v-model="item.value"

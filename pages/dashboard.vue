@@ -7,20 +7,58 @@ const eventStore = useEventStore();
 
 const items = ref<TabsItem[]>([
   {
+    label: "All",
+    value: "all",
+  },
+  {
     label: "Upcoming",
+    value: "upcoming",
   },
   {
     label: "Past",
+    value: "past",
   },
 ]);
 
+const route = useRoute();
+const router = useRouter();
+
+const activeTab = computed({
+  get() {
+    return (route.query.option as string) || items.value[0].value;
+  },
+  async set(option: string) {
+    router.push({
+      path: "/dashboard",
+      query: {
+        option,
+      },
+    });
+  },
+});
+
+watch(() => route.query.option, async (newOption) => {
+  if (newOption) {
+    await eventStore.getEvents(newOption as string);
+  }
+}, {
+  immediate: true,
+});
+
 onMounted(async () => {
-  await eventStore.getEvents();
+  if (!route.query.option) {
+    router.push({
+      path: "/dashboard",
+      query: {
+        option: items.value[0].value,
+      },
+    });
+  }
 });
 </script>
 
 <template>
-  <section class="text-black flex flex-col sm:gap-8 gap-4">
+  <section class="text-black flex flex-col gap-4">
     <div class="flex items-center justify-between gap-2">
       <h1 class="font-bold sm:text-4xl text-xl">
         Your Events
@@ -39,12 +77,28 @@ onMounted(async () => {
       base-class="pl-9"
     />
     <AppTabs
+      v-model="activeTab"
       :items="items"
       size="xl"
     />
-    <div v-if="eventStore.events.length === 0 && !eventStore.loading">
-      <h1 class="w-full text-2xl text-center">
+    <div>
+      <h1
+        v-if="route.query.option === 'all' && eventStore.events.length === 0 && !eventStore.loading"
+        class="w-full text-2xl text-center"
+      >
         No Event Created yet
+      </h1>
+      <h1
+        v-if="route.query.option === 'upcoming' && eventStore.events.length === 0 && !eventStore.loading"
+        class="w-full text-2xl text-center"
+      >
+        No Upcoming Event
+      </h1>
+      <h1
+        v-if="route.query.option === 'past' && eventStore.events.length === 0 && !eventStore.loading"
+        class="w-full text-2xl text-center"
+      >
+        No Past Event
       </h1>
     </div>
     <div

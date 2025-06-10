@@ -13,6 +13,10 @@ const props = defineProps({
   rootClass: String,
   disabled: Boolean,
   icon: String,
+  highlight: Boolean,
+  color: {
+    type: String as PropType<ComponentColor>,
+  },
 });
 
 const emit = defineEmits(["update:modelValue", "keyup"]);
@@ -47,6 +51,8 @@ function onKeyup(e: KeyboardEvent) {
   <UInput
     v-else
     v-model="model"
+    :highlight="highlight"
+    :color="color"
     :type="type"
     :icon="icon"
     :placeholder="placeholder"

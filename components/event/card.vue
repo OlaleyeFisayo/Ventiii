@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   id: String,
   title: String,
   img: String,
@@ -8,6 +8,12 @@ defineProps({
 });
 
 const cardWidth = ref(300);
+const startDate = computed(() => useFormatShortDate(props.startDate));
+const endDate = computed(() => useFormatShortDate(props.endDate));
+
+const isSameDay = computed(() => {
+  return props.startDate === props.endDate;
+});
 </script>
 
 <template>
@@ -26,10 +32,19 @@ const cardWidth = ref(300);
       <h1 class="w-full font-bold text-md">
         {{ title }}
       </h1>
-      <p class="text-sm">
+      <p
+        v-if="!isSameDay"
+        class="text-sm"
+      >
         <span class="font-light">{{ startDate }}</span>
         -
         <span class="font-light">{{ endDate }}</span>
+      </p>
+      <p
+        v-else
+        class="text-sm font-light"
+      >
+        {{ startDate }}
       </p>
     </div>
   </NuxtLink>

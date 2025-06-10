@@ -1,5 +1,6 @@
 import {
   int,
+  integer,
   sqliteTable,
   text,
 } from "drizzle-orm/sqlite-core";
@@ -18,8 +19,12 @@ export const event = sqliteTable("event", {
   id: text().primaryKey(),
   title: text().notNull(),
   description: text().notNull(),
-  startDate: text().notNull(),
-  endDate: text().notNull(),
+  startDate: integer({
+    mode: "timestamp",
+  }).notNull(),
+  endDate: integer({
+    mode: "timestamp",
+  }).notNull(),
   startTime: text().notNull(),
   endTime: text().notNull(),
   location: text().notNull(),
@@ -39,8 +44,20 @@ export const event = sqliteTable("event", {
 export const InsertEvent = createInsertSchema(event, {
   title: z.string().min(1),
   description: z.string().min(1),
-  startDate: z.iso.date(),
-  endDate: z.iso.date(),
+  startDate: z.union([
+    z.date(),
+    z.number().int().positive().transform(num => new Date(num * 1000)),
+    z.iso.datetime().transform(str => new Date(str)),
+  ]).transform((val) => {
+    return val instanceof Date ? val : new Date(val);
+  }),
+  endDate: z.union([
+    z.date(),
+    z.number().int().positive().transform(num => new Date(num * 1000)),
+    z.iso.datetime().transform(str => new Date(str)),
+  ]).transform((val) => {
+    return val instanceof Date ? val : new Date(val);
+  }),
   startTime: z.string().regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/),
   endTime: z.string().regex(/^(?:[01]\d|2[0-3]):[0-5]\d$/),
   location: z.string().min(1),

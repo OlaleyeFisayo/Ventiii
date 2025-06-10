@@ -1,5 +1,10 @@
 import {
+  and,
+  asc,
+  desc,
   eq,
+  gte,
+  lt,
 } from "drizzle-orm";
 
 import type {
@@ -21,7 +26,32 @@ export async function createEvent(data: InsertEvent, id: string, userId: number)
   return created;
 }
 
-export async function getEvents(userId: number) {
+export async function getEvents(userId: number, filter: GetEventFilterOptions = "all") {
+  const now = new Date();
+
+  // Build conditions array and combine them
+  const conditions = [eq(event.userId, userId)];
+
+  if (filter === "upcoming") {
+    conditions.push(gte(event.endDate, now));
+  }
+  else if (filter === "past") {
+    conditions.push(lt(event.endDate, now));
+  }
+
+  const whereCondition = conditions.length > 1 ? and(...conditions) : conditions[0];
+
+  let orderBy;
+  if (filter === "upcoming") {
+    orderBy = asc(event.startDate);
+  }
+  else if (filter === "past") {
+    orderBy = desc(event.endDate);
+  }
+  else {
+    orderBy = asc(event.startDate);
+  }
+
   return await db.query.event.findMany({
     columns: {
       id: true,
@@ -30,6 +60,7 @@ export async function getEvents(userId: number) {
       startDate: true,
       endDate: true,
     },
-    where: eq(event.userId, userId),
+    where: whereCondition,
+    orderBy,
   });
 }
