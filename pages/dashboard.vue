@@ -8,13 +8,38 @@ const eventStore = useEventStore();
 const items = ref<TabsItem[]>([
   {
     label: "Upcoming",
+    value: "upcoming",
   },
   {
     label: "Past",
+    value: "past",
   },
 ]);
 
+const route = useRoute();
+const router = useRouter();
+
+const activeTab = computed({
+  get() {
+    return (route.query.option as string) || items.value[0].value;
+  },
+  set(option: string) {
+    router.push({
+      path: "/dashboard",
+      query: {
+        option,
+      },
+    });
+  },
+});
+
 onMounted(async () => {
+  router.push({
+    path: "/dashboard",
+    query: {
+      option: items.value[0].value,
+    },
+  });
   await eventStore.getEvents();
 });
 </script>
@@ -39,6 +64,7 @@ onMounted(async () => {
       base-class="pl-9"
     />
     <AppTabs
+      v-model="activeTab"
       :items="items"
       size="xl"
     />
