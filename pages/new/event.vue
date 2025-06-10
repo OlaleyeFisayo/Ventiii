@@ -68,11 +68,14 @@ async function createEvent(state: CreateEventState) {
     url,
   } = await cloudinaryStore.upload(state.coverPicture[0] as File);
 
+  const startDate = new Date(state.date.start);
+  const endDate = new Date(state.date.end);
+
   const payload = {
     title: state.title,
     description: state.description,
-    startDate: state.date.start.toString(),
-    endDate: state.date.end.toString(),
+    startDate,
+    endDate,
     startTime: state.time.start,
     endTime: state.time.end,
     location: state.location,

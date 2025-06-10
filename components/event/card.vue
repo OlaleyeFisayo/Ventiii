@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-import {
-  CalendarDate,
-} from "@internationalized/date";
-
 const props = defineProps({
   id: String,
   title: String,
@@ -16,21 +12,7 @@ const startDate = computed(() => useFormatShortDate(props.startDate));
 const endDate = computed(() => useFormatShortDate(props.endDate));
 
 const isSameDay = computed(() => {
-  const date = new Date(props.startDate);
-  const start = new CalendarDate(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    date.getDate(),
-  );
-
-  const dateEnd = new Date(props.endDate);
-  const end = new CalendarDate(
-    dateEnd.getFullYear(),
-    dateEnd.getMonth() + 1,
-    dateEnd.getDate(),
-  );
-
-  return useAreDatesSame(start, end);
+  return props.startDate === props.endDate;
 });
 </script>
 

@@ -17,8 +17,8 @@ export const useEventStore = defineStore("useEventStore", () => {
   async function createEvent(payload: {
     title: string;
     description: string;
-    startDate: string;
-    endDate: string;
+    startDate: number;
+    endDate: number;
     startTime: string;
     endTime: string;
     location: string;
