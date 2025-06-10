@@ -5,6 +5,7 @@ export function useTimeInputValidator(
   const hasTimeField = computed(() =>
     items.value?.some((i: AppFormItems) => i.type === "time"),
   );
+
   const isTimeValid = computed(() => {
     if (!hasTimeField.value)
       return true;
@@ -16,6 +17,15 @@ export function useTimeInputValidator(
     );
   });
 
-  if (hasTimeField.value && !isTimeValid.value)
+  const isTimeRangeValid = computed(() => useTimeRangeValidator(state.value.time));
+
+  if (
+    hasTimeField.value
+    && !isTimeValid.value
+  ) {
     return true;
+  }
+  if (hasTimeField.value && isTimeRangeValid.value) {
+    return true;
+  }
 }
