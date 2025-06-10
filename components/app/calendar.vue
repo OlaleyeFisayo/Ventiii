@@ -47,25 +47,12 @@ function isDateUnavailable(date: DateValue) {
   return jsDate < todayMidnight;
 }
 
-function datesAreSame(
-  a: CalendarDate | null,
-  b: CalendarDate | null,
-): boolean {
-  if (!a || !b)
-    return false;
-  return (
-    a.year === b.year
-    && a.month === b.month
-    && a.day === b.day
-  );
-}
-
-const isSameDay = computed(() => {
-  return datesAreSame(
+const isSameDay = computed(() =>
+  useAreDatesSame(
     model.value.start,
     model.value.end,
-  );
-});
+  ),
+);
 </script>
 
 <template>

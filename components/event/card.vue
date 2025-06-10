@@ -1,5 +1,9 @@
 <script lang="ts" setup>
-defineProps({
+import {
+  CalendarDate,
+} from "@internationalized/date";
+
+const props = defineProps({
   id: String,
   title: String,
   img: String,
@@ -8,6 +12,26 @@ defineProps({
 });
 
 const cardWidth = ref(300);
+const startDate = computed(() => useFormatShortDate(props.startDate));
+const endDate = computed(() => useFormatShortDate(props.endDate));
+
+const isSameDay = computed(() => {
+  const date = new Date(props.startDate);
+  const start = new CalendarDate(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+  );
+
+  const dateEnd = new Date(props.endDate);
+  const end = new CalendarDate(
+    dateEnd.getFullYear(),
+    dateEnd.getMonth() + 1,
+    dateEnd.getDate(),
+  );
+
+  return useAreDatesSame(start, end);
+});
 </script>
 
 <template>
@@ -26,10 +50,19 @@ const cardWidth = ref(300);
       <h1 class="w-full font-bold text-md">
         {{ title }}
       </h1>
-      <p class="text-sm">
+      <p
+        v-if="!isSameDay"
+        class="text-sm"
+      >
         <span class="font-light">{{ startDate }}</span>
         -
         <span class="font-light">{{ endDate }}</span>
+      </p>
+      <p
+        v-else
+        class="text-sm font-light"
+      >
+        {{ startDate }}
       </p>
     </div>
   </NuxtLink>
