@@ -58,7 +58,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="text-black flex flex-col sm:gap-8 gap-4">
+  <section class="text-black flex flex-col gap-4">
     <div class="flex items-center justify-between gap-2">
       <h1 class="font-bold sm:text-4xl text-xl">
         Your Events
