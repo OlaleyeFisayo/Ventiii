@@ -16,6 +16,7 @@ const createEventForm = ref<AppFormItems[]>([
     type: "textarea",
     placeholder: "Enter description",
     value: "",
+    optional: true,
   },
   {
     label: "Date",

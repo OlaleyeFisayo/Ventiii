@@ -2,6 +2,8 @@
 defineProps({
   label: String,
   name: String,
+  required: Boolean,
+  optional: Boolean,
 });
 </script>
 
@@ -9,6 +11,8 @@ defineProps({
   <UFormField
     :label="label"
     :name="name"
+    :required="required"
+    :hint="optional ? 'Optional' : ''"
     :ui="{
       label: 'capitalize text-lg text-black',
     }"

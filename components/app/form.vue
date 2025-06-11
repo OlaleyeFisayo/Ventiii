@@ -82,6 +82,8 @@ watch(isDirty, (val: boolean) => {
         :key="item.tag"
         :name="item.tag"
         :label="item?.label ?? item.tag"
+        :required="item?.optional ? false : true"
+        :optional="item?.optional"
       >
         <AppImageDnd
           v-if="item.type === 'img'"
