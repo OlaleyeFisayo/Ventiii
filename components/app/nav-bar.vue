@@ -85,15 +85,17 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
           icon="i-tabler-plus"
           to="/new/event"
         />
-        <p>Hi, {{ authStore.user.name }}</p>
         <AppDropdownMenu
           :items="dropdownMenuItems"
         >
-          <AppAvatar
-            :src="authStore.user.image ?? ''"
-            :alt="authStore.user.image ? '' : authStore.user.name.toUpperCase()"
-            size="lg"
-          />
+          <div class="flex gap-2 items-center">
+            <p>Hi, {{ authStore.user.name }}</p>
+            <AppAvatar
+              :src="authStore.user.image ?? ''"
+              :alt="authStore.user.image ? '' : authStore.user.name.toUpperCase()"
+              size="lg"
+            />
+          </div>
         </AppDropdownMenu>
       </div>
       <div class="sm:hidden">

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-  middleware: ["guest"],
-});
-
 const authStore = useAuthStore();
 
 const forgotPasswordForm = ref<AppFormItems[]>([
