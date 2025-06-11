@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   });
   event.context.user = session?.user;
   const isProtected = protectedRoutes.some((route: string) => event.path.startsWith(route));
-  if (isProtected && !session) {
+  if (isProtected && !session?.user) {
     await sendRedirect(event, "/log-in", 302);
   }
 });

@@ -26,8 +26,13 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     errorToast,
   } = useAppToast();
 
-  const session = authClient.useSession();
-  const sessionLoading = computed(() => session.value.isPending || session.value.isRefetching);
+  const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(null);
+  async function init() {
+    const data = await authClient.useSession(useFetch);
+    session.value = data;
+  }
+
+  const sessionLoading = computed(() => session.value?.isPending);
   const user = computed(() => session.value?.data?.user);
   const loading = ref(false);
   const success = ref(false);
@@ -165,6 +170,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   }
 
   return {
+    init,
     loading,
     googleSignIn,
     signUp,
