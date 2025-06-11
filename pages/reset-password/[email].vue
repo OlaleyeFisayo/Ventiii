@@ -52,6 +52,7 @@ async function resetPassword(state: {
     >
       <AppForm
         v-model:items="resetPasswordForm"
+        :show-hints="false"
         submit-label="Reset Password"
         :loading="authStore.loading"
         @submit="resetPassword"

@@ -7,6 +7,10 @@ defineProps({
   submitLabel: String,
   loading: Boolean,
   disabled: Boolean,
+  showHints: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const emits = defineEmits(["submit"]);
@@ -82,8 +86,8 @@ watch(isDirty, (val: boolean) => {
         :key="item.tag"
         :name="item.tag"
         :label="item?.label ?? item.tag"
-        :required="item?.optional ? false : true"
-        :optional="item?.optional"
+        :required="showHints && !item?.optional"
+        :optional="showHints && item?.optional"
       >
         <AppImageDnd
           v-if="item.type === 'img'"

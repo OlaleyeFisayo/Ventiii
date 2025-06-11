@@ -23,6 +23,7 @@ const forgotPasswordForm = ref<AppFormItems[]>([
     >
       <AppForm
         v-model:items="forgotPasswordForm"
+        :show-hints="false"
         submit-label="Send OTP"
         :loading="authStore.loading"
         @submit="authStore.forgetPasswordOTP"

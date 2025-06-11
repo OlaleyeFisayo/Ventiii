@@ -25,6 +25,7 @@ const loginForm = ref<AppFormItems[]>([
     >
       <AppForm
         v-model:items="loginForm"
+        :show-hints="false"
         submit-label="Log in"
         :loading="authStore.loading"
         @submit="authStore.signIn"
