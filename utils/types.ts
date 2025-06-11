@@ -8,6 +8,7 @@ export type AppFormItems = {
   icon?: string;
   maxFile?: number;
   maxFileSize?: number;
+  optional?: boolean;
 };
 
 export type CreateEventState = {

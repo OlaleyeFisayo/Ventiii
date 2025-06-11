@@ -1,12 +1,18 @@
-export function useAllFilled<T extends Record<string, any>>(obj: T) {
-  return Object.values(obj).every((val) => {
-    if (typeof val === "string") {
-      return val.trim().length > 0;
+export function useAllFilled(state: Record<string, any>, items: AppFormItems[]) {
+  return items.every((item) => {
+    if (item.optional)
+      return true;
+
+    const value = state[item.tag];
+
+    if (item.type === "time") {
+      return value?.start?.trim() && value?.end?.trim();
     }
-    if (typeof val === "boolean") {
-      return val === true;
+
+    if (item.type === "img") {
+      return Array.isArray(value) && value.length > 0;
     }
-    return val !== null && val !== undefined;
+
+    return value !== undefined && value !== null && String(value).trim() !== "";
   });
-  ;
 }
