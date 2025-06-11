@@ -18,7 +18,7 @@ import {
 export const event = sqliteTable("event", {
   id: text().primaryKey(),
   title: text().notNull(),
-  description: text().notNull(),
+  description: text(),
   startDate: integer({
     mode: "timestamp",
   }).notNull(),
@@ -42,8 +42,10 @@ export const event = sqliteTable("event", {
 });
 
 export const InsertEvent = createInsertSchema(event, {
-  title: z.string().min(1),
-  description: z.string().min(1),
+  title: z.string().min(1).transform((val) => {
+    return val.trim();
+  }),
+  description: z.optional(z.string()),
   startDate: z.union([
     z.date(),
     z.number().int().positive().transform(num => new Date(num * 1000)),
