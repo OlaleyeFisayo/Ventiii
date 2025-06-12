@@ -1,17 +1,15 @@
-import type {
-  FetchError,
-} from "ofetch";
-
 export const useEventStore = defineStore("useEventStore", () => {
   const {
-    errorToast,
-  } = useAppToast();
+    execute,
+    loading: apiLoading,
+    success: apiSuccess,
+  } = useApiCall();
   const {
     $csrfFetch,
   } = useNuxtApp();
 
-  const loading = ref(false);
-  const success = ref(false);
+  const loading = computed(() => apiLoading.value);
+  const success = computed(() => apiSuccess.value);
   const events = ref<GetEventsResponse[]>([]);
 
   async function createEvent(payload: {
@@ -24,46 +22,19 @@ export const useEventStore = defineStore("useEventStore", () => {
     location: string;
     coverPictureUrl: string;
   }) {
-    try {
-      loading.value = true;
-      success.value = false;
-
-      await $csrfFetch("/api/event", {
-        method: "post",
-        body: payload,
-      });
-
-      success.value = true;
-    }
-    catch (e) {
-      loading.value = false;
-      const error = e as FetchError;
-      errorToast(error.data?.statusMessage || error.statusMessage || "An unknown issue occured");
-    }
-    finally {
-      loading.value = false;
-    }
+    await execute(() => $csrfFetch("/api/event", {
+      method: "post",
+      body: payload,
+    }));
   }
 
   async function getEvents(filter: GetEventFilterOptions = "all") {
-    try {
-      loading.value = true;
-      success.value = false;
+    const data = await execute(() => $csrfFetch(`/api/events?filter=${filter}`, {
+      method: "get",
+    })) as GetEventsResponse[];
 
-      const data = await $fetch(`/api/events?filter=${filter}`, {
-        method: "get",
-      }) as GetEventsResponse[];
-
+    if (success.value) {
       events.value = data;
-      success.value = true;
-    }
-    catch (e) {
-      loading.value = false;
-      const error = e as FetchError;
-      errorToast(error.data?.statusMessage || error.statusMessage || "An unknown issue occured");
-    }
-    finally {
-      loading.value = false;
     }
   }
 
