@@ -23,6 +23,12 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    esbuild: {
+      target: "es2022",
+    },
+    build: {
+      target: "es2022",
+    },
   },
   css: ["~/assets/css/main.css"],
   ui: {
