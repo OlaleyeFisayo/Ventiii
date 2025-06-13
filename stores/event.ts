@@ -10,7 +10,7 @@ export const useEventStore = defineStore("useEventStore", () => {
 
   const loading = computed(() => apiLoading.value);
   const success = computed(() => apiSuccess.value);
-  const events = ref<GetEventsResponse[]>([]);
+  const eventsData = ref<GetEventsResponse | null>(null);
 
   async function createEvent(payload: {
     title: string;
@@ -28,13 +28,17 @@ export const useEventStore = defineStore("useEventStore", () => {
     }));
   }
 
-  async function getEvents(filter: GetEventFilterOptions = "all") {
-    const data = await execute(() => $csrfFetch(`/api/events?filter=${filter}`, {
+  async function getEvents(
+    filter: GetEventFilterOptions = "all",
+    page: number = 1,
+    limit: number = 10,
+  ) {
+    const data = await execute(() => $csrfFetch(`/api/events?filter=${filter}&page=${page}&limit=${limit}`, {
       method: "get",
-    })) as GetEventsResponse[];
+    })) as GetEventsResponse;
 
     if (success.value) {
-      events.value = data;
+      eventsData.value = data;
     }
   }
 
@@ -43,6 +47,6 @@ export const useEventStore = defineStore("useEventStore", () => {
     loading,
     success,
     getEvents,
-    events,
+    eventsData,
   };
 });

@@ -37,13 +37,26 @@ const activeTab = computed({
   },
 });
 
+// Pagination feature
+const page = ref(1);
+const itemsPerPage = ref(10);
+const total = computed(() => eventStore.eventsData?.pagination?.total);
+
 watch(() => route.query.option, async (newOption) => {
   if (newOption) {
-    await eventStore.getEvents(newOption as string);
+    page.value = 1;
+    await eventStore.getEvents(newOption as string, page.value, itemsPerPage.value);
   }
 }, {
   immediate: true,
 });
+
+watch(
+  () => page.value,
+  async (newPage: number) => {
+    await eventStore.getEvents(route.query.option, newPage, itemsPerPage.value);
+  },
+);
 
 onMounted(async () => {
   if (!route.query.option) {
@@ -83,30 +96,30 @@ onMounted(async () => {
     />
     <div>
       <h1
-        v-if="route.query.option === 'all' && eventStore.events.length === 0 && !eventStore.loading"
+        v-if="route.query.option === 'all' && eventStore.eventsData?.events.length === 0 && !eventStore.loading"
         class="w-full text-2xl text-center"
       >
-        No Event Created yet
+        No Event
       </h1>
       <h1
-        v-if="route.query.option === 'upcoming' && eventStore.events.length === 0 && !eventStore.loading"
+        v-if="route.query.option === 'upcoming' && eventStore.eventsData?.events.length === 0 && !eventStore.loading"
         class="w-full text-2xl text-center"
       >
         No Upcoming Event
       </h1>
       <h1
-        v-if="route.query.option === 'past' && eventStore.events.length === 0 && !eventStore.loading"
+        v-if="route.query.option === 'past' && eventStore.eventsData?.events.length === 0 && !eventStore.loading"
         class="w-full text-2xl text-center"
       >
         No Past Event
       </h1>
     </div>
     <div
-      v-if="eventStore.events && !eventStore.loading"
+      v-if="eventStore.eventsData?.events && !eventStore.loading"
       class="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 place-items-center gap-4"
     >
       <EventCard
-        v-for="event in eventStore.events"
+        v-for="event in eventStore.eventsData?.events"
         :id="event.id"
         :key="event.id"
         :title="event.title"
@@ -127,6 +140,17 @@ onMounted(async () => {
         <AppSkeleton class="w-full max-w-[300px] h-[200px] rounded-md" />
         <AppSkeleton class="w-full max-w-[300px] h-9 mt-2 rounded-md" />
       </div>
+    </div>
+    <div
+      v-if="eventStore.eventsData?.events.length !== 0"
+      class="w-full flex itams-center justify-center"
+    >
+      <AppPagination
+        v-model:page="page"
+        :total="total"
+        :items-per-page="itemsPerPage"
+        :disabled="eventStore.loading"
+      />
     </div>
   </section>
 </template>

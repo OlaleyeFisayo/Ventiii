@@ -27,9 +27,19 @@ export type CreateEventState = {
 };
 
 export type GetEventsResponse = {
-  id: string;
-  title: string;
-  startDate: string;
-  endDate: string;
-  coverPictureUrl: string;
+  events: {
+    id: string;
+    title: string;
+    startDate: string;
+    endDate: string;
+    coverPictureUrl: string;
+  }[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+  };
 };

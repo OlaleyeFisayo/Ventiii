@@ -1,6 +1,7 @@
 import {
   and,
   asc,
+  count,
   desc,
   eq,
   gte,
@@ -26,12 +27,16 @@ export async function createEvent(data: InsertEvent, id: string, userId: number)
   return created;
 }
 
-export async function getEvents(userId: number, filter: GetEventFilterOptions = "all") {
+export async function getEvents(
+  userId: number,
+  filter: GetEventFilterOptions = "all",
+  page: number = 1,
+  limit: number = 10,
+) {
   const now = new Date();
+  const offset = (page - 1) * limit;
 
-  // Build conditions array and combine them
   const conditions = [eq(event.userId, userId)];
-
   if (filter === "upcoming") {
     conditions.push(gte(event.endDate, now));
   }
@@ -52,15 +57,32 @@ export async function getEvents(userId: number, filter: GetEventFilterOptions = 
     orderBy = asc(event.startDate);
   }
 
-  return await db.query.event.findMany({
-    columns: {
-      id: true,
-      coverPictureUrl: true,
-      title: true,
-      startDate: true,
-      endDate: true,
+  const [events, totalCountResult] = await Promise.all([
+    db.query.event.findMany({
+      columns: {
+        id: true,
+        coverPictureUrl: true,
+        title: true,
+        startDate: true,
+        endDate: true,
+      },
+      where: whereCondition,
+      orderBy,
+      limit,
+      offset,
+    }),
+
+    db.select({
+      count: count(),
+    }).from(event).where(whereCondition),
+  ]);
+
+  const total = totalCountResult[0].count;
+
+  return {
+    events,
+    pagination: {
+      total,
     },
-    where: whereCondition,
-    orderBy,
-  });
+  };
 }
