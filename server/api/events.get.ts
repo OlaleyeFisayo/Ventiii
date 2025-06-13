@@ -8,6 +8,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
   const filter = query.filter as GetEventFilterOptions || "all";
   const page = Number.parseInt(query.page as string) || 1;
   const limit = Number.parseInt(query.limit as string) || 10;
+  const search = query.search as string;
 
   try {
     const result = await getEvents(
@@ -15,6 +16,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
       filter,
       page,
       limit,
+      search,
     );
     return result;
   }

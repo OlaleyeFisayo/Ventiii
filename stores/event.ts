@@ -32,8 +32,9 @@ export const useEventStore = defineStore("useEventStore", () => {
     filter: GetEventFilterOptions = "all",
     page: number = 1,
     limit: number = 10,
+    search?: string,
   ) {
-    const data = await execute(() => $csrfFetch(`/api/events?filter=${filter}&page=${page}&limit=${limit}`, {
+    const data = await execute(() => $csrfFetch(`/api/events?filter=${filter}&page=${page}&limit=${limit}${search ? `&search=${search}` : ""}`, {
       method: "get",
     })) as GetEventsResponse;
 
