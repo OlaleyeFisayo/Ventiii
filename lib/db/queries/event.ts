@@ -5,6 +5,7 @@ import {
   desc,
   eq,
   gte,
+  like,
   lt,
 } from "drizzle-orm";
 
@@ -32,6 +33,7 @@ export async function getEvents(
   filter: GetEventFilterOptions = "all",
   page: number = 1,
   limit: number = 10,
+  searchQuery?: string,
 ) {
   const now = new Date();
   const offset = (page - 1) * limit;
@@ -42,6 +44,13 @@ export async function getEvents(
   }
   else if (filter === "past") {
     conditions.push(lt(event.endDate, now));
+  }
+
+  if (searchQuery && searchQuery.trim()) {
+    const searchTerm = `%${searchQuery.trim()}%`;
+    conditions.push(
+      like(event.title, searchTerm),
+    );
   }
 
   const whereCondition = conditions.length > 1 ? and(...conditions) : conditions[0];
