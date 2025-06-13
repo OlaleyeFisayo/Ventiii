@@ -141,7 +141,10 @@ onMounted(async () => {
         <AppSkeleton class="w-full max-w-[300px] h-9 mt-2 rounded-md" />
       </div>
     </div>
-    <div class="w-full flex itams-center justify-center">
+    <div
+      v-if="eventStore.eventsData?.events.length !== 0"
+      class="w-full flex itams-center justify-center"
+    >
       <AppPagination
         v-model:page="page"
         :total="total"
