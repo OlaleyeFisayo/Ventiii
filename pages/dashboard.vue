@@ -42,7 +42,7 @@ const page = ref(1);
 const itemsPerPage = ref(10);
 const total = computed(() => eventStore.eventsData?.pagination?.total);
 
-watch(() => route.query.option, async (newOption) => {
+watch(() => route.query.option, async (newOption: LocationQueryValue | LocationQueryValue[]) => {
   if (newOption) {
     page.value = 1;
     await eventStore.getEvents(newOption as string, page.value, itemsPerPage.value);
