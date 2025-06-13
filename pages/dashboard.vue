@@ -155,7 +155,7 @@ onMounted(async () => {
         v-if="!route.query.search && route.query.option === 'all' && eventStore.eventsData?.events.length === 0 && !eventStore.loading"
         class="w-full text-2xl text-center"
       >
-        No Event
+        No Event Created yet
       </h1>
       <h1
         v-if="!route.query.search && route.query.option === 'upcoming' && eventStore.eventsData?.events.length === 0 && !eventStore.loading"
