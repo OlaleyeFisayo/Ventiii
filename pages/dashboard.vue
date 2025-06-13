@@ -40,7 +40,7 @@ const activeTab = computed({
 // Pagination feature
 const page = ref(1);
 const itemsPerPage = ref(10);
-const total = computed(() => eventStore.eventsDataData?.pagination?.total);
+const total = computed(() => eventStore.eventsData?.pagination?.total);
 
 watch(() => route.query.option, async (newOption) => {
   if (newOption) {

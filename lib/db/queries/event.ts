@@ -78,17 +78,11 @@ export async function getEvents(
   ]);
 
   const total = totalCountResult[0].count;
-  const totalPages = Math.ceil(total / limit);
 
   return {
     events,
     pagination: {
-      page,
-      limit,
       total,
-      totalPages,
-      hasNext: page < totalPages,
-      hasPrev: page > 1,
     },
   };
 }
