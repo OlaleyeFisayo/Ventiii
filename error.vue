@@ -1,10 +1,17 @@
 <script lang="ts" setup>
-const route = useRoute();
-const error: any = route.query.error || "Unknown Error Occured";
+import type {
+  NuxtError,
+} from "#app";
+
+const props = defineProps({
+  error: Object as () => NuxtError,
+});
+
+const error: any = props.error?.statusMessage || props.error?.message || "Unknown Error Occured";
 </script>
 
 <template>
-  <section class="h-full w-full flex flex-col justify-center items-center gap-6">
+  <section class="h-[100dvh] w-full flex flex-col justify-center items-center gap-6 p-4 container mx-auto">
     <AppAlert
       color="error"
       title="Error"
