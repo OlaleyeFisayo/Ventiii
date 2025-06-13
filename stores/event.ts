@@ -10,7 +10,7 @@ export const useEventStore = defineStore("useEventStore", () => {
 
   const loading = computed(() => apiLoading.value);
   const success = computed(() => apiSuccess.value);
-  const events = ref<GetEventsResponse[]>([]);
+  const eventsData = ref<GetEventsResponse | null>(null);
 
   async function createEvent(payload: {
     title: string;
@@ -35,10 +35,10 @@ export const useEventStore = defineStore("useEventStore", () => {
   ) {
     const data = await execute(() => $csrfFetch(`/api/events?filter=${filter}&page=${page}&limit=${limit}`, {
       method: "get",
-    })) as GetEventsResponse[];
+    })) as GetEventsResponse;
 
     if (success.value) {
-      events.value = data;
+      eventsData.value = data;
     }
   }
 
@@ -47,6 +47,6 @@ export const useEventStore = defineStore("useEventStore", () => {
     loading,
     success,
     getEvents,
-    events,
+    eventsData,
   };
 });
