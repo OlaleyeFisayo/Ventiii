@@ -22,6 +22,16 @@ const dropdownMenuItems = ref<DropdownMenuItem[]>([
 const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
   [
     {
+      label: authStore.user?.name,
+      avatar: {
+        src: authStore.user?.image ?? "",
+        alt: authStore.user?.image ? "" : authStore.user?.name.toUpperCase(),
+      },
+      type: "label",
+    },
+  ],
+  [
+    {
       label: "Logout",
       icon: "i-tabler-logout-2",
       color: "error",
