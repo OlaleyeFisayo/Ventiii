@@ -1,6 +1,6 @@
 <template>
   <section class="text-black">
-    <h1>This is the layout for events</h1>
+    <EventNavbar />
     <slot />
   </section>
 </template>
