@@ -61,7 +61,7 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
       <div class="border-1 border-gray-300 h-[30px]" />
       <NuxtLink
         to="/dashboard"
-        class="flex items-center"
+        class="flex items-center md:hidden"
       >
         <UIcon
           name="i-tabler-arrow-narrow-left"
@@ -69,6 +69,7 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
         />
         Dashboard
       </NuxtLink>
+      <EventBreadCrumb class="hidden md:block" />
     </section>
     <section>
       <div class="hidden sm:flex gap-2 items-center">
