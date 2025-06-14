@@ -18,26 +18,17 @@ export function useMobileBreakpoint(breakpoint: TailwindBreakpoint = "md") {
     isMobile.value = width < breakpoints[breakpoint];
   };
 
-  // Only run on client side
   if (import.meta.client) {
-    // Set initial value
     checkBreakpoint();
 
-    // Debounced resize handler for better performance
-    let timeoutId: NodeJS.Timeout;
     const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        checkBreakpoint();
-      }, 100);
+      checkBreakpoint();
     };
 
     window.addEventListener("resize", handleResize);
 
-    // Cleanup on unmount
     onUnmounted(() => {
       window.removeEventListener("resize", handleResize);
-      clearTimeout(timeoutId);
     });
   }
 
