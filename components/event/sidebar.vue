@@ -30,7 +30,7 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
     to: `${defaultEventUrl}/settings`,
     icon: "i-tabler-settings-cog",
     tooltip: closed.value && {
-      text: "Overview",
+      text: "Settings",
     },
   },
 ]));
@@ -43,8 +43,8 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
     }`"
   >
     <NuxtLink
-      :class="`flex items-center gap-2 border-b-muted border-b-1 py-4 transition-all duration-300 ease-in-out ${
-        closed ? 'px-2 justify-center' : 'px-4'
+      :class="`flex items-center gap-2 border-b-muted border-b-1 transition-all duration-300 ease-in-out ${
+        closed ? 'px-2 justify-center py-4.5' : 'px-4 py-4'
       }`"
       :to="defaultEventUrl"
     >
