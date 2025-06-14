@@ -1,6 +1,8 @@
 <template>
-  <section class="text-black">
+  <section class="text-black flex">
     <EventNavbar />
-    <slot />
+    <div>
+      <slot />
+    </div>
   </section>
 </template>
