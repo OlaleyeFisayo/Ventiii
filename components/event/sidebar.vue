@@ -8,7 +8,7 @@ const eventId = route.params.eventId;
 const defaultEventUrl = `/event/${eventId}`;
 
 const sidebarStore = useSidebarStore();
-const closed = computed(() => sidebarStore.desktopState);
+const isCollapsed = computed(() => sidebarStore.desktopState);
 
 const navItems = computed<NavigationMenuItem[]>(() => ([
   {
@@ -20,18 +20,22 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
     type: "link",
     to: defaultEventUrl,
     icon: "i-tabler-layout-dashboard",
-    tooltip: closed.value && {
-      text: "Overview",
-    },
+    tooltip: isCollapsed.value
+      ? {
+          text: "Overview",
+        }
+      : undefined,
   },
   {
     label: "Settings",
     type: "link",
     to: `${defaultEventUrl}/settings`,
     icon: "i-tabler-settings-cog",
-    tooltip: closed.value && {
-      text: "Settings",
-    },
+    tooltip: isCollapsed.value
+      ? {
+          text: "Settings",
+        }
+      : undefined,
   },
 ]));
 </script>
@@ -39,12 +43,12 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
 <template>
   <section
     :class="`bg-gray-50 hidden md:block w-full h-[100dvh] border-muted border-1 transition-all duration-300 ease-in-out ${
-      closed ? 'max-w-[72px]' : 'max-w-[265px]'
+      isCollapsed ? 'max-w-[72px]' : 'max-w-[265px]'
     }`"
   >
     <NuxtLink
       :class="`flex items-center gap-2 border-b-muted border-b-1 transition-all duration-300 ease-in-out ${
-        closed ? 'px-2 justify-center py-4.5' : 'px-4 py-4'
+        isCollapsed ? 'px-2 justify-center py-4.5' : 'px-4 py-4'
       }`"
       :to="defaultEventUrl"
     >
@@ -63,11 +67,11 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
         leave-to-class="opacity-0 transform scale-95"
       >
         <div
-          v-if="!closed"
+          v-if="!isCollapsed"
           class="min-w-0 flex-1"
         >
           <h1 class="text-md font-semibold w-[150px] text-nowrap overflow-hidden overflow-ellipsis">
-            Community Tech Meetup
+            Insert Event Name Here
           </h1>
           <p class="text-sm overflow-x-hidden text-nowrap overflow-ellipsis w-[150px]">
             {{ eventId }}
@@ -75,10 +79,10 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
         </div>
       </Transition>
     </NuxtLink>
-    <section :class="`transition-all duration-300 ease-in-out ${closed ? 'p-2 flex flex-col items-center' : 'p-4'}`">
+    <section :class="`transition-all duration-300 ease-in-out ${isCollapsed ? 'p-2 flex flex-col items-center' : 'p-4'}`">
       <AppNavigationMenu
         :items="navItems"
-        :collapsed="closed"
+        :collapsed="isCollapsed"
       />
     </section>
   </section>

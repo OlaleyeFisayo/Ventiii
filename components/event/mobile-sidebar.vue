@@ -9,7 +9,7 @@ const defaultEventUrl = `/event/${eventId}`;
 
 const sidebarStore = useSidebarStore();
 
-const open = computed({
+const isOpened = computed({
   get() {
     return sidebarStore.mobileState;
   },
@@ -40,7 +40,7 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
 
 <template>
   <UDrawer
-    v-model:open="open"
+    v-model:open="isOpened"
     direction="left"
     :handle="false"
     class="md:hidden"
