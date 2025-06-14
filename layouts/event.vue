@@ -1,9 +1,14 @@
+<script setup lang="ts">
+</script>
+
 <template>
   <section class="text-black flex">
-    <EventNavbar />
-    <EventMobileNavbar />
-    <div>
-      <slot />
+    <EventSidebar />
+    <EventMobileSidebar />
+    <div class="flex flex-col">
+      <main class="w-full border border-red-500 flex-1">
+        <slot />
+      </main>
     </div>
   </section>
 </template>

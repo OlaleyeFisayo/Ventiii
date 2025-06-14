@@ -37,7 +37,7 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
 
 <template>
   <section
-    :class="`hidden md:block w-full h-[100dvh] border-muted border-1 transition-all duration-300 ease-in-out ${
+    :class="`bg-gray-50 hidden md:block w-full h-[100dvh] border-muted border-1 transition-all duration-300 ease-in-out ${
       closed ? 'max-w-[72px]' : 'max-w-[265px]'
     }`"
   >
