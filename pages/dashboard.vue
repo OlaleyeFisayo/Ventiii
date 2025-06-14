@@ -5,20 +5,23 @@ import type {
 
 const eventStore = useEventStore();
 
-const items = ref<TabsItem[]>([
+const items = computed<TabsItem[]>(() => ([
   {
     label: "All",
     value: "all",
+    disabled: eventStore.loading,
   },
   {
     label: "Upcoming",
     value: "upcoming",
+    disabled: eventStore.loading,
   },
   {
     label: "Past",
     value: "past",
+    disabled: eventStore.loading,
   },
-]);
+]));
 
 const route = useRoute();
 const router = useRouter();
@@ -78,7 +81,7 @@ watch(
   () => searchInput.value,
   async (newInput: string, oldInput: string) => {
     page.value = 1;
-    if (!newInput && oldInput) {
+    if (!newInput && oldInput && route.query.search) {
       router.push({
         path: "/dashboard",
         query: {
