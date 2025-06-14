@@ -7,7 +7,11 @@ const route = useRoute();
 const eventId = route.params.eventId;
 const defaultEventUrl = `/event/${eventId}`;
 
-const closed = ref(false);
+const {
+  isMobile,
+} = useMobileBreakpoint();
+
+const open = computed(() => !isMobile.value && false);
 
 const navItems = computed<NavigationMenuItem[]>(() => ([
   {
@@ -31,7 +35,7 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
 
 <template>
   <UDrawer
-    v-model:open="closed"
+    v-model:open="open"
     direction="left"
     :handle="false"
     class="md:hidden"
