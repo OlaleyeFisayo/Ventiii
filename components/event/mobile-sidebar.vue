@@ -11,7 +11,7 @@ const {
   isMobile,
 } = useMobileBreakpoint();
 
-const open = computed(() => !!isMobile.value);
+const open = ref(!!isMobile.value);
 
 const navItems = computed<NavigationMenuItem[]>(() => ([
   {

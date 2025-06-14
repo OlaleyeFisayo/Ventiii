@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
   const protectedRoutes = [
     "/dashboard",
     "/new",
+    "/event",
   ];
 
   const session = await auth.api.getSession({
