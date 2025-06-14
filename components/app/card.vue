@@ -6,6 +6,11 @@ defineProps({
 
 <template>
   <UCard :ui="ui">
+    <template
+      #header
+    >
+      <slot name="header" />
+    </template>
     <slot />
   </UCard>
 </template>
