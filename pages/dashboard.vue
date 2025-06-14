@@ -88,7 +88,7 @@ watch(
           option: "all",
         },
       });
-      await eventStore.getEvents(route.query.option, page.value, itemsPerPage.value, searchInput.value.trim());
+      await eventStore.getEvents(route.query.option, page.value, itemsPerPage.value, newInput.trim());
     }
   },
 );
