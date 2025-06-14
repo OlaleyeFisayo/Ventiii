@@ -1,6 +1,27 @@
 <script setup lang="ts">
+import type {
+  NavigationMenuItem,
+} from "@nuxt/ui";
+
 const route = useRoute();
 const eventId = route.params.eventId;
+const defaultEventUrl = `/event/${eventId}`;
+
+const navItemsClass = "text-lg";
+const navItems = computed<NavigationMenuItem[]>(() => ([
+  {
+    label: "Overview",
+    to: defaultEventUrl,
+    icon: "i-tabler-presentation-analytics",
+    class: navItemsClass,
+  },
+  {
+    label: "Settings",
+    to: `${defaultEventUrl}/settings`,
+    icon: "i-tabler-settings",
+    class: navItemsClass,
+  },
+]));
 </script>
 
 <template>
@@ -12,9 +33,9 @@ const eventId = route.params.eventId;
     <template #header>
       <NuxtLink
         class="flex items-center gap-2"
-        :to="`/event/${eventId}`"
+        :to="defaultEventUrl"
       >
-        <div class="p-2 bg-black flex items-center justify-center rounded-2xl">
+        <div class="p-2 bg-primary flex items-center justify-center rounded-2xl">
           <UIcon
             name="i-tabler-calendar-week-filled"
             class="text-white size-6"
@@ -29,6 +50,15 @@ const eventId = route.params.eventId;
           </p>
         </div>
       </NuxtLink>
+    </template>
+    <template #default>
+      <section>
+        <h1 class="text-sm text-muted">
+          Navigation:
+        </h1>
+
+        <AppNavigationMenu :items="navItems" />
+      </section>
     </template>
   </AppCard>
 </template>
