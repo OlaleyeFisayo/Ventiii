@@ -9,7 +9,7 @@ await authStore.init();
     <EventMobileSidebar />
     <div class="flex flex-col w-full">
       <EventNavBar />
-      <main class="w-full flex-1">
+      <main class="w-full flex-1 p-8">
         <slot />
       </main>
     </div>

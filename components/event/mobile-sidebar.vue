@@ -7,11 +7,16 @@ const route = useRoute();
 const eventId = route.params.eventId;
 const defaultEventUrl = `/event/${eventId}`;
 
-const {
-  isMobile,
-} = useMobileBreakpoint();
+const sidebarStore = useSidebarStore();
 
-const open = ref(!!isMobile.value);
+const open = computed({
+  get() {
+    return sidebarStore.mobileState;
+  },
+  set(state: boolean) {
+    sidebarStore.mobileState = state;
+  },
+});
 
 const navItems = computed<NavigationMenuItem[]>(() => ([
   {

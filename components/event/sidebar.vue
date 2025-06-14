@@ -7,7 +7,8 @@ const route = useRoute();
 const eventId = route.params.eventId;
 const defaultEventUrl = `/event/${eventId}`;
 
-const closed = ref(false);
+const sidebarStore = useSidebarStore();
+const closed = computed(() => sidebarStore.desktopState);
 
 const navItems = computed<NavigationMenuItem[]>(() => ([
   {
