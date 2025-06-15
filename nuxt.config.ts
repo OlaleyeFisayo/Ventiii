@@ -45,4 +45,11 @@ export default defineNuxtConfig({
       ],
     },
   },
+  csurf: {
+    cookie: {
+      httpOnly: true,
+      sameSite: "strict",
+    },
+    headerName: "csrf-token",
+  },
 });

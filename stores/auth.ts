@@ -25,8 +25,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const {
     errorToast,
   } = useAppToast();
-
   const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(null);
+
   async function init() {
     const data = await authClient.useSession(useFetch);
     session.value = data;
@@ -37,136 +37,219 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const loading = ref(false);
   const success = ref(false);
 
+  // Helper function to get CSRF headers with proper error handling
+  async function getCsrfHeaders() {
+    try {
+      const {
+        csrf,
+      } = useCsrf();
+
+      // Wait for CSRF token to be available
+      if (!csrf) {
+        console.warn("CSRF token not available, retrying...");
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const {
+          csrf: retryToken,
+        } = useCsrf();
+        if (!retryToken) {
+          throw new Error("CSRF token unavailable after retry");
+        }
+        return {
+          "csrf-token": retryToken,
+        };
+      }
+
+      return {
+        "csrf-token": csrf,
+      };
+    }
+    catch (error) {
+      console.error("Failed to get CSRF token:", error);
+      throw error;
+    }
+  }
+
   async function signUp(payload: SignUpPayload) {
-    const {
-      csrf,
-    } = useCsrf();
-    const headers = new Headers();
-    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
-    const {
-      error,
-    } = await authClient.signUp.email({
-      ...payload,
-      fetchOptions: {
-        headers,
-      },
-    });
-    if (error)
-      errorToast(error?.message as string);
-    else success.value = true;
 
-    loading.value = false;
+    try {
+      const csrfHeaders = await getCsrfHeaders();
+
+      const {
+        error,
+      } = await authClient.signUp.email({
+        ...payload,
+        fetchOptions: {
+          headers: csrfHeaders,
+          // Add credentials for cross-origin requests
+          credentials: "same-origin",
+        },
+      });
+
+      if (error) {
+        errorToast(error?.message as string);
+      }
+      else {
+        success.value = true;
+      }
+    }
+    catch (error) {
+      console.error("SignUp error:", error);
+      errorToast("Authentication failed. Please try again.");
+    }
+    finally {
+      loading.value = false;
+    }
   }
 
   async function signIn(payload: SignUpPayload) {
-    const {
-      csrf,
-    } = useCsrf();
-    const headers = new Headers();
-    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
-    const {
-      error,
-    } = await authClient.signIn.email({
-      ...payload,
-      fetchOptions: {
-        headers,
-      },
-    });
-    if (error)
-      errorToast(error?.message as string);
-    else await navigateTo("/dashboard");
 
-    loading.value = false;
+    try {
+      const csrfHeaders = await getCsrfHeaders();
+
+      const {
+        error,
+      } = await authClient.signIn.email({
+        ...payload,
+        fetchOptions: {
+          headers: csrfHeaders,
+          credentials: "same-origin",
+        },
+      });
+
+      if (error) {
+        errorToast(error?.message as string);
+      }
+      else {
+        await navigateTo("/dashboard");
+      }
+    }
+    catch (error) {
+      console.error("SignIn error:", error);
+      errorToast("Authentication failed. Please try again.");
+    }
+    finally {
+      loading.value = false;
+    }
   }
 
   async function googleSignIn() {
-    const {
-      csrf,
-    } = useCsrf();
-    const headers = new Headers();
-    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/dashboard",
-      errorCallbackURL: "/error",
-      fetchOptions: {
-        headers,
-      },
-    });
-  };
+
+    try {
+      const csrfHeaders = await getCsrfHeaders();
+
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/dashboard",
+        errorCallbackURL: "/error",
+        fetchOptions: {
+          headers: csrfHeaders,
+          credentials: "same-origin",
+        },
+      });
+    }
+    catch (error) {
+      console.error("Google SignIn error:", error);
+      errorToast("Google sign-in failed. Please try again.");
+      loading.value = false;
+    }
+  }
 
   async function forgetPasswordOTP(payload: ForgetPasswordOTPPayload) {
-    const {
-      csrf,
-    } = useCsrf();
-    const headers = new Headers();
-    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
-    const {
-      error,
-    } = await authClient.emailOtp.sendVerificationOtp({
-      email: payload.email,
-      type: "forget-password",
-      fetchOptions: {
-        headers,
-      },
-    });
-    if (error)
-      errorToast(error?.message as string);
-    else await navigateTo(`/reset-password/${payload.email}`);
 
-    loading.value = false;
+    try {
+      const csrfHeaders = await getCsrfHeaders();
+
+      const {
+        error,
+      } = await authClient.emailOtp.sendVerificationOtp({
+        email: payload.email,
+        type: "forget-password",
+        fetchOptions: {
+          headers: csrfHeaders,
+          credentials: "same-origin",
+        },
+      });
+
+      if (error) {
+        errorToast(error?.message as string);
+      }
+      else {
+        await navigateTo(`/reset-password/${payload.email}`);
+      }
+    }
+    catch (error) {
+      console.error("Forget password error:", error);
+      errorToast("Failed to send reset email. Please try again.");
+    }
+    finally {
+      loading.value = false;
+    }
   }
 
   async function resetPassword(payload: ResetPasswordPayload) {
-    const {
-      csrf,
-    } = useCsrf();
-    const headers = new Headers();
-    headers.append("csrf-token", csrf);
     success.value = false;
     loading.value = true;
 
-    const {
-      error,
-    } = await authClient.emailOtp.resetPassword({
-      email: payload.email,
-      otp: payload.otp,
-      password: payload.password,
-      fetchOptions: {
-        headers,
-      },
-    });
+    try {
+      const csrfHeaders = await getCsrfHeaders();
 
-    if (error)
-      errorToast(error?.message as string);
-    else await navigateTo(`/log-in`);
+      const {
+        error,
+      } = await authClient.emailOtp.resetPassword({
+        email: payload.email,
+        otp: payload.otp,
+        password: payload.password,
+        fetchOptions: {
+          headers: csrfHeaders,
+          credentials: "same-origin",
+        },
+      });
 
-    loading.value = false;
+      if (error) {
+        errorToast(error?.message as string);
+      }
+      else {
+        await navigateTo(`/log-in`);
+      }
+    }
+    catch (error) {
+      console.error("Reset password error:", error);
+      errorToast("Failed to reset password. Please try again.");
+    }
+    finally {
+      loading.value = false;
+    }
   }
 
   async function logout() {
-    const {
-      csrf,
-    } = useCsrf();
-    const headers = new Headers();
-    headers.append("csrf-token", csrf);
     success.value = false;
-    await authClient.signOut({
-      fetchOptions: {
-        headers,
-        onSuccess: async () => {
-          await navigateTo("/log-in");
+
+    try {
+      const csrfHeaders = await getCsrfHeaders();
+
+      await authClient.signOut({
+        fetchOptions: {
+          headers: csrfHeaders,
+          credentials: "same-origin",
+          onSuccess: async () => {
+            await navigateTo("/log-in");
+          },
         },
-      },
-    });
+      });
+    }
+    catch (error) {
+      console.error("Logout error:", error);
+      // Still navigate to login even if logout fails
+      await navigateTo("/log-in");
+    }
   }
 
   return {

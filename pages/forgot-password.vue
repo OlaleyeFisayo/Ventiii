@@ -1,8 +1,5 @@
 <script setup lang="ts">
 const authStore = useAuthStore();
-if (authStore.user) {
-  await navigateTo("/dashboard");
-}
 
 const forgotPasswordForm = ref<AppFormItems[]>([
   {
