@@ -64,7 +64,7 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
 <template>
   <section class="border-b-1 border-b-gray-300 py-4 px-8 flex items-center justify-between">
     <NuxtLink
-      :to="authStore.user ? '/dashboard' : '/'"
+      :to="authStore.user ? '/dashboard?option=all' : '/'"
       class="flex gap-2 items-center text-xl font-extrabold"
     >
       <img
