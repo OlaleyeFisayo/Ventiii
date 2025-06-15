@@ -15,24 +15,30 @@ const error = computed(() => useTimeRangeValidator({
 <template>
   <div>
     <div class="flex gap-2 items-center justify-between">
-      <AppInput
-        v-model="start"
-        type="time"
-        icon="i-tabler-clock-play"
-        base-class="pl-9"
-        :disabled="disabled"
-        :highlight="error"
-        :color="error ? 'error' : 'primary'"
-      />
-      <AppInput
-        v-model="end"
-        type="time"
-        icon="i-tabler-clock-stop"
-        base-class="pl-9"
-        :disabled="disabled"
-        :highlight="error"
-        :color="error ? 'error' : 'primary'"
-      />
+      <div class="w-full">
+        <p>Start</p>
+        <AppInput
+          v-model="start"
+          type="time"
+          icon="i-tabler-clock-play"
+          base-class="pl-9"
+          :disabled="disabled"
+          :highlight="error"
+          :color="error ? 'error' : 'primary'"
+        />
+      </div>
+      <div class="w-full">
+        <p>End</p>
+        <AppInput
+          v-model="end"
+          type="time"
+          icon="i-tabler-clock-stop"
+          base-class="pl-9"
+          :disabled="disabled"
+          :highlight="error"
+          :color="error ? 'error' : 'primary'"
+        />
+      </div>
     </div>
     <p
       v-if="error"
