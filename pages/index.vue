@@ -35,8 +35,8 @@ const registerForm = ref<AppFormItems[]>([
       <AppAlert
         v-if="authStore.success"
         color="success"
-        title="Success"
-        description="Verify your Email before you log in"
+        title="Please verify your email."
+        description="We’ve sent you a link — check your inbox (or spam folder) before logging in"
         icon="i-tabler-info-square-rounded-filled"
         class="mb-4"
       />
