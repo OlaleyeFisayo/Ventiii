@@ -93,16 +93,8 @@ async function createEvent(state: CreateEventState) {
 </script>
 
 <template>
-  <section class="flex flex-col gap-2 items-center">
-    <div class="w-full">
-      <AppButton
-        label="Go Back"
-        variant="link"
-        class="text-black"
-        icon="i-tabler-arrow-left"
-        @click="$router.back"
-      />
-    </div>
+  <section class="flex flex-col items-center">
+    <AppBackButton />
     <h1 class="font-bold text-3xl text-black">
       Create Event
     </h1>

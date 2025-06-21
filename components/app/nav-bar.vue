@@ -21,7 +21,7 @@ const dropdownMenuItems = ref<DropdownMenuItem[]>([
   [
     {
       label: "Settings",
-      icon: "i-tabler-settings-cog",
+      icon: "i-tabler-settings",
       to: "/settings",
     },
     {
@@ -49,7 +49,7 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
   [
     {
       label: "Settings",
-      icon: "i-tabler-settings-cog",
+      icon: "i-tabler-settings",
       to: "/settings",
     },
     {
