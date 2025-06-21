@@ -99,6 +99,11 @@ const changeUsersImage = ref <AppFormItems[]> ([
   },
 ]);
 
+const confirmDelete = ref(false);
+function toggleConfirmDelete() {
+  confirmDelete.value = !confirmDelete.value;
+}
+
 async function changeImage(state: {
   image: File[];
 }) {
@@ -189,6 +194,58 @@ onMounted(async () => {
           @submit="changeImage"
         />
       </AppCard>
+      <AppCard>
+        <template #header>
+          <h1>Danger Zone</h1>
+          <p class="text-muted">
+            Irreversible actions for your accounts
+          </p>
+        </template>
+        <AppCard theme="error">
+          <section class="flex items-center justify-between gap-2">
+            <div>
+              <h2>Delete Event</h2>
+              <p>Permanently delete this account and all associated data.</p>
+            </div>
+            <AppButton
+              label="Delete"
+              color="error"
+              class="px-4 py-3"
+              loading-auto
+              :loading="userStore.loading"
+              @click="toggleConfirmDelete"
+            />
+          </section>
+        </AppCard>
+      </AppCard>
     </section>
+
+    <AppModal
+      v-model:open="confirmDelete"
+      :dismissible="false"
+    >
+      <template #content>
+        <div class="flex flex-col items-center justify-center gap-2 p-4">
+          <p>Are you sure you want to delete your account?</p>
+          <div class="flex gap-4">
+            <AppButton
+              label="No"
+              theme="secondary"
+              class="px-4 py-2.5"
+              loading-auto
+              :loading="userStore.loading"
+              @click="toggleConfirmDelete"
+            />
+            <AppButton
+              label="Yes"
+              class="px-4 py-2.5"
+              loading-auto
+              :loading="userStore.loading"
+              @click="toggleConfirmDelete"
+            />
+          </div>
+        </div>
+      </template>
+    </AppModal>
   </section>
 </template>
