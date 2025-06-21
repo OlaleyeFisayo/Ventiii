@@ -24,6 +24,21 @@ export type UserWithId = Omit<User, "id"> & {
 };
 
 export const auth = betterAuth({
+  user: {
+    changeEmail: {
+      enabled: true,
+      sendChangeEmailVerification: async ({
+        user,
+        url,
+        newEmail,
+      }) => {
+        await sendEmail(user.email, "new-email", {
+          url,
+          newEmail,
+        });
+      },
+    },
+  },
   hooks: {
     after: createAuthMiddleware(async (ctx) => {
       if (ctx.path === "/get-session") {

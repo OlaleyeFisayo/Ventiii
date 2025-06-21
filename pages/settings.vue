@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import z4 from "zod/v4";
+
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const cloudinaryStore = useCloudinaryStore();
@@ -37,6 +39,24 @@ const changeEmailForm = ref <AppFormItems[]> ([
     value: authStore.user?.email,
   },
 ]);
+
+async function changeEmail(state: {
+  email: string;
+}) {
+  const emailSchema = z4.email();
+  const result = emailSchema.safeParse(state.email);
+  if (state.email === authStore.user?.email) {
+    setErrorMessage("You’re already using this email. Please enter a different one.");
+  }
+  else if (result.error) {
+    setErrorMessage("Please enter a valid email");
+  }
+  else {
+    await userStore.updateUserEmail({
+      newEmail: state.email,
+    });
+  }
+}
 
 const changePasswordForm = ref <AppFormItems[]> ([
   {
@@ -114,6 +134,8 @@ async function changeImage(state: {
           v-model:items="changeEmailForm"
           submit-label="Change Email"
           :show-hints="false"
+          :loading="userStore.loading"
+          @submit="changeEmail"
         />
       </AppCard>
       <AppCard>

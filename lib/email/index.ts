@@ -20,7 +20,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendEmail(to: string, type: EmailTemplateType, data: EmailTemplateData) {
+export async function sendEmail(
+  to: string,
+  type: EmailTemplateType,
+  data: EmailTemplateData,
+) {
   const {
     subject,
     text,
