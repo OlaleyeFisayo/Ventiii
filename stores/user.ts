@@ -132,6 +132,41 @@ export const useUserStore = defineStore("useUserStore", () => {
     }
   }
 
+  async function deleteUser() {
+    success.value = false;
+    loading.value = true;
+
+    try {
+      const csrfHeaders = await getCsrfHeaders();
+
+      const {
+        error,
+      } = await authClient.deleteUser({
+        callbackURL: "/",
+        fetchOptions: {
+          headers: csrfHeaders,
+          credentials: "same-origin",
+        },
+      });
+      if (error) {
+        errorToast(error.message as string);
+      }
+      else {
+        success.value = true;
+        successToast("Account Deleted");
+        await navigateTo("/");
+      }
+    }
+    catch (error) {
+      loading.value = false;
+      console.error("Update error:", error);
+      errorToast("User Update failed. Please try again.");
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
   return {
     loading,
     success,
@@ -140,5 +175,6 @@ export const useUserStore = defineStore("useUserStore", () => {
     getAccount,
     account,
     updateUserPassword,
+    deleteUser,
   };
 });

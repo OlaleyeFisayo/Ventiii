@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
     "/dashboard",
     "/new",
     "/event",
+    "/settings",
   ];
 
   const session = await auth.api.getSession({

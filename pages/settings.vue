@@ -10,7 +10,7 @@ function setErrorMessage(msg: string) {
   errorMessage.value = msg;
   setTimeout(() => {
     errorMessage.value = "";
-  }, 5000);
+  }, 10000);
 }
 
 const changeNameForm = ref <AppFormItems[]> ([
@@ -127,38 +127,41 @@ onMounted(async () => {
     <h1 class="text-3xl font-bold text-center">
       User Settings
     </h1>
-    <section class="w-full max-w-[700px] mx-auto mt-4 flex flex-col gap-4">
-      <AppAlert
-        v-if="errorMessage"
-        color="error"
-        title="Error"
-        icon="i-tabler-info-square-rounded-filled"
-        :description="errorMessage"
-      />
-      <AppCard>
-        <template #header>
-          <h2>User Name</h2>
-        </template>
-        <AppForm
-          v-model:items="changeNameForm"
-          submit-label="Change Name"
-          :show-hints="false"
-          :loading="userStore.loading"
-          @submit="changeName"
-        />
-      </AppCard>
-      <AppCard v-if="userStore?.account?.provider === 'credential'">
-        <template #header>
-          <h2>User Email</h2>
-        </template>
-        <AppForm
-          v-model:items="changeEmailForm"
-          submit-label="Change Email"
-          :show-hints="false"
-          :loading="userStore.loading"
-          @submit="changeEmail"
-        />
-      </AppCard>
+    <AppAlert
+      v-if="errorMessage"
+      color="error"
+      class="w-full max-w-[600px] mx-auto mt-2"
+      title="Error"
+      icon="i-tabler-info-square-rounded-filled"
+      :description="errorMessage"
+    />
+    <section class="w-full mt-4 grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 justify-start gap-4">
+      <div class="flex flex-col gap-2">
+        <AppCard>
+          <template #header>
+            <h2>User Name</h2>
+          </template>
+          <AppForm
+            v-model:items="changeNameForm"
+            submit-label="Change Name"
+            :show-hints="false"
+            :loading="userStore.loading"
+            @submit="changeName"
+          />
+        </AppCard>
+        <AppCard v-if="userStore?.account?.provider === 'credential'">
+          <template #header>
+            <h2>User Email</h2>
+          </template>
+          <AppForm
+            v-model:items="changeEmailForm"
+            submit-label="Change Email"
+            :show-hints="false"
+            :loading="userStore.loading"
+            @submit="changeEmail"
+          />
+        </AppCard>
+      </div>
       <AppCard v-if="userStore?.account?.provider === 'credential'">
         <template #header>
           <h2>User Password</h2>
@@ -194,38 +197,42 @@ onMounted(async () => {
           @submit="changeImage"
         />
       </AppCard>
-      <AppCard>
-        <template #header>
-          <h1>Danger Zone</h1>
-          <p class="text-muted">
-            Irreversible actions for your accounts
-          </p>
-        </template>
-        <AppCard theme="error">
-          <section class="flex items-center justify-between gap-2">
-            <div>
-              <h2>Delete Event</h2>
-              <p>Permanently delete this account and all associated data.</p>
-            </div>
-            <AppButton
-              label="Delete"
-              color="error"
-              class="px-4 py-3"
-              loading-auto
-              :loading="userStore.loading"
-              @click="toggleConfirmDelete"
-            />
-          </section>
-        </AppCard>
-      </AppCard>
     </section>
+    <AppCard class="mt-4">
+      <template #header>
+        <h1 class="text-lg">
+          Danger Zone
+        </h1>
+        <p class="text-muted text-md">
+          Irreversible actions for your accounts
+        </p>
+      </template>
+      <AppCard theme="error">
+        <section class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2>Delete Event</h2>
+            <p class="text-muted text-sm">
+              Permanently delete this account and all associated data.
+            </p>
+          </div>
+          <AppButton
+            label="Delete Account"
+            color="error"
+            class="px-4 py-3"
+            loading-auto
+            :loading="userStore.loading"
+            @click="toggleConfirmDelete"
+          />
+        </section>
+      </AppCard>
+    </AppCard>
 
     <AppModal
       v-model:open="confirmDelete"
       :dismissible="false"
     >
       <template #content>
-        <div class="flex flex-col items-center justify-center gap-2 p-4">
+        <div class="flex flex-col items-center justify-center gap-2 px-4 py-8">
           <p>Are you sure you want to delete your account?</p>
           <div class="flex gap-4">
             <AppButton
@@ -241,7 +248,7 @@ onMounted(async () => {
               class="px-4 py-2.5"
               loading-auto
               :loading="userStore.loading"
-              @click="toggleConfirmDelete"
+              @click="userStore.deleteUser"
             />
           </div>
         </div>
