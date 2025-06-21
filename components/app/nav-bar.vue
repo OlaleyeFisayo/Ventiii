@@ -20,6 +20,11 @@ const authLinks = [
 const dropdownMenuItems = ref<DropdownMenuItem[]>([
   [
     {
+      label: "Settings",
+      icon: "i-tabler-settings",
+      to: "/settings",
+    },
+    {
       label: "Logout",
       icon: "i-tabler-logout-2",
       color: "error",
@@ -42,6 +47,11 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
     },
   ],
   [
+    {
+      label: "Settings",
+      icon: "i-tabler-settings",
+      to: "/settings",
+    },
     {
       label: "New Event",
       icon: "i-tabler-plus",

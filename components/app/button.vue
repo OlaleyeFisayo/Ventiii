@@ -20,6 +20,9 @@ const props = defineProps({
   },
   loading: Boolean,
   loadingAuto: Boolean,
+  color: {
+    type: String as PropType<ComponentColor>,
+  },
 });
 
 const emits = defineEmits(["click"]);
@@ -46,6 +49,7 @@ function handleClick(event: Event) {
     :type="type"
     :loading="loading"
     :loading-auto="loadingAuto"
+    :color="color"
     @click="handleClick"
   >
     <slot />
