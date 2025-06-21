@@ -9,6 +9,16 @@ export const useUserStore = defineStore("useUserStore", () => {
   } = useAppToast();
   const loading = ref(false);
   const success = ref(false);
+  const account = ref();
+
+  async function getAccount() {
+    loading.value = true;
+    const accounts = await authClient.listAccounts();
+    if (accounts) {
+      account.value = accounts?.data[0];
+    }
+    loading.value = false;
+  }
 
   async function updateUser(payload: {
     image?: string;
@@ -89,5 +99,7 @@ export const useUserStore = defineStore("useUserStore", () => {
     success,
     updateUser,
     updateUserEmail,
+    getAccount,
+    account,
   };
 });

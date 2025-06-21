@@ -98,6 +98,10 @@ async function changeImage(state: {
   });
   changeUsersImage.value[0].value = [];
 }
+
+onMounted(async () => {
+  await userStore.getAccount();
+});
 </script>
 
 <template>
@@ -126,7 +130,7 @@ async function changeImage(state: {
           @submit="changeName"
         />
       </AppCard>
-      <AppCard>
+      <AppCard v-if="userStore?.account?.provider === 'credential'">
         <template #header>
           <h2>User Email</h2>
         </template>
@@ -138,7 +142,7 @@ async function changeImage(state: {
           @submit="changeEmail"
         />
       </AppCard>
-      <AppCard>
+      <AppCard v-if="userStore?.account?.provider === 'credential'">
         <template #header>
           <h2>User Password</h2>
         </template>
