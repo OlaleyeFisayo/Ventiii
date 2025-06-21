@@ -8,9 +8,12 @@ const cloudinaryStore = useCloudinaryStore();
 const errorMessage = ref("");
 function setErrorMessage(msg: string) {
   errorMessage.value = msg;
-  setTimeout(() => {
-    errorMessage.value = "";
-  }, 10000);
+  setTimeout(
+    () => {
+      errorMessage.value = "";
+    },
+    10000,
+  );
 }
 
 const changeNameForm = ref <AppFormItems[]> ([

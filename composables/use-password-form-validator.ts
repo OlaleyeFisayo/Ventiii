@@ -4,11 +4,9 @@ export function usePasswordFormValidator(
   score: Readonly<Ref<number>>,
 ) {
   const hasSecurePassword = computed(() =>
-    items.value?.some((i: AppFormItems) => i.tag === "password" && i.securePassword),
-  );
+    items.value?.some((i: AppFormItems) => i.tag === "password" && i.securePassword));
   const hasConfirmPassword = computed(() =>
-    items.value?.some((i: AppFormItems) => i.tag === "confirmPassword"),
-  );
+    items.value?.some((i: AppFormItems) => i.tag === "confirmPassword"));
 
   const passwordsMatch = computed(() => {
     const pw = state.value.password;

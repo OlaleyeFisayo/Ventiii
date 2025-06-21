@@ -15,9 +15,12 @@ defineProps({
 
 const model = defineModel<any>();
 
-const df = new DateFormatter("en-US", {
-  dateStyle: "medium",
-});
+const df = new DateFormatter(
+  "en-US",
+  {
+    dateStyle: "medium",
+  },
+);
 
 const todayJs = new Date();
 const start = new CalendarDate(
@@ -41,9 +44,19 @@ const defaultValue = shallowRef({
 
 function isDateUnavailable(date: DateValue) {
   const jsDate = (date as CalendarDate).toDate(getLocalTimeZone());
-  jsDate.setHours(0, 0, 0, 0);
+  jsDate.setHours(
+    0,
+    0,
+    0,
+    0,
+  );
   const todayMidnight = new Date();
-  todayMidnight.setHours(0, 0, 0, 0);
+  todayMidnight.setHours(
+    0,
+    0,
+    0,
+    0,
+  );
   return jsDate < todayMidnight;
 }
 
@@ -51,8 +64,7 @@ const isSameDay = computed(() =>
   useAreDatesSame(
     model.value.start,
     model.value.end,
-  ),
-);
+  ));
 </script>
 
 <template>

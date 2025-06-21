@@ -58,28 +58,50 @@ async function handleSearch() {
     },
   });
 
-  await eventStore.getEvents(route.query.option, page.value, itemsPerPage.value, searchInput.value.trim());
+  await eventStore.getEvents(
+    route.query.option,
+    page.value,
+    itemsPerPage.value,
+    searchInput.value.trim(),
+  );
 }
 
-watch(() => route.query.option, async (newOption: LocationQueryValue | LocationQueryValue[]) => {
-  if (newOption) {
-    page.value = 1;
-    await eventStore.getEvents(newOption as string, page.value, itemsPerPage.value, searchInput.value.trim());
-  }
-}, {
-  immediate: true,
-});
+watch(
+  () => route.query.option,
+  async (newOption: LocationQueryValue | LocationQueryValue[]) => {
+    if (newOption) {
+      page.value = 1;
+      await eventStore.getEvents(
+        newOption as string,
+        page.value,
+        itemsPerPage.value,
+        searchInput.value.trim(),
+      );
+    }
+  },
+  {
+    immediate: true,
+  },
+);
 
 watch(
   () => page.value,
   async (newPage: number) => {
-    await eventStore.getEvents(route.query.option, newPage, itemsPerPage.value, searchInput.value.trim());
+    await eventStore.getEvents(
+      route.query.option,
+      newPage,
+      itemsPerPage.value,
+      searchInput.value.trim(),
+    );
   },
 );
 
 watch(
   () => searchInput.value,
-  async (newInput: string, oldInput: string) => {
+  async (
+    newInput: string,
+    oldInput: string,
+  ) => {
     page.value = 1;
     if (!newInput && oldInput && route.query.search) {
       router.push({
@@ -88,7 +110,12 @@ watch(
           option: "all",
         },
       });
-      await eventStore.getEvents(route.query.option, page.value, itemsPerPage.value, newInput.trim());
+      await eventStore.getEvents(
+        route.query.option,
+        page.value,
+        itemsPerPage.value,
+        newInput.trim(),
+      );
     }
   },
 );

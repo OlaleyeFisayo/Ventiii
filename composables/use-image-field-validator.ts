@@ -1,9 +1,6 @@
-export function useImageFieldValidator(
-  items: Readonly<Ref<AppFormItems[]>>,
-) {
+export function useImageFieldValidator(items: Readonly<Ref<AppFormItems[]>>) {
   const hasImageField = computed(() =>
-    items.value?.some((i: AppFormItems) => i.type === "img"),
-  );
+    items.value?.some((i: AppFormItems) => i.type === "img"));
   const isImageValid = computed(() => {
     if (!hasImageField.value)
       return true;

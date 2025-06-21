@@ -1,4 +1,7 @@
-export function useAllFilled(state: Record<string, any>, items: AppFormItems[]) {
+export function useAllFilled(
+  state: Record<string, any>,
+  items: AppFormItems[],
+) {
   return items.every((item) => {
     if (item.optional)
       return true;

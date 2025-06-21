@@ -25,10 +25,16 @@ export function useMobileBreakpoint(breakpoint: TailwindBreakpoint = "md") {
       checkBreakpoint();
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener(
+      "resize",
+      handleResize,
+    );
 
     onUnmounted(() => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener(
+        "resize",
+        handleResize,
+      );
     });
   }
 

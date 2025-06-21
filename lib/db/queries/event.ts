@@ -18,7 +18,11 @@ import {
   event,
 } from "../schema";
 
-export async function createEvent(data: InsertEvent, id: string, userId: number) {
+export async function createEvent(
+  data: InsertEvent,
+  id: string,
+  userId: number,
+) {
   const created = await db.insert(event).values({
     ...data,
     id,
@@ -38,22 +42,34 @@ export async function getEvents(
   const now = new Date();
   const offset = (page - 1) * limit;
 
-  const conditions = [eq(event.userId, userId)];
+  const conditions = [eq(
+    event.userId,
+    userId,
+  )];
   if (filter === "upcoming") {
-    conditions.push(gte(event.endDate, now));
+    conditions.push(gte(
+      event.endDate,
+      now,
+    ));
   }
   else if (filter === "past") {
-    conditions.push(lt(event.endDate, now));
+    conditions.push(lt(
+      event.endDate,
+      now,
+    ));
   }
 
   if (searchQuery && searchQuery.trim()) {
     const searchTerm = `%${searchQuery.trim()}%`;
-    conditions.push(
-      like(event.title, searchTerm),
-    );
+    conditions.push(like(
+      event.title,
+      searchTerm,
+    ));
   }
 
-  const whereCondition = conditions.length > 1 ? and(...conditions) : conditions[0];
+  const whereCondition = conditions.length > 1
+    ? and(...conditions)
+    : conditions[0];
 
   let orderBy;
   if (filter === "upcoming") {

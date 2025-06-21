@@ -7,7 +7,10 @@ export async function getCsrfHeaders() {
     // Wait for CSRF token to be available
     if (!csrf) {
       console.warn("CSRF token not available, retrying...");
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(
+        resolve,
+        100,
+      ));
       const {
         csrf: retryToken,
       } = useCsrf();
@@ -24,7 +27,10 @@ export async function getCsrfHeaders() {
     };
   }
   catch (error) {
-    console.error("Failed to get CSRF token:", error);
+    console.error(
+      "Failed to get CSRF token:",
+      error,
+    );
     throw error;
   }
 }

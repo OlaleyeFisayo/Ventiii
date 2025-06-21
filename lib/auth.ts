@@ -35,10 +35,14 @@ export const auth = betterAuth({
         url,
         newEmail,
       }) => {
-        await sendEmail(user.email, "new-email", {
-          url,
-          newEmail,
-        });
+        await sendEmail(
+          user.email,
+          "new-email",
+          {
+            url,
+            newEmail,
+          },
+        );
       },
     },
   },
@@ -55,9 +59,12 @@ export const auth = betterAuth({
       }
     }),
   },
-  database: drizzleAdapter(db, {
-    provider: "sqlite",
-  }),
+  database: drizzleAdapter(
+    db,
+    {
+      provider: "sqlite",
+    },
+  ),
   advanced: {
     database: {
       generateId: false,
@@ -73,10 +80,17 @@ export const auth = betterAuth({
       url,
     }) => {
       const verificationUrl = new URL(url);
-      verificationUrl.searchParams.set("callbackURL", "/log-in");
-      await sendEmail(user.email, "verify-email", {
-        url: verificationUrl.toString(),
-      });
+      verificationUrl.searchParams.set(
+        "callbackURL",
+        "/log-in",
+      );
+      await sendEmail(
+        user.email,
+        "verify-email",
+        {
+          url: verificationUrl.toString(),
+        },
+      );
     },
     sendOnSignUp: true,
   },
@@ -96,9 +110,13 @@ export const auth = betterAuth({
       type,
     }) {
       if (type === "forget-password") {
-        await sendEmail(email, "reset-password", {
-          otp,
-        });
+        await sendEmail(
+          email,
+          "reset-password",
+          {
+            otp,
+          },
+        );
       }
     },
   })],

@@ -29,7 +29,10 @@ export async function sendEmail(
     subject,
     text,
     html,
-  } = getEmailTemplate(type, data);
+  } = getEmailTemplate(
+    type,
+    data,
+  );
 
   await transporter.sendMail({
     from: env.SMTP_USER,

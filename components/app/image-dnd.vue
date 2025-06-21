@@ -20,13 +20,16 @@ type Emits = {
   (e: "error", error: string): void;
 };
 
-const props = withDefaults(defineProps<Props>(), {
-  maxFiles: 0, // 0 means unlimited
-  maxFileSize: 10 * 1024 * 1024, // 10MB default
-  acceptedTypes: () => ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"],
-  preview: false,
-  disabled: false,
-});
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    maxFiles: 0, // 0 means unlimited
+    maxFileSize: 10 * 1024 * 1024, // 10MB default
+    acceptedTypes: () => ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"],
+    preview: false,
+    disabled: false,
+  },
+);
 
 const emit = defineEmits<Emits>();
 
@@ -43,13 +46,17 @@ const dropZone = ref<HTMLElement>();
 const fileInput = ref<HTMLInputElement>();
 
 // Watch for external changes to modelValue
-watch(() => props.modelValue, (newFiles) => {
-  if (newFiles && newFiles.length !== images.value.length) {
-    loadFilesFromProps(newFiles);
-  }
-}, {
-  immediate: true,
-});
+watch(
+  () => props.modelValue,
+  (newFiles) => {
+    if (newFiles && newFiles.length !== images.value.length) {
+      loadFilesFromProps(newFiles);
+    }
+  },
+  {
+    immediate: true,
+  },
+);
 
 // Drag and drop handlers
 let dragCounter = 0;
@@ -111,20 +118,21 @@ async function processFiles(files: File[]) {
     const validFiles = validateFiles(files);
 
     if (validFiles.length > 0) {
-      const newImages = await Promise.all(
-        validFiles.map(async file => ({
-          id: generateId(),
-          file,
-          preview: await createPreview(file),
-        })),
-      );
+      const newImages = await Promise.all(validFiles.map(async file => ({
+        id: generateId(),
+        file,
+        preview: await createPreview(file),
+      })));
 
       // Check max files limit
       const totalFiles = images.value.length + newImages.length;
       if (props.maxFiles > 0 && totalFiles > props.maxFiles) {
         const allowedCount = props.maxFiles - images.value.length;
         if (allowedCount > 0) {
-          images.value.push(...newImages.slice(0, allowedCount));
+          images.value.push(...newImages.slice(
+            0,
+            allowedCount,
+          ));
           errors.value.push(`Only ${allowedCount} more files allowed. Some files were not added.`);
         }
         else {
@@ -141,7 +149,10 @@ async function processFiles(files: File[]) {
   // eslint-disable-next-line unused-imports/no-unused-vars
   catch (error) {
     errors.value.push("Error processing files. Please try again.");
-    emit("error", "Error processing files");
+    emit(
+      "error",
+      "Error processing files",
+    );
   }
   finally {
     isUploading.value = false;
@@ -166,8 +177,7 @@ function validateFiles(files: File[]): File[] {
 
     // Check for duplicates based on name and size
     const isDuplicate = images.value.some(img =>
-      img.file.name === file.name && img.file.size === file.size,
-    );
+      img.file.name === file.name && img.file.size === file.size);
 
     if (isDuplicate) {
       errors.value.push(`${file.name}: File already selected.`);
@@ -181,7 +191,10 @@ function validateFiles(files: File[]): File[] {
 }
 
 function createPreview(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
+  return new Promise((
+    resolve,
+    reject,
+  ) => {
     const reader = new FileReader();
     reader.onload = e => resolve(e.target?.result as string);
     reader.onerror = reject;
@@ -193,7 +206,10 @@ function createPreview(file: File): Promise<string> {
 function removeImage(index: number) {
   // Revoke the object URL to free memory
   URL.revokeObjectURL(images.value[index].preview);
-  images.value.splice(index, 1);
+  images.value.splice(
+    index,
+    1,
+  );
   emitChanges();
 }
 
@@ -217,14 +233,23 @@ function formatFileSize(bytes: number): string {
 }
 
 function removeError(index: number) {
-  errors.value.splice(index, 1);
+  errors.value.splice(
+    index,
+    1,
+  );
 }
 
 // Emit changes
 function emitChanges() {
   const files = images.value.map(img => img.file);
-  emit("update:modelValue", files);
-  emit("change", files);
+  emit(
+    "update:modelValue",
+    files,
+  );
+  emit(
+    "change",
+    files,
+  );
 }
 
 // Load files from props (for v-model support)
@@ -237,18 +262,19 @@ async function loadFilesFromProps(files: File[]) {
   isUploading.value = true;
 
   try {
-    const newImages = await Promise.all(
-      files.map(async file => ({
-        id: generateId(),
-        file,
-        preview: await createPreview(file),
-      })),
-    );
+    const newImages = await Promise.all(files.map(async file => ({
+      id: generateId(),
+      file,
+      preview: await createPreview(file),
+    })));
 
     images.value = newImages;
   }
   catch (error) {
-    console.error("Error loading files from props:", error);
+    console.error(
+      "Error loading files from props:",
+      error,
+    );
   }
   finally {
     isUploading.value = false;

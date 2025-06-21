@@ -26,11 +26,17 @@ const model = defineModel<any>();
 function onFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0] ?? null;
-  emit("update:modelValue", file);
+  emit(
+    "update:modelValue",
+    file,
+  );
 }
 
 function onKeyup(e: KeyboardEvent) {
-  emit("keyup", e);
+  emit(
+    "keyup",
+    e,
+  );
 }
 </script>
 

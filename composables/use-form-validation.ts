@@ -7,10 +7,23 @@ export function useFormValidation(
   state: Readonly<Ref<Record<string, any>>>,
   score: Readonly<Ref<number>>,
 ) {
-  const isAllFilled = computed(() => useAllFilled(state.value, items.value));
-  const isPasswordValidated = computed(() => usePasswordFormValidator(items, state, score));
-  const isOtpValdated = computed(() => useOtpValidator(items, state));
-  const isTimeInputValidated = computed(() => useTimeInputValidator(items, state));
+  const isAllFilled = computed(() => useAllFilled(
+    state.value,
+    items.value,
+  ));
+  const isPasswordValidated = computed(() => usePasswordFormValidator(
+    items,
+    state,
+    score,
+  ));
+  const isOtpValdated = computed(() => useOtpValidator(
+    items,
+    state,
+  ));
+  const isTimeInputValidated = computed(() => useTimeInputValidator(
+    items,
+    state,
+  ));
   const isImageFieldValidated = computed(() => useImageFieldValidator(items));
 
   if (

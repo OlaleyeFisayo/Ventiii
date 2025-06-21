@@ -3,8 +3,7 @@ export function useTimeInputValidator(
   state: Readonly<Ref<Record<string, any>>>,
 ) {
   const hasTimeField = computed(() =>
-    items.value?.some((i: AppFormItems) => i.type === "time"),
-  );
+    items.value?.some((i: AppFormItems) => i.type === "time"));
 
   const isTimeValid = computed(() => {
     if (!hasTimeField.value)

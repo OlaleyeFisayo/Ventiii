@@ -3,8 +3,8 @@ import antfu from "@antfu/eslint-config";
 // @ts-check
 import withNuxt from "./.nuxt/eslint.config.mjs";
 
-export default withNuxt(
-  antfu({
+export default withNuxt(antfu(
+  {
     type: "app",
     vue: true,
     typescript: true,
@@ -15,11 +15,21 @@ export default withNuxt(
       quotes: "double",
     },
     ignores: ["**/migrations/*"],
-  }, {
+  },
+  {
     rules: {
       "ts/no-redeclare": "off",
       "ts/consistent-type-definitions": ["error", "type"],
-      "object-curly-newline": ["error", "always"],
+      "object-curly-newline": ["error", {
+        multiline: true,
+        minProperties: 1,
+      }],
+      "style/function-paren-newline": [
+        "error",
+        {
+          minItems: 2,
+        },
+      ],
       "no-console": ["warn"],
       "antfu/no-top-level-await": ["off"],
       "node/prefer-global/process": ["off"],
@@ -43,5 +53,5 @@ export default withNuxt(
         },
       }],
     },
-  }),
-);
+  },
+));

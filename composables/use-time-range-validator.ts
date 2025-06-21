@@ -1,9 +1,7 @@
-export function useTimeRangeValidator(
-  tv: {
-    start: string;
-    end: string;
-  },
-) {
+export function useTimeRangeValidator(tv: {
+  start: string;
+  end: string;
+}) {
   if (!tv?.start || !tv?.end)
     return false;
 

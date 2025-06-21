@@ -3,8 +3,7 @@ export function useOtpValidator(
   state: Readonly<Ref<Record<string, any>>>,
 ) {
   const hasOtp = computed(() =>
-    items.value?.some((i: AppFormItems) => i.type === "otp"),
-  );
+    items.value?.some((i: AppFormItems) => i.type === "otp"));
   const isOtpValid = computed(() => {
     const otp = state.value?.otp;
     if (!hasOtp.value)

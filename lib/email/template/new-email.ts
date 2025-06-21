@@ -1,4 +1,7 @@
-export function changeEmailTemplate(url: string, newEmail: string) {
+export function changeEmailTemplate(
+  url: string,
+  newEmail: string,
+) {
   return `<!DOCTYPE html>
 <html>
 <head>

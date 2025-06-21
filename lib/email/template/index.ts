@@ -13,7 +13,10 @@ import {
   verifyEmailTemplate,
 } from "./verify-email";
 
-export function getEmailTemplate(type: EmailTemplateType, data: EmailTemplateData) {
+export function getEmailTemplate(
+  type: EmailTemplateType,
+  data: EmailTemplateData,
+) {
   const template = {
     "verify-email": {
       subject: "Verify your email address",
@@ -31,7 +34,10 @@ export function getEmailTemplate(type: EmailTemplateType, data: EmailTemplateDat
         Click the link to approve the change: ${data.url}
         After confirming this request, we’ll send a verification email to your new address.
       `,
-      html: changeEmailTemplate(data.url as string, data.newEmail as string),
+      html: changeEmailTemplate(
+        data.url as string,
+        data.newEmail as string,
+      ),
     },
   };
 

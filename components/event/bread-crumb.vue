@@ -13,9 +13,12 @@ type Props = {
   items?: BreadcrumbLink[];
 };
 
-const props = withDefaults(defineProps<Props>(), {
-  items: () => [],
-});
+const props = withDefaults(
+  defineProps<Props>(),
+  {
+    items: () => [],
+  },
+);
 
 const route = useRoute();
 
@@ -33,7 +36,10 @@ const breadcrumbitems = computed(() => {
   }];
 
   let currentPath = "";
-  pathSegments.forEach((segment: string, index: number) => {
+  pathSegments.forEach((
+    segment: string,
+    index: number,
+  ) => {
     // Skip the "event" segment
     if (segment.toLowerCase() === "event") {
       currentPath += `/${segment}`;
@@ -44,8 +50,14 @@ const breadcrumbitems = computed(() => {
 
     // Format segment name (capitalize and replace hyphens)
     const label = segment
-      .replace(/-/g, " ")
-      .replace(/\b\w/g, (l: string) => l.toUpperCase());
+      .replace(
+        /-/g,
+        " ",
+      )
+      .replace(
+        /\b\w/g,
+        (l: string) => l.toUpperCase(),
+      );
 
     // Don't add link for the current page (last segment)
     const isLastSegment = index === pathSegments.length - 1;

@@ -9,9 +9,12 @@ defineProps({
   disabled: Boolean,
 });
 
-const page = defineModel<number>("page", {
-  default: 1,
-});
+const page = defineModel<number>(
+  "page",
+  {
+    default: 1,
+  },
+);
 </script>
 
 <template>

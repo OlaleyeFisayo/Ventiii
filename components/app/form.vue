@@ -22,8 +22,7 @@ const showPassword = ref(false);
 
 // State for Uform
 const state = computed<Record<string, any>>(() =>
-  Object.fromEntries(items.value!.map((i: AppFormItems) => [i.tag, i.value])),
-);
+  Object.fromEntries(items.value!.map((i: AppFormItems) => [i.tag, i.value])));
 
 // Secure password check
 const strength = computed(() => useCheckPasswordStrength(state.value?.password));
@@ -43,20 +42,28 @@ const text = computed(() => {
 });
 
 // check if submitting is disabled
-const isSubmitDisabled = computed(() => useFormValidation(items, state, score));
+const isSubmitDisabled = computed(() => useFormValidation(
+  items,
+  state,
+  score,
+));
 
 // Handling submits
 type Schema = ReturnType<typeof state>;
 
 function handleSubmit(event: FormSubmitEvent<Schema>) {
-  emits("submit", event.data);
+  emits(
+    "submit",
+    event.data,
+  );
 }
 
 // THis is to check whether the form is filled or not
 const isDirty = computed(() => {
   return Object.values(state.value).some((val) => {
-    if (Array.isArray(val))
+    if (Array.isArray(val)) {
       return val.length > 0;
+    }
     if (val && typeof val === "object" && "start" in val && "end" in val)
       return val.start?.trim?.() || val.end?.trim?.();
     return typeof val === "string"
@@ -65,14 +72,20 @@ const isDirty = computed(() => {
   });
 });
 
-const isDirtyModel = defineModel<boolean>("isDirty", {
-  local: true,
-  default: false,
-});
+const isDirtyModel = defineModel<boolean>(
+  "isDirty",
+  {
+    local: true,
+    default: false,
+  },
+);
 
-watch(isDirty, (val: boolean) => {
-  isDirtyModel.value = val;
-});
+watch(
+  isDirty,
+  (val: boolean) => {
+    isDirtyModel.value = val;
+  },
+);
 </script>
 
 <template>

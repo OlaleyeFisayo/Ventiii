@@ -1,6 +1,5 @@
 import type {
   DrizzleError,
-
 } from "drizzle-orm";
 
 import {
@@ -16,7 +15,10 @@ import {
 import defineAuthenticatedEventHandler from "~/utils/define-authenticated-event-handler";
 
 export default defineAuthenticatedEventHandler(async (event) => {
-  const result = await readValidatedBody(event, InsertEvent.safeParse);
+  const result = await readValidatedBody(
+    event,
+    InsertEvent.safeParse,
+  );
 
   if (!result.success) {
     const statusMessage = result
@@ -28,28 +30,43 @@ export default defineAuthenticatedEventHandler(async (event) => {
     const data = result
       .error
       .issues
-      .reduce((errors, issue) => {
-        errors[issue.path.join("")] = issue.message;
-        return errors;
-      }, {
-      } as Record<string, string>);
+      .reduce(
+        (
+          errors,
+          issue,
+        ) => {
+          errors[issue.path.join("")] = issue.message;
+          return errors;
+        },
+        {} as Record<string, string>,
+      );
 
-    return sendError(event, createError({
-      statusCode: 422,
-      statusMessage,
-      data,
-    }));
+    return sendError(
+      event,
+      createError({
+        statusCode: 422,
+        statusMessage,
+        data,
+      }),
+    );
   }
 
   try {
     const id = uuidv4();
-    return createEvent(result.data, id, event.context.user.id);
+    return createEvent(
+      result.data,
+      id,
+      event.context.user.id,
+    );
   }
   catch (e: any) {
     const error = e as DrizzleError;
-    return sendError(event, createError({
-      statusCode: 409,
-      statusMessage: error.message,
-    }));
+    return sendError(
+      event,
+      createError({
+        statusCode: 409,
+        statusMessage: error.message,
+      }),
+    );
   }
 });

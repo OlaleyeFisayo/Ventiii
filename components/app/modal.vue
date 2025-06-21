@@ -6,9 +6,12 @@ defineProps({
   },
 });
 
-const open = defineModel<boolean>("open", {
-  default: false,
-});
+const open = defineModel<boolean>(
+  "open",
+  {
+    default: false,
+  },
+);
 </script>
 
 <template>
