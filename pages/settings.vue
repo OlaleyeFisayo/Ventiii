@@ -61,20 +61,32 @@ async function changeEmail(state: {
 const changePasswordForm = ref <AppFormItems[]> ([
   {
     label: "Old Password",
-    tag: "oldpassword",
+    tag: "currentPassword",
     type: "password",
     value: "",
-    placeholder: "Confirm New Password",
+    placeholder: "Old Password",
   },
   {
     label: "New Password",
     tag: "password",
     type: "password",
     value: "",
-    securePassword: true,
     placeholder: "New Password",
+    securePassword: true,
   },
 ]);
+
+async function changePassword(state: {
+  password: string;
+  currentPassword: string;
+}) {
+  await userStore.updateUserPassword({
+    currentPassword: state.currentPassword,
+    newPassword: state.password,
+  });
+  changePasswordForm.value[0].value = "";
+  changePasswordForm.value[1].value = "";
+}
 
 const changeUsersImage = ref <AppFormItems[]> ([
   {
@@ -151,6 +163,7 @@ onMounted(async () => {
           submit-label="Change Password"
           :loading="userStore.loading"
           :show-hints="false"
+          @submit="changePassword"
         />
       </AppCard>
       <AppCard>

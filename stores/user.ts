@@ -94,6 +94,44 @@ export const useUserStore = defineStore("useUserStore", () => {
     }
   };
 
+  async function updateUserPassword(payload: {
+    newPassword: string;
+    currentPassword: string;
+  }) {
+    success.value = false;
+    loading.value = true;
+
+    try {
+      const csrfHeaders = await getCsrfHeaders();
+
+      const {
+        error,
+      } = await authClient.changePassword({
+        ...payload,
+        revokeOtherSessions: true,
+        fetchOptions: {
+          headers: csrfHeaders,
+          credentials: "same-origin",
+        },
+      });
+      if (error) {
+        errorToast(error.message as string);
+      }
+      else {
+        success.value = true;
+        successToast("Changes saved. Your account information is now up to date.");
+      }
+    }
+    catch (error) {
+      loading.value = false;
+      console.error("Update error:", error);
+      errorToast("User Update failed. Please try again.");
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
   return {
     loading,
     success,
@@ -101,5 +139,6 @@ export const useUserStore = defineStore("useUserStore", () => {
     updateUserEmail,
     getAccount,
     account,
+    updateUserPassword,
   };
 });
