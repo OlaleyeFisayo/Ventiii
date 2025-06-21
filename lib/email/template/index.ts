@@ -27,7 +27,10 @@ export function getEmailTemplate(type: EmailTemplateType, data: EmailTemplateDat
     },
     "new-email": {
       subject: "Confirm Your New Email",
-      text: `Click the link to approve the change: ${data.url}`,
+      text: `
+        Click the link to approve the change: ${data.url}
+        After confirming this request, we’ll send a verification email to your new address.
+      `,
       html: changeEmailTemplate(data.url as string, data.newEmail as string),
     },
   };

@@ -32,7 +32,7 @@ export function changeEmailTemplate(url: string, newEmail: string) {
             <td style="padding: 30px 40px; text-align: center;">
               <h2 style="color: #180e1b; font-size: 28px; margin: 0 0 20px; font-weight: bold;">Confirm Your New Email</h2>
               <p style="color: #180e1b; font-size: 16px; line-height: 1.5; margin: 0 0 10px;">
-                You requested to change the email associated with your Ventiii account.
+                You’ve requested to update the email linked to your Ventiii account. After confirming this request, we’ll send a verification email to your new address.
               </p>
               <p style="color: #180e1b; font-size: 16px; font-weight: bold; margin: 0 0 20px;">
                 New Email: <span style="color: #aa1cce;">${newEmail}</span>

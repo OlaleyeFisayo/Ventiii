@@ -149,6 +149,7 @@ onMounted(async () => {
         <AppForm
           v-model:items="changePasswordForm"
           submit-label="Change Password"
+          :loading="userStore.loading"
           :show-hints="false"
         />
       </AppCard>
