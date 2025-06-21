@@ -37,38 +37,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
   const loading = ref(false);
   const success = ref(false);
 
-  // Helper function to get CSRF headers with proper error handling
-  async function getCsrfHeaders() {
-    try {
-      const {
-        csrf,
-      } = useCsrf();
-
-      // Wait for CSRF token to be available
-      if (!csrf) {
-        console.warn("CSRF token not available, retrying...");
-        await new Promise(resolve => setTimeout(resolve, 100));
-        const {
-          csrf: retryToken,
-        } = useCsrf();
-        if (!retryToken) {
-          throw new Error("CSRF token unavailable after retry");
-        }
-        return {
-          "csrf-token": retryToken,
-        };
-      }
-
-      return {
-        "csrf-token": csrf,
-      };
-    }
-    catch (error) {
-      console.error("Failed to get CSRF token:", error);
-      throw error;
-    }
-  }
-
   async function signUp(payload: SignUpPayload) {
     success.value = false;
     loading.value = true;
@@ -82,12 +50,12 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         ...payload,
         fetchOptions: {
           headers: csrfHeaders,
-          // Add credentials for cross-origin requests
           credentials: "same-origin",
         },
       });
 
       if (error) {
+        loading.value = false;
         errorToast(error?.message as string);
       }
       else {
@@ -95,6 +63,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       }
     }
     catch (error) {
+      loading.value = false;
       console.error("SignUp error:", error);
       errorToast("Authentication failed. Please try again.");
     }
@@ -121,6 +90,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       });
 
       if (error) {
+        loading.value = false;
         errorToast(error?.message as string);
       }
       else {
@@ -128,6 +98,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       }
     }
     catch (error) {
+      loading.value = false;
       console.error("SignIn error:", error);
       errorToast("Authentication failed. Please try again.");
     }
@@ -179,6 +150,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       });
 
       if (error) {
+        loading.value = false;
         errorToast(error?.message as string);
       }
       else {
@@ -186,6 +158,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       }
     }
     catch (error) {
+      loading.value = false;
       console.error("Forget password error:", error);
       errorToast("Failed to send reset email. Please try again.");
     }
@@ -214,6 +187,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       });
 
       if (error) {
+        loading.value = false;
         errorToast(error?.message as string);
       }
       else {
@@ -221,6 +195,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       }
     }
     catch (error) {
+      loading.value = false;
       console.error("Reset password error:", error);
       errorToast("Failed to reset password. Please try again.");
     }
@@ -247,7 +222,6 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     }
     catch (error) {
       console.error("Logout error:", error);
-      // Still navigate to login even if logout fails
       await navigateTo("/log-in");
     }
   }
