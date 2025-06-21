@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const authStore = useAuthStore();
 const userStore = useUserStore();
+const cloudinaryStore = useCloudinaryStore();
 
 const errorMessage = ref("");
 function setErrorMessage(msg: string) {
@@ -65,6 +66,18 @@ const changeUsersImage = ref <AppFormItems[]> ([
     maxFileSize: 1 * 1024 * 1024,
   },
 ]);
+
+async function changeImage(state: {
+  image: File[];
+}) {
+  const {
+    url,
+  } = await cloudinaryStore.upload(state.image[0] as File);
+  await userStore.updateUser({
+    image: url,
+  });
+  changeUsersImage.value[0].value = [];
+}
 </script>
 
 <template>
@@ -132,6 +145,8 @@ const changeUsersImage = ref <AppFormItems[]> ([
           v-model:items="changeUsersImage"
           submit-label="Change Image"
           :show-hints="false"
+          :loading="cloudinaryStore.loading || userStore.loading"
+          @submit="changeImage"
         />
       </AppCard>
     </section>

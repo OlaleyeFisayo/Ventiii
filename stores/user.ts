@@ -5,6 +5,7 @@ import {
 export const useUserStore = defineStore("useUserStore", () => {
   const {
     errorToast,
+    successToast,
   } = useAppToast();
   const loading = ref(false);
   const success = ref(false);
@@ -27,6 +28,7 @@ export const useUserStore = defineStore("useUserStore", () => {
         },
       });
       success.value = true;
+      successToast("Changes saved. Your account information is now up to date.");
     }
     catch (error) {
       loading.value = false;
