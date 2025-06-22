@@ -34,6 +34,11 @@ watch(
     immediate: true,
   },
 );
+
+const confirmDelete = ref(false);
+function toggleConfirmDelete() {
+  confirmDelete.value = !confirmDelete.value;
+}
 </script>
 
 <template>
@@ -110,14 +115,14 @@ watch(
             optional
           >
             <div
-              v-if="eventStore.event?.logo"
+              v-if="eventStore.event?.logoUrl"
               class="mb-2"
             >
               <h1>Current Image: </h1>
               <NuxtImg
                 alt="User Image"
                 :width="100"
-                :src="eventStore.event?.logo"
+                :src="eventStore.event?.logoUrl"
               />
             </div>
             <AppImageDnd
@@ -129,6 +134,34 @@ watch(
         </div>
       </div>
     </AppCard>
+    <AppCard class="mt-4">
+      <template #header>
+        <h1 class="text-lg">
+          Danger Zone
+        </h1>
+        <p class="text-muted text-md">
+          Irreversible actions for your event
+        </p>
+      </template>
+      <AppCard theme="error">
+        <section class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2>Delete Event</h2>
+            <p class="text-muted text-sm">
+              Permanently delete this Event and all associated data.
+            </p>
+          </div>
+          <AppButton
+            label="Delete Account"
+            color="error"
+            class="px-4 py-3"
+            loading-auto
+            @click="toggleConfirmDelete"
+          />
+        </section>
+      </AppCard>
+    </AppCard>
+
     <div
       v-if="eventStore.loading"
       class="flex justify-end gap-2"
@@ -146,5 +179,31 @@ watch(
       />
       <AppButton label="Save Changes" />
     </div>
+
+    <AppModal
+      v-model:open="confirmDelete"
+      :dismissible="false"
+    >
+      <template #content>
+        <div class="flex flex-col items-center justify-center gap-2 px-4 py-8">
+          <p>Are you sure you want to delete this event?</p>
+          <div class="flex gap-4">
+            <AppButton
+              label="No"
+              theme="secondary"
+              class="px-4 py-2.5"
+              loading-auto
+              @click="toggleConfirmDelete"
+            />
+            <AppButton
+              label="Yes"
+              class="px-4 py-2.5"
+              loading-auto
+              @click="toggleConfirmDelete"
+            />
+          </div>
+        </div>
+      </template>
+    </AppModal>
   </section>
 </template>

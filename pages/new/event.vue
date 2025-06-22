@@ -4,7 +4,7 @@ const cloudinaryStore = useCloudinaryStore();
 
 const createEventForm = ref<AppFormItems[]>([
   {
-    label: "Title",
+    label: "Event Name",
     tag: "title",
     type: "text",
     placeholder: "Enter name",

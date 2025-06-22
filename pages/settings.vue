@@ -210,7 +210,7 @@ onMounted(async () => {
       <AppCard theme="error">
         <section class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2>Delete Event</h2>
+            <h2>Delete Account</h2>
             <p class="text-muted text-sm">
               Permanently delete this account and all associated data.
             </p>
