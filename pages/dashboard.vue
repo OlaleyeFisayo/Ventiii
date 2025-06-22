@@ -151,12 +151,12 @@ onMounted(async () => {
         v-model="searchInput"
         placeholder="Search Event by name"
         icon="i-tabler-search"
-        base-class="pl-9 rounded-r-none"
+        base-class="rounded-r-none"
         :disabled="eventStore.loading"
       />
       <AppButton
         label="Search"
-        class="p-4 rounded-l-none"
+        class="p-2.5 rounded-l-none"
         :disabled="!searchInput || eventStore.loading"
         :loading="eventStore.loading"
         @click="handleSearch"

@@ -73,7 +73,7 @@ const isSameDay = computed(() =>
       color="neutral"
       variant="subtle"
       icon="i-tabler-calendar-event-filled"
-      class="w-full p-4"
+      class="w-full p-2.5"
       :disabled="disabled"
     >
       <template v-if="model?.start">

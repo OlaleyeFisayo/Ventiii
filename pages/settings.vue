@@ -127,9 +127,12 @@ onMounted(async () => {
 <template>
   <section>
     <AppBackButton />
-    <h1 class="text-3xl font-bold text-center">
+    <h1 class="text-3xl font-bold">
       User Settings
     </h1>
+    <p class="text-muted text-md">
+      Configure your account details.
+    </p>
     <AppAlert
       v-if="errorMessage"
       color="error"
@@ -139,11 +142,8 @@ onMounted(async () => {
       :description="errorMessage"
     />
     <section class="w-full mt-4 grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 justify-start gap-4">
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 justify-between">
         <AppCard>
-          <template #header>
-            <h2>User Name</h2>
-          </template>
           <AppForm
             v-model:items="changeNameForm"
             submit-label="Change Name"
@@ -153,9 +153,6 @@ onMounted(async () => {
           />
         </AppCard>
         <AppCard v-if="userStore?.account?.provider === 'credential'">
-          <template #header>
-            <h2>User Email</h2>
-          </template>
           <AppForm
             v-model:items="changeEmailForm"
             submit-label="Change Email"
@@ -166,9 +163,6 @@ onMounted(async () => {
         </AppCard>
       </div>
       <AppCard v-if="userStore?.account?.provider === 'credential'">
-        <template #header>
-          <h2>User Password</h2>
-        </template>
         <AppForm
           v-model:items="changePasswordForm"
           submit-label="Change Password"
@@ -178,7 +172,10 @@ onMounted(async () => {
         />
       </AppCard>
       <AppCard>
-        <template #header>
+        <template
+          v-if="!authStore.user?.image"
+          #header
+        >
           <h2>User Image</h2>
         </template>
         <div

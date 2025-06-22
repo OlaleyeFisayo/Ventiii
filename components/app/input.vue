@@ -48,7 +48,7 @@ function onKeyup(e: KeyboardEvent) {
     :ui="{
       trailing: 'pe-1',
       root: `w-full ${rootClass}`,
-      base: `p-4 bg-inherit text-black ${baseClass}`,
+      base: `p-2.5 bg-inherit text-black ${baseClass}`,
     }"
     :disabled="disabled"
     @change="onFileChange"
@@ -68,7 +68,7 @@ function onKeyup(e: KeyboardEvent) {
     :ui="{
       trailing: 'pe-1',
       root: `w-full ${rootClass}`,
-      base: `p-4 bg-inherit ${baseClass}`,
+      base: `p-2.5 bg-inherit ${baseClass} ${icon ? 'pl-9' : ''}`,
     }"
     :disabled="disabled"
     @keyup="onKeyup"

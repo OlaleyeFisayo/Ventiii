@@ -313,7 +313,7 @@ defineExpose({
     <!-- Drag and Drop Area -->
     <div
       ref="dropZone"
-      class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 transition-colors duration-200"
+      class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-2.5 transition-colors duration-200"
       :class="{
         'border-primary-500 bg-primary-50 dark:bg-primary-950': isDragging,
         'hover:border-gray-400 dark:hover:border-gray-500': !isDragging,
@@ -328,9 +328,9 @@ defineExpose({
       <div class="text-center">
         <UIcon
           name="i-tabler-photo"
-          class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500"
+          class="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500"
         />
-        <div class="mt-4">
+        <div class="mt-1">
           <p class="text-sm text-gray-600 dark:text-gray-400">
             <UButton
               variant="link"
