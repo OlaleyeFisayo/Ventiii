@@ -10,6 +10,8 @@ const defaultEventUrl = `/event/${eventId}`;
 const sidebarStore = useSidebarStore();
 const isCollapsed = computed(() => sidebarStore.desktopState);
 
+const eventStore = useEventStore();
+
 const navItems = computed<NavigationMenuItem[]>(() => ([
   {
     label: "Navigation:",
@@ -42,7 +44,7 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
 
 <template>
   <section
-    :class="`bg-gray-50 hidden md:block w-full h-[100dvh] border-muted border-1 transition-all duration-300 ease-in-out ${
+    :class="`bg-slate-50 hidden md:block w-full min-h-[100dvh] border-muted border-1 transition-all duration-300 ease-in-out ${
       isCollapsed ? 'max-w-[72px]' : 'max-w-[265px]'
     }`"
   >
@@ -52,7 +54,14 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
       }`"
       :to="defaultEventUrl"
     >
-      <div class="p-2 bg-primary flex items-center justify-center rounded-2xl flex-shrink-0">
+      <AppSkeleton
+        v-if="eventStore.loading"
+        class="w-9.5 h-10"
+      />
+      <div
+        v-else
+        class="p-2 bg-primary flex items-center justify-center rounded-2xl flex-shrink-0"
+      >
         <UIcon
           name="i-tabler-calendar-week-filled"
           class="text-white size-6"
@@ -70,8 +79,12 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
           v-if="!isCollapsed"
           class="min-w-0 flex-1"
         >
+          <AppSkeleton
+            v-if="eventStore.loading"
+            class="max-w-[150px] w-full h-5"
+          />
           <h1 class="text-md font-semibold w-[150px] text-nowrap overflow-hidden overflow-ellipsis">
-            Insert Event Name Here
+            {{ eventStore.event?.title }}
           </h1>
           <p class="text-sm overflow-x-hidden text-nowrap overflow-ellipsis w-[150px]">
             {{ eventId }}

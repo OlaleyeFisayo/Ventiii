@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {
+  CalendarDate as CalendarDateType,
   DateValue,
 } from "@internationalized/date";
 
@@ -43,7 +44,7 @@ const defaultValue = shallowRef({
 });
 
 function isDateUnavailable(date: DateValue) {
-  const jsDate = (date as CalendarDate).toDate(getLocalTimeZone());
+  const jsDate = (date as CalendarDateType).toDate(getLocalTimeZone());
   jsDate.setHours(
     0,
     0,

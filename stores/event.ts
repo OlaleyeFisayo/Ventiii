@@ -13,7 +13,7 @@ export const useEventStore = defineStore(
     const loading = computed(() => apiLoading.value);
     const success = computed(() => apiSuccess.value);
     const eventsData = ref<GetEventsResponse | null>(null);
-    const event = ref(null);
+    const event = ref<GetEventResponse | null>(null);
 
     async function createEvent(payload: {
       title: string;
@@ -53,7 +53,7 @@ export const useEventStore = defineStore(
     }
 
     async function getEvent(eventId: string) {
-      const data = await execute(() => $csrfFetch(`/api/event/${eventId}`));
+      const data = await execute(() => $csrfFetch(`/api/event/${eventId}`)) as GetEventResponse;
 
       if (success.value) {
         event.value = data;
@@ -67,6 +67,7 @@ export const useEventStore = defineStore(
       getEvents,
       eventsData,
       getEvent,
+      event,
     };
   },
 );

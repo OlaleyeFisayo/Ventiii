@@ -3,8 +3,12 @@ import type {
   DropdownMenuItem,
 } from "@nuxt/ui";
 
+const route = useRoute();
+const eventId = route.params.eventId;
+
 const authStore = useAuthStore();
 const sidebarStore = useSidebarStore();
+const eventStore = useEventStore();
 
 const dropdownItems = computed<DropdownMenuItem[][]>(() => ([
   [
@@ -33,6 +37,10 @@ const dropdownItems = computed<DropdownMenuItem[][]>(() => ([
     },
   ],
 ]));
+
+onMounted(async () => {
+  eventStore.getEvent(eventId as string);
+});
 </script>
 
 <template>
