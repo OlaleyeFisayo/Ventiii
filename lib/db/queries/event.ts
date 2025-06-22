@@ -111,3 +111,12 @@ export async function getEvents(
     },
   };
 }
+
+export async function getEvent(eventId: string) {
+  return await db.query.event.findFirst(({
+    where: eq(
+      event.id,
+      eventId,
+    ),
+  }));
+};
