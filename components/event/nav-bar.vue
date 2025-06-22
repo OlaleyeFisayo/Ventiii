@@ -6,20 +6,7 @@ import type {
 const authStore = useAuthStore();
 const sidebarStore = useSidebarStore();
 
-const dropdownMenuItems = ref<DropdownMenuItem[]>([
-  [
-    {
-      label: "Logout",
-      icon: "i-tabler-logout-2",
-      color: "error",
-      onSelect: () => {
-        authStore.logout();
-      },
-    },
-  ],
-]);
-
-const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
+const dropdownItems = computed<DropdownMenuItem[][]>(() => ([
   [
     {
       label: authStore.user?.name,
@@ -28,6 +15,11 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
         alt: authStore.user?.image ? "" : authStore.user?.name.toUpperCase(),
       },
       type: "label",
+    },
+    {
+      label: "Settings",
+      icon: "i-tabler-settings",
+      to: "/settings",
     },
   ],
   [
@@ -74,7 +66,7 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
     <section>
       <div class="hidden sm:flex gap-2 items-center">
         <AppDropdownMenu
-          :items="dropdownMenuItems"
+          :items="dropdownItems"
         >
           <div class="flex gap-2 items-center">
             <AppAvatar
@@ -87,7 +79,7 @@ const mobileDropdownMenuItems = computed<DropdownMenuItem[][]>(() => ([
       </div>
       <div class="sm:hidden">
         <AppDropdownMenu
-          :items="mobileDropdownMenuItems"
+          :items="dropdownItems"
         >
           <AppButton
             icon="i-tabler-menu-2"
