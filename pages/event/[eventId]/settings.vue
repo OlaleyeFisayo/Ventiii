@@ -156,6 +156,7 @@ function toggleConfirmDelete() {
             color="error"
             class="px-4 py-3"
             loading-auto
+            :loading="eventStore.loading"
             @click="toggleConfirmDelete"
           />
         </section>
@@ -199,7 +200,7 @@ function toggleConfirmDelete() {
               label="Yes"
               class="px-4 py-2.5"
               loading-auto
-              @click="toggleConfirmDelete"
+              @click="eventStore.deleteEvent(eventStore.event?.id as string)"
             />
           </div>
         </div>

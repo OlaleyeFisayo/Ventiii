@@ -53,10 +53,28 @@ export const useEventStore = defineStore(
     }
 
     async function getEvent(eventId: string) {
-      const data = await execute(() => $csrfFetch(`/api/event/${eventId}`)) as GetEventResponse;
+      const data = await execute(() => $csrfFetch(
+        `/api/event/${eventId}`,
+        {
+          method: "get",
+        },
+      )) as GetEventResponse;
 
       if (success.value) {
         event.value = data;
+      }
+    }
+
+    async function deleteEvent(eventId: string) {
+      await execute(() => $csrfFetch(
+        `/api/event/${eventId}`,
+        {
+          method: "delete",
+        },
+      ));
+
+      if (success.value) {
+        await navigateTo("/dashboard");
       }
     }
 
@@ -68,6 +86,7 @@ export const useEventStore = defineStore(
       eventsData,
       getEvent,
       event,
+      deleteEvent,
     };
   },
 );

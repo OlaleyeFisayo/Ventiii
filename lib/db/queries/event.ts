@@ -120,3 +120,10 @@ export async function getEvent(eventId: string) {
     ),
   }));
 };
+
+export async function deleteEvent(eventId: string) {
+  await db.delete(event).where(eq(
+    event.id,
+    eventId,
+  ));
+}
