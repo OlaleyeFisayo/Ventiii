@@ -113,10 +113,12 @@ async function changeImage(state: {
   const {
     url,
   } = await cloudinaryStore.upload(state.image[0] as File);
-  await userStore.updateUser({
-    image: url,
-  });
-  changeUsersImage.value[0].value = [];
+  if (cloudinaryStore.success) {
+    await userStore.updateUser({
+      image: url,
+    });
+    changeUsersImage.value[0].value = [];
+  }
 }
 
 onMounted(async () => {

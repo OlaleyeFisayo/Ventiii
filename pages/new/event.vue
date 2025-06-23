@@ -47,7 +47,7 @@ const createEventForm = ref<AppFormItems[]>([
     type: "img",
     value: [],
     maxFile: 1,
-    maxFileSize: 5 * 1024 * 1024,
+    maxFileSize: 2 * 1024 * 1024,
   },
 ]);
 
@@ -69,25 +69,27 @@ async function createEvent(state: CreateEventState) {
     url,
   } = await cloudinaryStore.upload(state.coverPicture[0] as File);
 
-  const startDate = new Date(state.date.start);
-  const endDate = new Date(state.date.end);
+  if (cloudinaryStore.success) {
+    const startDate = new Date(state.date.start);
+    const endDate = new Date(state.date.end);
 
-  const payload = {
-    title: state.title,
-    description: state.description,
-    startDate,
-    endDate,
-    startTime: state.time.start,
-    endTime: state.time.end,
-    location: state.location,
-    coverPictureUrl: url,
-  };
+    const payload = {
+      title: state.title,
+      description: state.description,
+      startDate,
+      endDate,
+      startTime: state.time.start,
+      endTime: state.time.end,
+      location: state.location,
+      coverPictureUrl: url,
+    };
 
-  await eventStore.createEvent(payload);
+    await eventStore.createEvent(payload);
 
-  if (eventStore.success) {
-    isSubmitted.value = true;
-    await navigateTo("/dashboard");
+    if (eventStore.success) {
+      isSubmitted.value = true;
+      await navigateTo("/dashboard");
+    }
   }
 };
 </script>
