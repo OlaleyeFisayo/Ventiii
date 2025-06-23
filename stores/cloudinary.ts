@@ -32,10 +32,24 @@ export const useCloudinaryStore = defineStore(
       }
     }
 
+    async function deleteUpload(name: string) {
+      const publicId = `ventiii/${name}`;
+      await execute(() => $csrfFetch(
+        "/api/upload",
+        {
+          method: "delete",
+          body: {
+            public_id: publicId,
+          },
+        },
+      ));
+    }
+
     return {
       loading,
       upload,
       success,
+      deleteUpload,
     };
   },
 );

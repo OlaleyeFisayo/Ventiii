@@ -110,6 +110,7 @@ function toggleConfirmDelete() {
 async function changeImage(state: {
   image: File[];
 }) {
+  await isMyCloudinaryUrl(authStore.user?.image);
   const {
     url,
   } = await cloudinaryStore.upload(state.image[0] as File);
@@ -119,6 +120,11 @@ async function changeImage(state: {
     });
     changeUsersImage.value[0].value = [];
   }
+}
+
+async function deleteUser() {
+  await isMyCloudinaryUrl(authStore.user?.image);
+  await userStore.deleteUser();
 }
 
 onMounted(async () => {
@@ -250,7 +256,7 @@ onMounted(async () => {
               class="px-4 py-2.5"
               loading-auto
               :loading="userStore.loading"
-              @click="userStore.deleteUser"
+              @click="deleteUser"
             />
           </div>
         </div>
