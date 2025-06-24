@@ -127,3 +127,25 @@ export async function deleteEvent(eventId: string) {
     eventId,
   ));
 }
+
+export async function updateEvent(
+  data: {
+    title?: string;
+    description?: string;
+    startDate?: any;
+    endDate?: any;
+    startTime?: string;
+    endTime?: string;
+    location?: string;
+    coverPictureUrl?: string;
+    logoUrl?: string;
+  },
+  eventId: string,
+) {
+  const result = await db.update(event).set(data).where(eq(
+    event.id,
+    eventId,
+  )).returning();
+
+  return result;
+}

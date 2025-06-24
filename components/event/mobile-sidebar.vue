@@ -58,6 +58,11 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
             v-if="eventStore.loading"
             class="w-9.5 h-10"
           />
+          <NuxtImg
+            v-else-if="!eventStore.loading && eventStore.event?.logoUrl"
+            :src="eventStore.event.logoUrl"
+            :width="37"
+          />
           <div
             v-else
             class="p-2 bg-primary flex items-center justify-center rounded-2xl"

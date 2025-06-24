@@ -1,8 +1,9 @@
 <script setup lang="ts">
 const eventStore = useEventStore();
+const cloudinaryStore = useCloudinaryStore();
 
 const eventInfo = reactive({
-  eventName: "",
+  title: "",
   description: "",
   date: {
     start: "",
@@ -21,7 +22,7 @@ watch(
   () => eventStore.event,
   (event) => {
     if (event) {
-      eventInfo.eventName = event.title || "";
+      eventInfo.title = event.title || "";
       eventInfo.description = event.description || "";
       eventInfo.date.start = event.startDate ? useConvertToCalendarDate(event.startDate) : null;
       eventInfo.date.end = event.endDate ? useConvertToCalendarDate(event.endDate) : null;
@@ -38,6 +39,54 @@ watch(
 const confirmDelete = ref(false);
 function toggleConfirmDelete() {
   confirmDelete.value = !confirmDelete.value;
+}
+
+async function deleteEvent() {
+  await Promise.all([
+    isMyCloudinaryUrl(eventStore.event?.coverPictureUrl),
+    isMyCloudinaryUrl(eventStore.event?.logoUrl),
+    eventStore.deleteEvent(eventStore.event?.id as string),
+  ]);
+}
+
+async function updateEvent() {
+  const updateData = {
+    title: eventInfo.title,
+    description: eventInfo.description ?? null,
+    startDate: new Date(eventInfo.date.start),
+    endDate: new Date(eventInfo.date.end),
+    startTime: eventInfo.time.start,
+    endTime: eventInfo.time.end,
+  };
+
+  const uploadPromises = [];
+
+  if (eventInfo.coverPicture.length > 0) {
+    uploadPromises.push(Promise.all([
+      isMyCloudinaryUrl(eventStore.event?.coverPictureUrl),
+      cloudinaryStore.upload(eventInfo.coverPicture[0]),
+    ]).then(([, uploadResult]) => {
+      updateData.coverPictureUrl = uploadResult.url;
+    }));
+  }
+
+  if (eventInfo.logo.length > 0) {
+    uploadPromises.push(Promise.all([
+      isMyCloudinaryUrl(eventStore.event?.logoUrl),
+      cloudinaryStore.upload(eventInfo.logo[0]),
+    ]).then(([, uploadResult]) => {
+      updateData.logoUrl = uploadResult.url;
+    }));
+  }
+
+  if (uploadPromises.length > 0) {
+    await Promise.all(uploadPromises);
+  }
+
+  await eventStore.updateEvent(
+    eventStore.event?.id as string,
+    updateData,
+  );
 }
 </script>
 
@@ -66,7 +115,7 @@ function toggleConfirmDelete() {
       <div class="flex flex-col gap-2">
         <AppFormField label="Event Name">
           <AppInput
-            v-model="eventInfo.eventName"
+            v-model="eventInfo.title"
             placeholder="Change Event Name"
           />
         </AppFormField>
@@ -107,7 +156,7 @@ function toggleConfirmDelete() {
             <AppImageDnd
               v-model="eventInfo.coverPicture"
               :max-files="1"
-              :max-file-size="5 * 1024 * 1024"
+              :max-file-size="2 * 1024 * 1024"
             />
           </AppFormField>
           <AppFormField
@@ -121,7 +170,7 @@ function toggleConfirmDelete() {
               <h1>Current Image: </h1>
               <NuxtImg
                 alt="User Image"
-                :width="100"
+                :width="92"
                 :src="eventStore.event?.logoUrl"
               />
             </div>
@@ -175,10 +224,11 @@ function toggleConfirmDelete() {
       class="flex justify-end gap-2"
     >
       <AppButton
-        label="Cancel"
-        theme="secondary"
+        label="Save Changes"
+        loading-auto
+        :loading="eventStore.loading || cloudinaryStore.loading"
+        @click="updateEvent"
       />
-      <AppButton label="Save Changes" />
     </div>
 
     <AppModal
@@ -200,7 +250,7 @@ function toggleConfirmDelete() {
               label="Yes"
               class="px-4 py-2.5"
               loading-auto
-              @click="eventStore.deleteEvent(eventStore.event?.id as string)"
+              @click="deleteEvent"
             />
           </div>
         </div>

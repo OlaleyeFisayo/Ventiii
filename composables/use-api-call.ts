@@ -4,6 +4,7 @@ import type {
 
 export function useApiCall() {
   const {
+    successToast,
     errorToast,
   } = useAppToast();
 
@@ -17,6 +18,9 @@ export function useApiCall() {
     try {
       const result = await apiCall();
       success.value = true;
+      if (result.message) {
+        successToast(result.message);
+      }
       return result;
     }
     catch (e) {

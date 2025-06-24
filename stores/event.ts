@@ -78,6 +78,27 @@ export const useEventStore = defineStore(
       }
     }
 
+    async function updateEvent(
+      eventId: string,
+      data: any,
+    ) {
+      const {
+        data: resultData,
+      } = await execute(() => $csrfFetch(
+        `/api/event/${eventId}`,
+        {
+          method: "patch",
+          body: data,
+        },
+      )) as {
+        data: GetEventResponse[];
+      };
+
+      if (success.value) {
+        event.value = resultData[0];
+      }
+    }
+
     return {
       createEvent,
       loading,
@@ -87,6 +108,7 @@ export const useEventStore = defineStore(
       getEvent,
       event,
       deleteEvent,
+      updateEvent,
     };
   },
 );
