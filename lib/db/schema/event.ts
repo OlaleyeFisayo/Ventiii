@@ -31,6 +31,7 @@ export const event = sqliteTable(
     endTime: text().notNull(),
     location: text().notNull(),
     coverPictureUrl: text().notNull(),
+    logoUrl: text(),
     userId: int().notNull().references(() => user.id),
     createdAt: int()
       .$default(() => Date.now())
@@ -75,6 +76,7 @@ export const InsertEvent = createInsertSchema(
 ).omit({
   id: true,
   userId: true,
+  logoUrl: true,
   createdAt: true,
   updatedAt: true,
 });
