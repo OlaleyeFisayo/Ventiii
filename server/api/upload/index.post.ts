@@ -32,7 +32,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
       format: result.format,
     };
   }
-  catch (error) {
+  catch (error: any) {
     throw createError({
       statusCode: 500,
       statusMessage: error.message,
