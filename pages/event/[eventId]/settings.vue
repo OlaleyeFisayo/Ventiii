@@ -73,7 +73,7 @@ const isFormChanged = computed(() => {
   ) {
     setErrorMessage(
       errorMessage,
-      "You have to change an entry to update your event",
+      "Looks like nothing was changed. Please update at least one detail before submitting.",
     );
     return false;
   }
