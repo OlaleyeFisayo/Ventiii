@@ -12,33 +12,83 @@ const isCollapsed = computed(() => sidebarStore.desktopState);
 
 const eventStore = useEventStore();
 
-const navItems = computed<NavigationMenuItem[]>(() => ([
-  {
-    label: "Navigation:",
-    type: "label",
-  },
-  {
-    label: "Overview",
-    type: "link",
-    to: defaultEventUrl,
-    icon: "i-tabler-layout-dashboard",
-    tooltip: isCollapsed.value
-      ? {
-          text: "Overview",
-        }
-      : undefined,
-  },
-  {
-    label: "Settings",
-    type: "link",
-    to: `${defaultEventUrl}/settings`,
-    icon: "i-tabler-settings-cog",
-    tooltip: isCollapsed.value
-      ? {
-          text: "Settings",
-        }
-      : undefined,
-  },
+const navItems = computed<NavigationMenuItem[][]>(() => ([
+  [
+    {
+      label: "Navigation:",
+      type: "label",
+    },
+    {
+      label: "Overview",
+      to: defaultEventUrl,
+      icon: "i-tabler-layout-dashboard",
+      tooltip: isCollapsed.value
+        ? {
+            text: "Overview",
+          }
+        : undefined,
+    },
+    {
+      label: "Registration",
+      icon: "i-tabler-ticket",
+      popover: {
+        mode: "hover",
+      },
+      tooltip: isCollapsed.value
+        ? {
+            text: "Registration",
+          }
+        : undefined,
+      children: [
+        {
+          label: "Settings",
+          icon: "i-tabler-settings-cog",
+          to: `${defaultEventUrl}/registration/settings`,
+          tooltip: isCollapsed.value
+            ? {
+                text: "Registration Settings",
+              }
+            : undefined,
+        },
+      ],
+    },
+    {
+      label: "Gallery",
+      icon: "i-tabler-photo",
+      popover: {
+        mode: "hover",
+      },
+      tooltip: isCollapsed.value
+        ? {
+            text: "Gallery",
+          }
+        : undefined,
+      children: [
+        {
+          label: "Settings",
+          icon: "i-tabler-settings-cog",
+          to: `${defaultEventUrl}/gallery/settings`,
+          tooltip: isCollapsed.value
+            ? {
+                text: "Gallery Settings",
+              }
+            : undefined,
+        },
+      ],
+    },
+  ],
+  [
+    {
+      label: "Settings",
+      to: `${defaultEventUrl}/settings`,
+      icon: "i-tabler-settings",
+      tooltip: isCollapsed.value
+        ? {
+            text: "Event Settings",
+          }
+        : undefined,
+    },
+  ],
 ]));
 </script>
 
@@ -105,6 +155,8 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
       <AppNavigationMenu
         :items="navItems"
         :collapsed="isCollapsed"
+        popover
+        tooltip
       />
     </section>
   </section>

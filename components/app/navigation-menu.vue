@@ -8,9 +8,12 @@ defineProps({
   collapsed: Boolean,
   tooltip: {
     type: Boolean,
-    default: false,
+    default: true,
   },
-  popover: Boolean,
+  popover: {
+    type: Boolean,
+    default: true,
+  },
   orientation: {
     type: String as PropType<"vertical" | "horizontal">,
     default: "vertical",
@@ -22,7 +25,7 @@ defineProps({
   <UNavigationMenu
     :items="items"
     :collapsed="collapsed"
-    :tooltip="true"
+    :tooltip="tooltip"
     :popover="popover"
     :orientation="orientation"
     highlight
