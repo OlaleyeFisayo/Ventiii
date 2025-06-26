@@ -155,8 +155,6 @@ const navItems = computed<NavigationMenuItem[][]>(() => ([
       <AppNavigationMenu
         :items="navItems"
         :collapsed="isCollapsed"
-        popover
-        tooltip
       />
     </section>
   </section>
