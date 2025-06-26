@@ -14,5 +14,9 @@ defineProps ({
     :ui="{
       link: 'w-full max-w-[100px]',
     }"
-  />
+  >
+    <template #separator>
+      <span class="text-muted">/</span>
+    </template>
+  </UBreadcrumb>
 </template>
