@@ -49,7 +49,49 @@ async function deleteEvent() {
   ]);
 }
 
+const errorMessage = ref("");
+
+const isFormChanged = computed(() => {
+  const isOldTitle = eventInfo.title === eventStore.event?.title;
+  const isOldDescription = eventInfo.description === eventStore.event?.description;
+  const isOldStartDate = new Date(eventInfo.date.start).getTime() === new Date(eventStore.event?.startDate).getTime();
+  const isOldEndDate = new Date(eventInfo.date.end).getTime() === new Date(eventStore.event?.endDate).getTime();
+  const isOldStartTime = eventInfo.time.start === eventStore.event?.startTime;
+  const isOldEndTime = eventInfo.time.end === eventStore.event?.endTime;
+  const isOldLocation = eventInfo.location === eventStore.event?.location;
+  if (isOldTitle
+    && isOldDescription
+    && isOldStartDate
+    && isOldEndDate
+    && isOldStartTime
+    && isOldEndTime
+    && isOldLocation
+  ) {
+    setErrorMessage(
+      errorMessage,
+      "You have to change an entry to update your event",
+    );
+    return false;
+  }
+  const timeError = useTimeRangeValidator({
+    start: eventInfo.time.start,
+    end: eventInfo.time.end,
+  });
+  if (timeError) {
+    setErrorMessage(
+      errorMessage,
+      "End time cannot be the same as or earlier than the start time.",
+    );
+    return false;
+  }
+  return true;
+});
+
 async function updateEvent() {
+  if (!isFormChanged.value) {
+    return;
+  }
+
   const updateData = {
     title: eventInfo.title,
     description: eventInfo.description ?? null,
@@ -113,6 +155,14 @@ async function updateEvent() {
         </p>
       </template>
       <div class="flex flex-col gap-2">
+        <AppAlert
+          v-if="errorMessage"
+          color="error"
+          class="w-full mx-auto mt-2"
+          title="Error"
+          icon="i-tabler-info-square-rounded-filled"
+          :description="errorMessage"
+        />
         <AppFormField label="Event Name">
           <AppInput
             v-model="eventInfo.title"

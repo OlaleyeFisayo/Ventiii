@@ -6,15 +6,6 @@ const userStore = useUserStore();
 const cloudinaryStore = useCloudinaryStore();
 
 const errorMessage = ref("");
-function setErrorMessage(msg: string) {
-  errorMessage.value = msg;
-  setTimeout(
-    () => {
-      errorMessage.value = "";
-    },
-    10000,
-  );
-}
 
 const changeNameForm = ref <AppFormItems[]> ([
   {
@@ -28,7 +19,10 @@ async function changeName(state: {
   name: string;
 }) {
   if (state.name === authStore.user?.name) {
-    setErrorMessage("You’re already using this username. Please enter a different one.");
+    setErrorMessage(
+      errorMessage,
+      "You’re already using this username. Please enter a different one.",
+    );
   }
   else {
     await userStore.updateUser(state);
@@ -49,10 +43,16 @@ async function changeEmail(state: {
   const emailSchema = z4.email();
   const result = emailSchema.safeParse(state.email);
   if (state.email === authStore.user?.email) {
-    setErrorMessage("You’re already using this email. Please enter a different one.");
+    setErrorMessage(
+      errorMessage,
+      "You’re already using this email. Please enter a different one.",
+    );
   }
   else if (result.error) {
-    setErrorMessage("Please enter a valid email");
+    setErrorMessage(
+      errorMessage,
+      "Please enter a valid email",
+    );
   }
   else {
     await userStore.updateUserEmail({
