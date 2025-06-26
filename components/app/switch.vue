@@ -21,8 +21,9 @@ const model = defineModel<boolean>({
     :size="size"
     :ui="{
       root: 'flex items-center flex-row-reverse w-full justify-between gap-2',
-      label: 'font-semibold text-lg text-black',
+      label: 'text-lg text-black',
       description: 'text-muted text-sm',
+      wrapper: 'm-0',
     }"
   />
 </template>

@@ -3,7 +3,7 @@ const maximumAttendance = ref(["50 - 100", "101 - 250"]);
 
 const formData = reactive({
   maxAttendance: maximumAttendance.value[0],
-  registrationOpen: false,
+  registrationOpen: true,
 });
 </script>
 
@@ -34,6 +34,13 @@ const formData = reactive({
             label="Registration Open"
             description="Allow new attendees to register"
           />
+        </div>
+      </AppCard>
+      <AppCard v-if="formData.registrationOpen">
+        <div class="flex flex-col gap-4">
+          <AppFormField label="Registration Deadline">
+            <AppDatePicker />
+          </AppFormField>
         </div>
       </AppCard>
     </section>

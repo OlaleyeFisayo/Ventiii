@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {
+  AppDateRangePicker,
+} from "#components";
+
 const eventStore = useEventStore();
 const cloudinaryStore = useCloudinaryStore();
 
@@ -182,7 +186,7 @@ async function updateEvent() {
           />
         </AppFormField>
         <AppFormField label="Date">
-          <AppCalendar v-model="eventInfo.date" />
+          <AppDateRangePicker v-model="eventInfo.date" />
         </AppFormField>
         <AppFormField label="Time">
           <AppTime
