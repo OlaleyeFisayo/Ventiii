@@ -62,6 +62,7 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
         v-else-if="!eventStore.loading && eventStore.event?.logoUrl"
         :src="eventStore.event.logoUrl"
         :width="37"
+        alt="Event Logo"
       />
       <div
         v-else
@@ -88,7 +89,10 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
             v-if="eventStore.loading"
             class="max-w-[150px] w-full h-5"
           />
-          <h1 class="text-md font-semibold w-[150px] text-nowrap overflow-hidden overflow-ellipsis">
+          <h1
+            v-else
+            class="text-md font-semibold w-[150px] text-nowrap overflow-hidden overflow-ellipsis"
+          >
             {{ eventStore.event?.title }}
           </h1>
           <p class="text-sm overflow-x-hidden text-nowrap overflow-ellipsis w-[150px]">

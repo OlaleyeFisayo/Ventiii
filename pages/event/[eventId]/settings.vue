@@ -59,6 +59,8 @@ const isFormChanged = computed(() => {
   const isOldStartTime = eventInfo.time.start === eventStore.event?.startTime;
   const isOldEndTime = eventInfo.time.end === eventStore.event?.endTime;
   const isOldLocation = eventInfo.location === eventStore.event?.location;
+  const isOldCoverPicture = eventInfo.coverPicture.length === 0;
+  const isOldLogo = eventInfo.logo.length === 0;
   if (isOldTitle
     && isOldDescription
     && isOldStartDate
@@ -66,6 +68,8 @@ const isFormChanged = computed(() => {
     && isOldStartTime
     && isOldEndTime
     && isOldLocation
+    && isOldCoverPicture
+    && isOldLogo
   ) {
     setErrorMessage(
       errorMessage,
@@ -109,6 +113,7 @@ async function updateEvent() {
       cloudinaryStore.upload(eventInfo.coverPicture[0]),
     ]).then(([, uploadResult]) => {
       updateData.coverPictureUrl = uploadResult.url;
+      eventInfo.coverPicture = [];
     }));
   }
 
@@ -118,6 +123,7 @@ async function updateEvent() {
       cloudinaryStore.upload(eventInfo.logo[0]),
     ]).then(([, uploadResult]) => {
       updateData.logoUrl = uploadResult.url;
+      eventInfo.logoUrl = [];
     }));
   }
 
@@ -198,7 +204,7 @@ async function updateEvent() {
             >
               <h1>Current Image: </h1>
               <NuxtImg
-                alt="User Image"
+                alt="Cover Picture"
                 :width="100"
                 :src="eventStore.event?.coverPictureUrl"
               />
@@ -219,7 +225,7 @@ async function updateEvent() {
             >
               <h1>Current Image: </h1>
               <NuxtImg
-                alt="User Image"
+                alt="Event Logo"
                 :width="92"
                 :src="eventStore.event?.logoUrl"
               />

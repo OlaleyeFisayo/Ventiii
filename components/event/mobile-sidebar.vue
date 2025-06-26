@@ -62,6 +62,7 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
             v-else-if="!eventStore.loading && eventStore.event?.logoUrl"
             :src="eventStore.event.logoUrl"
             :width="37"
+            alt="Event Logo"
           />
           <div
             v-else
