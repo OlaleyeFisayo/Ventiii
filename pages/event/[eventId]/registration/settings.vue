@@ -1,5 +1,7 @@
 <script setup lang="ts">
-// code...
+const formData = reactive({
+  registrationOpen: false,
+});
 </script>
 
 <template>
@@ -21,6 +23,13 @@
           Configure how attendees can register for your event.
         </p>
       </template>
+      <div class="flex flex-col gap-4">
+        <AppSwitch
+          v-model="formData.registrationOpen"
+          label="Registration Open"
+          description="Allow new attendees to register"
+        />
+      </div>
     </AppCard>
   </section>
 </template>
