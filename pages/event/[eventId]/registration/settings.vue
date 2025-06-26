@@ -1,5 +1,8 @@
 <script setup lang="ts">
+const maximumAttendance = ref(["50 - 100", "101 - 250"]);
+
 const formData = reactive({
+  maxAttendance: maximumAttendance.value[0],
   registrationOpen: false,
 });
 </script>
@@ -14,22 +17,25 @@ const formData = reactive({
         Manage or disable registration settings for your event.
       </p>
     </div>
-    <AppCard>
-      <template #header>
-        <h1 class="text-xl font-semibold">
-          Registration Settings
-        </h1>
-        <p class="text-muted">
-          Configure how attendees can register for your event.
-        </p>
-      </template>
-      <div class="flex flex-col gap-4">
-        <AppSwitch
-          v-model="formData.registrationOpen"
-          label="Registration Open"
-          description="Allow new attendees to register"
-        />
-      </div>
-    </AppCard>
+    <section class="flex flex-col gap-4">
+      <AppCard>
+        <div class="flex flex-col gap-4">
+          <AppFormField
+            label="Maximum attendance"
+            class="w-full"
+          >
+            <AppSelect
+              v-model="formData.maxAttendance"
+              :items="maximumAttendance"
+            />
+          </AppFormField>
+          <AppSwitch
+            v-model="formData.registrationOpen"
+            label="Registration Open"
+            description="Allow new attendees to register"
+          />
+        </div>
+      </AppCard>
+    </section>
   </section>
 </template>
