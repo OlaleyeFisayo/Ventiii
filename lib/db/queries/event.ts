@@ -111,3 +111,41 @@ export async function getEvents(
     },
   };
 }
+
+export async function getEvent(eventId: string) {
+  return await db.query.event.findFirst(({
+    where: eq(
+      event.id,
+      eventId,
+    ),
+  }));
+};
+
+export async function deleteEvent(eventId: string) {
+  await db.delete(event).where(eq(
+    event.id,
+    eventId,
+  ));
+}
+
+export async function updateEvent(
+  data: {
+    title?: string;
+    description?: string;
+    startDate?: any;
+    endDate?: any;
+    startTime?: string;
+    endTime?: string;
+    location?: string;
+    coverPictureUrl?: string;
+    logoUrl?: string;
+  },
+  eventId: string,
+) {
+  const result = await db.update(event).set(data).where(eq(
+    event.id,
+    eventId,
+  )).returning();
+
+  return result;
+}

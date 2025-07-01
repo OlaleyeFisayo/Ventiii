@@ -8,6 +8,7 @@ const eventId = route.params.eventId;
 const defaultEventUrl = `/event/${eventId}`;
 
 const sidebarStore = useSidebarStore();
+const eventStore = useEventStore();
 
 const isOpened = computed({
   get() {
@@ -18,23 +19,27 @@ const isOpened = computed({
   },
 });
 
-const navItems = computed<NavigationMenuItem[]>(() => ([
-  {
-    label: "Navigation:",
-    type: "label",
-  },
-  {
-    label: "Overview",
-    type: "link",
-    to: defaultEventUrl,
-    icon: "i-tabler-layout-dashboard",
-  },
-  {
-    label: "Settings",
-    type: "link",
-    to: `${defaultEventUrl}/settings`,
-    icon: "i-tabler-settings-cog",
-  },
+const navItems = computed<NavigationMenuItem[][]>(() => ([
+  [
+    {
+      label: "Navigation:",
+      type: "label",
+    },
+    {
+      label: "Overview",
+      type: "link",
+      to: defaultEventUrl,
+      icon: "i-tabler-layout-dashboard",
+    },
+  ],
+  [
+    {
+      label: "Settings",
+      type: "link",
+      to: `${defaultEventUrl}/settings`,
+      icon: "i-tabler-settings",
+    },
+  ],
 ]));
 </script>
 
@@ -53,7 +58,20 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
           class="flex items-center gap-2 border-b-muted border-b-1 py-4 justify-center px-4"
           :to="defaultEventUrl"
         >
-          <div class="p-2 bg-primary flex items-center justify-center rounded-2xl">
+          <AppSkeleton
+            v-if="eventStore.loading"
+            class="w-9.5 h-10"
+          />
+          <NuxtImg
+            v-else-if="!eventStore.loading && eventStore.event?.logoUrl"
+            :src="eventStore.event.logoUrl"
+            :width="37"
+            alt="Event Logo"
+          />
+          <div
+            v-else
+            class="p-2 bg-primary flex items-center justify-center rounded-2xl"
+          >
             <UIcon
               name="i-tabler-calendar-week-filled"
               class="text-white size-6"
@@ -62,8 +80,15 @@ const navItems = computed<NavigationMenuItem[]>(() => ([
           <div
             class="min-w-0 flex-1"
           >
-            <h1 class="text-md font-semibold max-w-[150px] w-full text-nowrap overflow-hidden overflow-ellipsis">
-              Community Tech Meetup
+            <AppSkeleton
+              v-if="eventStore.loading"
+              class="max-w-[150px] w-full h-5"
+            />
+            <h1
+              v-else
+              class="text-md font-semibold max-w-[150px] w-full text-nowrap overflow-hidden overflow-ellipsis"
+            >
+              {{ eventStore.event?.title }}
             </h1>
             <p class="text-sm overflow-x-hidden text-nowrap overflow-ellipsis max-w-[150px] w-full">
               {{ eventId }}

@@ -6,15 +6,6 @@ const userStore = useUserStore();
 const cloudinaryStore = useCloudinaryStore();
 
 const errorMessage = ref("");
-function setErrorMessage(msg: string) {
-  errorMessage.value = msg;
-  setTimeout(
-    () => {
-      errorMessage.value = "";
-    },
-    10000,
-  );
-}
 
 const changeNameForm = ref <AppFormItems[]> ([
   {
@@ -28,7 +19,10 @@ async function changeName(state: {
   name: string;
 }) {
   if (state.name === authStore.user?.name) {
-    setErrorMessage("You’re already using this username. Please enter a different one.");
+    setErrorMessage(
+      errorMessage,
+      "You’re already using this username. Please enter a different one.",
+    );
   }
   else {
     await userStore.updateUser(state);
@@ -49,10 +43,16 @@ async function changeEmail(state: {
   const emailSchema = z4.email();
   const result = emailSchema.safeParse(state.email);
   if (state.email === authStore.user?.email) {
-    setErrorMessage("You’re already using this email. Please enter a different one.");
+    setErrorMessage(
+      errorMessage,
+      "You’re already using this email. Please enter a different one.",
+    );
   }
   else if (result.error) {
-    setErrorMessage("Please enter a valid email");
+    setErrorMessage(
+      errorMessage,
+      "Please enter a valid email",
+    );
   }
   else {
     await userStore.updateUserEmail({
@@ -110,13 +110,21 @@ function toggleConfirmDelete() {
 async function changeImage(state: {
   image: File[];
 }) {
+  await isMyCloudinaryUrl(authStore.user?.image);
   const {
     url,
   } = await cloudinaryStore.upload(state.image[0] as File);
-  await userStore.updateUser({
-    image: url,
-  });
-  changeUsersImage.value[0].value = [];
+  if (cloudinaryStore.success) {
+    await userStore.updateUser({
+      image: url,
+    });
+    changeUsersImage.value[0].value = [];
+  }
+}
+
+async function deleteUser() {
+  await isMyCloudinaryUrl(authStore.user?.image);
+  await userStore.deleteUser();
 }
 
 onMounted(async () => {
@@ -127,9 +135,12 @@ onMounted(async () => {
 <template>
   <section>
     <AppBackButton />
-    <h1 class="text-3xl font-bold text-center">
+    <h1 class="text-3xl font-bold">
       User Settings
     </h1>
+    <p class="text-muted text-md">
+      Configure your account details.
+    </p>
     <AppAlert
       v-if="errorMessage"
       color="error"
@@ -139,11 +150,8 @@ onMounted(async () => {
       :description="errorMessage"
     />
     <section class="w-full mt-4 grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 justify-start gap-4">
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 justify-between">
         <AppCard>
-          <template #header>
-            <h2>User Name</h2>
-          </template>
           <AppForm
             v-model:items="changeNameForm"
             submit-label="Change Name"
@@ -153,9 +161,6 @@ onMounted(async () => {
           />
         </AppCard>
         <AppCard v-if="userStore?.account?.provider === 'credential'">
-          <template #header>
-            <h2>User Email</h2>
-          </template>
           <AppForm
             v-model:items="changeEmailForm"
             submit-label="Change Email"
@@ -166,9 +171,6 @@ onMounted(async () => {
         </AppCard>
       </div>
       <AppCard v-if="userStore?.account?.provider === 'credential'">
-        <template #header>
-          <h2>User Password</h2>
-        </template>
         <AppForm
           v-model:items="changePasswordForm"
           submit-label="Change Password"
@@ -178,7 +180,10 @@ onMounted(async () => {
         />
       </AppCard>
       <AppCard>
-        <template #header>
+        <template
+          v-if="!authStore.user?.image"
+          #header
+        >
           <h2>User Image</h2>
         </template>
         <div
@@ -213,7 +218,7 @@ onMounted(async () => {
       <AppCard theme="error">
         <section class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h2>Delete Event</h2>
+            <h2>Delete Account</h2>
             <p class="text-muted text-sm">
               Permanently delete this account and all associated data.
             </p>
@@ -251,7 +256,7 @@ onMounted(async () => {
               class="px-4 py-2.5"
               loading-auto
               :loading="userStore.loading"
-              @click="userStore.deleteUser"
+              @click="deleteUser"
             />
           </div>
         </div>

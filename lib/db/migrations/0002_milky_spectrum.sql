@@ -1,0 +1,1 @@
+ALTER TABLE `event` ADD `logo_url` text;

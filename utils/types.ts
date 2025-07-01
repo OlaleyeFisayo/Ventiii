@@ -43,3 +43,19 @@ export type GetEventsResponse = {
     hasPrev: boolean;
   };
 };
+
+export type GetEventResponse = {
+  id: string;
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  coverPictureUrl: string;
+  logoUrl: string;
+  userId: number;
+  createdAt: number;
+  updatedAt: number;
+};

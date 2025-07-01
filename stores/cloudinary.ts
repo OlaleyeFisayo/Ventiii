@@ -2,56 +2,54 @@ export const useCloudinaryStore = defineStore(
   "useCloudinaryStore",
   () => {
     const {
-      errorToast,
-    } = useAppToast();
+      execute,
+      loading: apiLoading,
+      success: apiSuccess,
+    } = useApiCall();
+    const {
+      $csrfFetch,
+    } = useNuxtApp();
 
-    const loading = ref(false);
+    const loading = computed(() => apiLoading.value);
+    const success = computed(() => apiSuccess.value);
 
     async function upload(file: File) {
-      try {
-        loading.value = true;
-        const name = "ventiiistorage";
-        const preset = "Ventiii File management";
-        const url = `https://api.cloudinary.com/v1_1/${name}/upload`;
-        const formData = new FormData();
+      const formData = new FormData();
+      formData.append(
+        "file",
+        file,
+      );
+      const data = await execute(() => $csrfFetch(
+        "/api/upload",
+        {
+          method: "post",
+          body: formData,
+        },
+      ));
 
-        formData.append(
-          "file",
-          file,
-        );
-        formData.append(
-          "upload_preset",
-          preset,
-        );
+      if (success.value) {
+        return data;
+      }
+    }
 
-        const response = await fetch(
-          url,
-          {
-            method: "POST",
-            body: formData,
+    async function deleteUpload(name: string) {
+      const publicId = `ventiii/${name}`;
+      await execute(() => $csrfFetch(
+        "/api/upload",
+        {
+          method: "delete",
+          body: {
+            public_id: publicId,
           },
-        );
-
-        if (!response.ok) {
-          throw new Error(`Upload failed: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        return {
-          url: data.secure_url,
-        };
-      }
-      catch (error: any) {
-        errorToast(error.message as string);
-      }
-      finally {
-        loading.value = false;
-      }
+        },
+      ));
     }
 
     return {
       loading,
       upload,
+      success,
+      deleteUpload,
     };
   },
 );

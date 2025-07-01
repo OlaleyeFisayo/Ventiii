@@ -3,6 +3,10 @@ import type {
   FormSubmitEvent,
 } from "@nuxt/ui";
 
+import {
+  AppDateRangePicker,
+} from "#components";
+
 defineProps({
   submitLabel: String,
   loading: Boolean,
@@ -115,7 +119,7 @@ watch(
           v-model:end="item.value.end"
           :disabled="loading"
         />
-        <AppCalendar
+        <AppDateRangePicker
           v-else-if="item.type === 'date'"
           v-model="item.value"
           :disabled="loading"

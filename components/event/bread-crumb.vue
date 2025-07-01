@@ -32,7 +32,7 @@ const breadcrumbitems = computed(() => {
   const pathSegments = route.path.split("/").filter(Boolean);
   const items: BreadcrumbLink[] = [{
     label: "Dashboard", // Changed from "Home" to "Dashboard"
-    to: "/",
+    to: "/dashboard",
   }];
 
   let currentPath = "";
