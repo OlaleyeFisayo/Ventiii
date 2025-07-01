@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const maximumAttendance = ref(["50 - 100", "101 - 250"]);
+const maximumAttendance = ref(["1 - 100", "101 - 250"]);
 
 const formData = reactive({
   maxAttendance: maximumAttendance.value[0],
