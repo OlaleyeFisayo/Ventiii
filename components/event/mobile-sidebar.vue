@@ -31,33 +31,6 @@ const navItems = computed<NavigationMenuItem[][]>(() => ([
       to: defaultEventUrl,
       icon: "i-tabler-layout-dashboard",
     },
-    {
-      label: "Registration",
-      type: "link",
-      to: `${defaultEventUrl}/registration`,
-      icon: "i-tabler-ticket",
-      children: [
-        {
-          label: "Settings",
-          icon: "i-tabler-settings-cog",
-          to: `${defaultEventUrl}/registration/settings`,
-        },
-      ],
-    },
-    {
-      label: "Gallery",
-      icon: "i-tabler-photo",
-      popover: {
-        mode: "hover",
-      },
-      children: [
-        {
-          label: "Settings",
-          icon: "i-tabler-settings-cog",
-          to: `${defaultEventUrl}/registration/settings`,
-        },
-      ],
-    },
   ],
   [
     {

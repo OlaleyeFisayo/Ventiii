@@ -28,54 +28,6 @@ const navItems = computed<NavigationMenuItem[][]>(() => ([
           }
         : undefined,
     },
-    {
-      label: "Registration",
-      icon: "i-tabler-ticket",
-      popover: {
-        mode: "hover",
-      },
-      tooltip: isCollapsed.value
-        ? {
-            text: "Registration",
-          }
-        : undefined,
-      children: [
-        {
-          label: "Settings",
-          icon: "i-tabler-settings-cog",
-          to: `${defaultEventUrl}/registration/settings`,
-          tooltip: isCollapsed.value
-            ? {
-                text: "Registration Settings",
-              }
-            : undefined,
-        },
-      ],
-    },
-    {
-      label: "Gallery",
-      icon: "i-tabler-photo",
-      popover: {
-        mode: "hover",
-      },
-      tooltip: isCollapsed.value
-        ? {
-            text: "Gallery",
-          }
-        : undefined,
-      children: [
-        {
-          label: "Settings",
-          icon: "i-tabler-settings-cog",
-          to: `${defaultEventUrl}/gallery/settings`,
-          tooltip: isCollapsed.value
-            ? {
-                text: "Gallery Settings",
-              }
-            : undefined,
-        },
-      ],
-    },
   ],
   [
     {
