@@ -19,28 +19,7 @@ const isOpened = computed({
   },
 });
 
-const navItems = computed<NavigationMenuItem[][]>(() => ([
-  [
-    {
-      label: "Navigation:",
-      type: "label",
-    },
-    {
-      label: "Overview",
-      type: "link",
-      to: defaultEventUrl,
-      icon: "i-tabler-layout-dashboard",
-    },
-  ],
-  [
-    {
-      label: "Settings",
-      type: "link",
-      to: `${defaultEventUrl}/settings`,
-      icon: "i-tabler-settings",
-    },
-  ],
-]));
+const navItems = computed<NavigationMenuItem[][]>(() => sidebarStore.navigation(eventId as string));
 </script>
 
 <template>

@@ -12,36 +12,7 @@ const isCollapsed = computed(() => sidebarStore.desktopState);
 
 const eventStore = useEventStore();
 
-const navItems = computed<NavigationMenuItem[][]>(() => ([
-  [
-    {
-      label: "Navigation:",
-      type: "label",
-    },
-    {
-      label: "Overview",
-      to: defaultEventUrl,
-      icon: "i-tabler-layout-dashboard",
-      tooltip: isCollapsed.value
-        ? {
-            text: "Overview",
-          }
-        : undefined,
-    },
-  ],
-  [
-    {
-      label: "Settings",
-      to: `${defaultEventUrl}/settings`,
-      icon: "i-tabler-settings",
-      tooltip: isCollapsed.value
-        ? {
-            text: "Event Settings",
-          }
-        : undefined,
-    },
-  ],
-]));
+const navItems = computed<NavigationMenuItem[][]>(() => sidebarStore.navigation(eventId as string));
 </script>
 
 <template>
