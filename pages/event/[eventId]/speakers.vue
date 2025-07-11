@@ -268,16 +268,28 @@ onMounted(async () => {
             :description="errorMessage"
           />
           <AppFormField label="Name">
-            <AppInput v-model="selectedSpeaker.name" />
+            <AppInput
+              v-model="selectedSpeaker.name"
+              placeholder="Enter Speaker's name"
+            />
           </AppFormField>
           <AppFormField label="Title">
-            <AppInput v-model="selectedSpeaker.title" />
+            <AppInput
+              v-model="selectedSpeaker.title"
+              placeholder="Enter Speaker's title"
+            />
           </AppFormField>
           <AppFormField label="Company">
-            <AppInput v-model="selectedSpeaker.company" />
+            <AppInput
+              v-model="selectedSpeaker.company"
+              placeholder="Enter Speaker's company"
+            />
           </AppFormField>
           <AppFormField label="Bio">
-            <AppTextarea v-model="selectedSpeaker.bio" />
+            <AppTextarea
+              v-model="selectedSpeaker.bio"
+              placeholder="Enter Speaker's bio"
+            />
           </AppFormField>
           <AppFormField label="Image">
             <div
@@ -285,9 +297,9 @@ onMounted(async () => {
             >
               <h1>Current Image: </h1>
               <NuxtImg
-                :alt="speakers[selectedSpeakerIndex].name"
-                :width="50"
-                :src="`${selectedSpeaker.image} image`"
+                :alt="`${speakers[selectedSpeakerIndex].name} image`"
+                :width="100"
+                :src="selectedSpeaker.image"
                 class="rounded-full"
               />
             </div>

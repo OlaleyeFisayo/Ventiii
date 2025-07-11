@@ -23,7 +23,7 @@ export const speaker = sqliteTable(
     id: int().primaryKey({
       autoIncrement: true,
     }),
-    eventId: int().notNull().references(
+    eventId: text().notNull().references(
       () => event.id,
       {
         onDelete: "cascade",
