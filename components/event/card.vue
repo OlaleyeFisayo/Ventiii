@@ -8,8 +8,8 @@ const props = defineProps({
 });
 
 const cardWidth = ref(300);
-const startDate = computed(() => useFormatShortDate(props.startDate));
-const endDate = computed(() => useFormatShortDate(props.endDate));
+const startDate = computed(() => useFormatShortDate(props.startDate as string));
+const endDate = computed(() => useFormatShortDate(props.endDate as string));
 
 const isSameDay = computed(() => {
   return props.startDate === props.endDate;

@@ -81,6 +81,16 @@ export const useSidebarStore = defineStore(
                 }
               : undefined,
           },
+          {
+            label: "Event Details",
+            to: `${defaultEventUrl}/details`,
+            icon: "i-tabler-list-details",
+            tooltip: desktopState.value
+              ? {
+                  text: "Event Details",
+                }
+              : undefined,
+          },
         ],
         [
           {
