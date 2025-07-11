@@ -1,4 +1,7 @@
 import {
+  relations,
+} from "drizzle-orm";
+import {
   int,
   integer,
   sqliteTable,
@@ -15,6 +18,9 @@ import {
 import {
   user,
 } from "./auth";
+import {
+  speaker,
+} from "./speakers";
 
 export const event = sqliteTable(
   "event",
@@ -34,6 +40,9 @@ export const event = sqliteTable(
     coverPictureUrl: text().notNull(),
     logoUrl: text(),
     userId: int().notNull().references(() => user.id),
+    hasSpeakers: integer({
+      mode: "boolean",
+    }).$defaultFn(() => false),
     createdAt: int()
       .$default(() => Date.now())
       .notNull(),
@@ -80,6 +89,7 @@ export const InsertEvent = createInsertSchema(
   logoUrl: true,
   createdAt: true,
   updatedAt: true,
+  hasSpeakers: true,
 });
 
 export const UpdateEvent = createUpdateSchema(
@@ -112,6 +122,7 @@ export const UpdateEvent = createUpdateSchema(
     location: z.optional(z.string().min(1)),
     coverPictureUrl: z.optional(z.url()),
     logoUrl: z.optional(z.url()),
+    hasSpeakers: z.optional(z.boolean()),
   },
 ).omit({
   id: true,
@@ -119,6 +130,15 @@ export const UpdateEvent = createUpdateSchema(
   createdAt: true,
   updatedAt: true,
 });
+
+export const eventRelations = relations(
+  event,
+  ({
+    many,
+  }) => ({
+    speakers: many(speaker),
+  }),
+);
 
 export type InsertEvent = z.infer<typeof InsertEvent>;
 export type UpdateEvent = z.infer<typeof UpdateEvent>;

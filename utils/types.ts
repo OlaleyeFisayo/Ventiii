@@ -56,6 +56,7 @@ export type GetEventResponse = {
   coverPictureUrl: string;
   logoUrl: string;
   userId: number;
+  hasSpeakers: boolean;
   createdAt: number;
   updatedAt: number;
 };

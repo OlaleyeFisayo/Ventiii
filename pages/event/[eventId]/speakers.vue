@@ -7,7 +7,22 @@ import {
   isEqual,
 } from "lodash";
 
-const enableSpeakers = ref(false);
+const route = useRoute();
+const eventStore = useEventStore();
+
+const enableSpeakers = computed({
+  get() {
+    return eventStore.event?.hasSpeakers;
+  },
+  async set() {
+    await eventStore.updateEvent(
+      route.params.eventId as string,
+      {
+        hasSpeakers: !eventStore.event?.hasSpeakers,
+      },
+    );
+  },
+});
 
 const speakers = ref([]);
 
@@ -128,8 +143,8 @@ async function updateSpeaker() {
     <AppCard>
       <AppSwitch
         v-model="enableSpeakers"
-        label="Add Speakers to event"
-        description="you add speakers to your event"
+        label="Add Event Speakers"
+        description="Turn on this feature to include and showcase speakers for your event."
       />
     </AppCard>
     <AppCard v-if="enableSpeakers">
