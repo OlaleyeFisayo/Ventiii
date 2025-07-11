@@ -2,5 +2,5 @@
 </script>
 
 <template>
-  <h1>Event Details</h1>
+  <h1>Event Speakers</h1>
 </template>

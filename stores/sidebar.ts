@@ -82,12 +82,12 @@ export const useSidebarStore = defineStore(
               : undefined,
           },
           {
-            label: "Event Details",
-            to: `${defaultEventUrl}/details`,
-            icon: "i-tabler-list-details",
+            label: "Speakers",
+            to: `${defaultEventUrl}/speakers`,
+            icon: "i-tabler-speakerphone",
             tooltip: desktopState.value
               ? {
-                  text: "Event Details",
+                  text: "Speakers",
                 }
               : undefined,
           },
