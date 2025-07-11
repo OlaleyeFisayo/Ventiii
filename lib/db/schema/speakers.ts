@@ -6,6 +6,12 @@ import {
   sqliteTable,
   text,
 } from "drizzle-orm/sqlite-core";
+import {
+  createInsertSchema,
+} from "drizzle-zod";
+import {
+  z,
+} from "zod/v4";
 
 import {
   event,
@@ -41,6 +47,30 @@ export const speaker = sqliteTable(
   },
 );
 
+export const InsertSpeaker = createInsertSchema(
+  speaker,
+  {
+    name: z.string().min(1).transform((val) => {
+      return val.trim();
+    }),
+    title: z.optional(z.string().transform((val) => {
+      return val.trim();
+    })),
+    company: z.optional(z.string().transform((val) => {
+      return val.trim();
+    })),
+    bio: z.optional(z.string().transform((val) => {
+      return val.trim();
+    })),
+    image: z.optional(z.url()),
+  },
+).omit({
+  id: true,
+  eventId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const speakerRelations = relations(
   speaker,
   ({
@@ -55,3 +85,5 @@ export const speakerRelations = relations(
     ),
   }),
 );
+
+export type InsertSpeaker = z.infer<typeof InsertSpeaker>;

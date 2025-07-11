@@ -1,3 +1,7 @@
+import type {
+  GetEventFilterOptions,
+} from "~/shared/types/event";
+
 export const useEventStore = defineStore(
   "useEventStore",
   () => {

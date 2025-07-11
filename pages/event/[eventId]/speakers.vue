@@ -9,6 +9,8 @@ import {
 
 const route = useRoute();
 const eventStore = useEventStore();
+const cloudinaryStore = useCloudinaryStore();
+const speakerStore = useSpeakerStore();
 
 const enableSpeakers = computed({
   get() {
@@ -24,8 +26,7 @@ const enableSpeakers = computed({
   },
 });
 
-const speakers = ref([]);
-
+const speakers = computed(() => speakerStore.speakers);
 const addSpeakerModal = ref(false);
 function addSpeakerModalToggle() {
   addSpeakerModal.value = !addSpeakerModal.value;
@@ -69,12 +70,37 @@ const defaultSpeakerForm: AppFormItems[] = [
   },
 ];
 const speakerDetailForm = ref<AppFormItems[]>(structuredClone(defaultSpeakerForm));
-const defaultSocial: any[] = [];
-const socials = ref<any[]>(structuredClone(defaultSocial));
+const defaultSocial: any = {};
+const socials = ref<any>(structuredClone(defaultSocial));
 
-function addSpeakertoEvent() {
-  speakerDetailForm.value = defaultSpeakerForm;
-  socials.value = defaultSocial;
+async function addSpeakertoEvent(state: {
+  name: string;
+  title?: string;
+  company?: string;
+  bio?: string;
+  image: File[];
+}) {
+  const {
+    url,
+  } = await cloudinaryStore.upload(state.image[0] as File);
+  if (cloudinaryStore.success) {
+    const payload = {
+      ...state,
+      socialLinks: socials.value,
+      image: url,
+    };
+
+    await speakerStore.createSpeaker(
+      route.params.eventId as string,
+      payload,
+    );
+
+    if (speakerStore.success) {
+      speakerDetailForm.value = defaultSpeakerForm;
+      socials.value = defaultSocial;
+      addSpeakerModalToggle();
+    }
+  }
 }
 
 const editSpeakerModal = ref(false);
@@ -131,6 +157,12 @@ async function updateSpeaker() {
   if (!isSpeakerDetailChanged.value)
     return false;
 }
+
+onMounted(async () => {
+  if (eventStore.event?.hasSpeakers) {
+    await speakerStore.getSpeakers(route.params.eventId as string);
+  }
+});
 </script>
 
 <template>
@@ -182,11 +214,14 @@ async function updateSpeaker() {
                   :width="50"
                   :src="speaker.image"
                   :alt="`${speaker.name} image`"
-                  class="rounded-xl"
+                  class="rounded-full"
                 />
-                <div>
+                <div class="flex flex-col gap-2 justify-center">
                   <h1>{{ speaker.name }}</h1>
-                  <p class="text-muted text-sm">
+                  <p
+                    v-if="speaker.title"
+                    class="text-muted text-sm"
+                  >
                     {{ speaker.title }}
                   </p>
                 </div>
@@ -253,7 +288,7 @@ async function updateSpeaker() {
                 :alt="speakers[selectedSpeakerIndex].name"
                 :width="50"
                 :src="`${selectedSpeaker.image} image`"
-                class="rounded-xl"
+                class="rounded-full"
               />
             </div>
             <AppImageDnd

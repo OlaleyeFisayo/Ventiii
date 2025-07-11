@@ -5,10 +5,11 @@ import type {
 
 const route = useRoute();
 const eventId = route.params.eventId;
+const eventStore = useEventStore();
+await eventStore.getEvent(eventId as string);
 
 const authStore = useAuthStore();
 const sidebarStore = useSidebarStore();
-const eventStore = useEventStore();
 
 const dropdownItems = computed<DropdownMenuItem[][]>(() => ([
   [
@@ -37,10 +38,6 @@ const dropdownItems = computed<DropdownMenuItem[][]>(() => ([
     },
   ],
 ]));
-
-onMounted(async () => {
-  eventStore.getEvent(eventId as string);
-});
 </script>
 
 <template>
