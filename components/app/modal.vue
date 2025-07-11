@@ -4,6 +4,7 @@ defineProps({
     type: Boolean,
     default: true,
   },
+  title: String,
 });
 
 const open = defineModel<boolean>(
@@ -18,6 +19,7 @@ const open = defineModel<boolean>(
   <UModal
     v-model:open="open"
     :dismissible="dismissible"
+    :title="title"
   >
     <template
       v-if="$slots.content"
@@ -25,9 +27,11 @@ const open = defineModel<boolean>(
     >
       <slot name="content" />
     </template>
+    <template
+      v-if="$slots.body"
+      #body
+    >
+      <slot name="body" />
+    </template>
   </UModal>
 </template>
-
-<style scoped>
-/* code... */
-</style>

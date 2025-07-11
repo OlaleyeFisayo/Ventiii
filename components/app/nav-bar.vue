@@ -24,6 +24,8 @@ const dropdownMenuItems = ref<DropdownMenuItem[]>([
       icon: "i-tabler-settings",
       to: "/settings",
     },
+  ],
+  [
     {
       label: "Logout",
       icon: "i-tabler-logout-2",

@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import {
-  AppDateRangePicker,
-} from "#components";
-
 const eventStore = useEventStore();
 const cloudinaryStore = useCloudinaryStore();
 
