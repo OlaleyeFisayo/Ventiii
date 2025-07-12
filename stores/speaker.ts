@@ -18,16 +18,16 @@ export const useSpeakerStore = defineStore(
       eventId: string,
       payload: CreateSpeakerPayload,
     ) {
-      const result = await execute(() => $csrfFetch(
+      await execute(() => $csrfFetch(
         `/api/speaker/${eventId}`,
         {
           method: "post",
           body: payload,
         },
-      )) as GetSpeakerResponse[];
+      ));
 
       if (success.value) {
-        speakers.value = result;
+        await getSpeakers(eventId);
       }
     }
 
@@ -44,12 +44,22 @@ export const useSpeakerStore = defineStore(
       }
     }
 
+    async function deleteSpeaker(speakerId: number) {
+      await execute(() => $csrfFetch(
+        `/api/speaker/${speakerId}`,
+        {
+          method: "delete",
+        },
+      ));
+    }
+
     return {
       createSpeaker,
       loading,
       success,
       speakers,
       getSpeakers,
+      deleteSpeaker,
     };
   },
 );

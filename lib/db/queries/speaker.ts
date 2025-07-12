@@ -33,3 +33,10 @@ export async function getSpeakers(eventId: string) {
 
   return result;
 }
+
+export async function deleteSpeakers(speakerId: number) {
+  await db.delete(speaker).where(eq(
+    speaker.id,
+    speakerId,
+  ));
+}

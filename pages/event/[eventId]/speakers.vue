@@ -128,6 +128,17 @@ function speakerDropdownMenu(index: number): DropdownMenuItem[] {
       label: "Delete",
       icon: "i-tabler-trash",
       color: "error",
+      onSelect: async () => {
+        // FIX: error toast popping up
+        const currentSpeaker = {
+          ...speakers.value[index],
+        };
+        await Promise.all([
+          isMyCloudinaryUrl(currentSpeaker.image),
+          speakerStore.deleteSpeaker(currentSpeaker.id),
+        ]);
+        await speakerStore.getSpeakers(route.params.id as string);
+      },
     },
   ];
 };
@@ -179,8 +190,22 @@ onMounted(async () => {
         description="Turn on this feature to include and showcase speakers for your event."
       />
     </AppCard>
-    <AppCard v-if="enableSpeakers">
-      <section class="flex flex-col gap-4">
+    <AppSkeleton
+      v-if="eventStore.loading"
+      class="w-full h-30"
+    />
+    <AppCard v-if="enableSpeakers && !eventStore.loading">
+      <template v-if="speakerStore.loading">
+        <AppSkeleton
+          v-for="i in 2"
+          :key="i"
+          class="w-full h-10"
+        />
+      </template>
+      <section
+        v-else
+        class="flex flex-col gap-4"
+      >
         <div class="flex justify-end gap-2">
           <AppTooltip text="Add a speaker">
             <AppButton
@@ -216,7 +241,7 @@ onMounted(async () => {
                   :alt="`${speaker.name} image`"
                   class="rounded-full"
                 />
-                <div class="flex flex-col gap-2 justify-center">
+                <div class="flex flex-col justify-center">
                   <h1>{{ speaker.name }}</h1>
                   <p
                     v-if="speaker.title"
@@ -241,11 +266,13 @@ onMounted(async () => {
     <AppModal
       v-model:open="addSpeakerModal"
       title="Speaker Detail"
+      :loading="eventStore.loading || cloudinaryStore.loading"
     >
       <template #body>
         <AppForm
           v-model:items="speakerDetailForm"
           submit-label="Add Speaker"
+          :loading="eventStore.loading || cloudinaryStore.loading"
           @submit="addSpeakertoEvent"
         >
           <EventSocialLinksMenu v-model="socials" />

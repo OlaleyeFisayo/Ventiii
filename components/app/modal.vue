@@ -5,6 +5,7 @@ defineProps({
     default: true,
   },
   title: String,
+  loading: Boolean,
 });
 
 const open = defineModel<boolean>(
@@ -18,7 +19,7 @@ const open = defineModel<boolean>(
 <template>
   <UModal
     v-model:open="open"
-    :dismissible="dismissible"
+    :dismissible="loading ? false : dismissible"
     :title="title"
   >
     <template
