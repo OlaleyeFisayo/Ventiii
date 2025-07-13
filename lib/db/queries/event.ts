@@ -11,6 +11,7 @@ import {
 
 import type {
   InsertEvent,
+  UpdateEvent,
 } from "../schema";
 
 import db from "..";
@@ -129,17 +130,7 @@ export async function deleteEvent(eventId: string) {
 }
 
 export async function updateEvent(
-  data: {
-    title?: string;
-    description?: string;
-    startDate?: any;
-    endDate?: any;
-    startTime?: string;
-    endTime?: string;
-    location?: string;
-    coverPictureUrl?: string;
-    logoUrl?: string;
-  },
+  data: UpdateEvent,
   eventId: string,
 ) {
   const result = await db.update(event).set(data).where(eq(

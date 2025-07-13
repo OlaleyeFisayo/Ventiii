@@ -7,7 +7,7 @@ import type {
   UserWithId,
 } from "~/lib/auth";
 
-type AuthenticatedEvent = H3Event & {
+export type AuthenticatedEvent = H3Event & {
   context: H3EventContext & {
     user: UserWithId;
   };

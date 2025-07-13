@@ -3,10 +3,6 @@ import type {
   FormSubmitEvent,
 } from "@nuxt/ui";
 
-import {
-  AppDateRangePicker,
-} from "#components";
-
 defineProps({
   submitLabel: String,
   loading: Boolean,

@@ -1,13 +1,13 @@
 import {
-  deleteEvent,
-} from "~/lib/db/queries/event";
+  deleteSpeaker,
+} from "~/lib/db/queries/speaker";
 import defineAuthenticatedEventHandler from "~/utils/define-authenticated-event-handler";
 
 export default defineAuthenticatedEventHandler(async (event) => {
-  const eventId = event?.context?.params?.id;
+  const speakerId = event?.context?.params?.id;
 
   try {
-    await deleteEvent(eventId as string);
+    await deleteSpeaker(Number.parseInt(speakerId as string));
 
     return {
       message: "Deleted Successfully",
@@ -16,7 +16,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
   catch {
     throw createError({
       statusCode: 500,
-      statusMessage: "Failed to Delete event, try again",
+      statusMessage: "Failed to Delete speaker, try again",
     });
   }
 });
