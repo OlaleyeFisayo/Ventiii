@@ -24,6 +24,9 @@ const enableSpeakers = computed({
         hasSpeakers: !eventStore.event?.hasSpeakers,
       },
     );
+    if (eventStore.event?.hasSpeakers) {
+      await speakerStore.getSpeakers(eventId as string);
+    }
   },
 });
 
@@ -207,6 +210,25 @@ async function deleteAllSpeakers() {
   ]);
   await speakerStore.getSpeakers(eventId as string);
 }
+
+onBeforeRouteLeave(async () => {
+  if (eventStore.event?.hasSpeakers === true && speakers.value.length === 0) {
+    // eslint-disable-next-line no-alert
+    const confirm = window.confirm("Since you've enabled the Speakers feature, please add at least one speaker. If no speaker is added, the feature will be automatically disabled.");
+    if (!confirm) {
+      return false;
+    }
+    else {
+      await eventStore.updateEvent(
+        eventId as string,
+        {
+          hasSpeakers: !eventStore.event?.hasSpeakers,
+        },
+      );
+    }
+  }
+  return true;
+});
 
 onMounted(async () => {
   if (eventStore.event?.hasSpeakers) {
