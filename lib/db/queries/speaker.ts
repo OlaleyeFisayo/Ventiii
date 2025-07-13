@@ -42,6 +42,13 @@ export async function deleteSpeaker(speakerId: number) {
   ));
 }
 
+export async function deleteSpeakers(eventId: string) {
+  await db.delete(speaker).where(eq(
+    speaker.eventId,
+    eventId,
+  ));
+}
+
 export async function updateSpeaker(
   data: UpdateSpeaker,
   speakerId: number,

@@ -8,11 +8,15 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   try {
     await deleteSpeaker(Number.parseInt(speakerId as string));
+
+    return {
+      message: "Deleted Successfully",
+    };
   }
   catch {
     throw createError({
       statusCode: 500,
-      statusMessage: "Failed to Delete speakers, try again",
+      statusMessage: "Failed to Delete speaker, try again",
     });
   }
 });

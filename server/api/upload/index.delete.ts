@@ -11,10 +11,9 @@ export default defineAuthenticatedEventHandler(async (event) => {
     return;
   }
 
-  // Delete from Cloudinary
-  const result = await cloudinary.uploader.destroy(public_id);
+  const data = await cloudinary.uploader.destroy(public_id);
 
-  if (result.result === "ok") {
+  if (data.result === "ok") {
     return {
       success: true,
       message: "Image deleted successfully",

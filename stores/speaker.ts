@@ -48,7 +48,16 @@ export const useSpeakerStore = defineStore(
       await execute(() => $csrfFetch(
         `/api/speaker/${speakerId}`,
         {
-          method: "delete",
+          method: "DELETE",
+        },
+      ));
+    }
+
+    async function deleteSpeakers(eventId: string) {
+      await execute(() => $csrfFetch(
+        `/api/speakers/${eventId}`,
+        {
+          method: "DELETE",
         },
       ));
     }
@@ -73,6 +82,7 @@ export const useSpeakerStore = defineStore(
       speakers,
       getSpeakers,
       deleteSpeaker,
+      deleteSpeakers,
       updateSpeaker,
     };
   },

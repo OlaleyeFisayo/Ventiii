@@ -130,7 +130,6 @@ function speakerDropdownMenu(index: number): DropdownMenuItem[] {
       icon: "i-tabler-trash",
       color: "error",
       onSelect: async () => {
-        // FIX: error toast popping up
         await Promise.all([
           isMyCloudinaryUrl(selectedSpeaker.value.image),
           speakerStore.deleteSpeaker(selectedSpeaker.value.id),
@@ -201,6 +200,14 @@ async function updateSpeaker() {
   }
 }
 
+async function deleteAllSpeakers() {
+  await speakerStore.deleteSpeakers(eventId as string);
+  await Promise.all([
+    speakers.value.map(async speaker => isMyCloudinaryUrl(speaker.image)),
+  ]);
+  await speakerStore.getSpeakers(eventId as string);
+}
+
 onMounted(async () => {
   if (eventStore.event?.hasSpeakers) {
     await speakerStore.getSpeakers(eventId as string);
@@ -250,7 +257,7 @@ onMounted(async () => {
               v-if="speakers.length > 1"
               icon="i-tabler-trash"
               color="error"
-              @click="addSpeakerModalToggle"
+              @click="deleteAllSpeakers"
             />
           </AppTooltip>
         </div>
