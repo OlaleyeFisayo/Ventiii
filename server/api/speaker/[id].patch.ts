@@ -3,14 +3,10 @@ import type {
 } from "drizzle-orm";
 
 import {
-  v4 as uuidv4,
-} from "uuid";
-
+  updateSpeaker,
+} from "~/lib/db/queries/speaker";
 import {
-  createEvent,
-} from "~/lib/db/queries/event";
-import {
-  InsertEvent,
+  UpdateSpeaker,
 } from "~/lib/db/schema";
 import {
   bodyValidator,
@@ -18,18 +14,23 @@ import {
 import defineAuthenticatedEventHandler from "~/utils/define-authenticated-event-handler";
 
 export default defineAuthenticatedEventHandler(async (event) => {
+  const speakerId = event?.context?.params?.id;
   const result = await bodyValidator(
     event,
-    InsertEvent.safeParse,
+    UpdateSpeaker.safeParse,
   );
 
   try {
-    const id = uuidv4();
-    return createEvent(
+    const data = await updateSpeaker(
       result.data,
-      id,
-      event.context.user.id,
+      Number.parseInt(speakerId as string),
     );
+
+    return {
+      success: true,
+      message: "Speaker Details have been updated",
+      data,
+    };
   }
   catch (e: any) {
     const error = e as DrizzleError;

@@ -8,6 +8,7 @@ import {
 } from "lodash";
 
 const route = useRoute();
+const eventId = route.params.eventId;
 const eventStore = useEventStore();
 const cloudinaryStore = useCloudinaryStore();
 const speakerStore = useSpeakerStore();
@@ -18,7 +19,7 @@ const enableSpeakers = computed({
   },
   async set() {
     await eventStore.updateEvent(
-      route.params.eventId as string,
+      eventId as string,
       {
         hasSpeakers: !eventStore.event?.hasSpeakers,
       },
@@ -91,7 +92,7 @@ async function addSpeakertoEvent(state: {
     };
 
     await speakerStore.createSpeaker(
-      route.params.eventId as string,
+      eventId as string,
       payload,
     );
 
@@ -107,21 +108,21 @@ const editSpeakerModal = ref(false);
 const selectedSpeakerIndex = ref<number>(0);
 const selectedSpeaker = ref<any>(null);
 const selectedSpeakerImage = ref([]);
-function toggleEditModal(index: number) {
+function toggleEditModal() {
   editSpeakerModal.value = !editSpeakerModal.value;
+}
+
+function speakerDropdownMenu(index: number): DropdownMenuItem[] {
   selectedSpeakerIndex.value = index;
   selectedSpeaker.value = {
     ...speakers.value[index],
   };
-}
-
-function speakerDropdownMenu(index: number): DropdownMenuItem[] {
   return [
     {
       label: "Edit",
       icon: "i-tabler-pencil",
       onSelect: () => {
-        toggleEditModal(index);
+        toggleEditModal();
       },
     },
     {
@@ -130,14 +131,11 @@ function speakerDropdownMenu(index: number): DropdownMenuItem[] {
       color: "error",
       onSelect: async () => {
         // FIX: error toast popping up
-        const currentSpeaker = {
-          ...speakers.value[index],
-        };
         await Promise.all([
-          isMyCloudinaryUrl(currentSpeaker.image),
-          speakerStore.deleteSpeaker(currentSpeaker.id),
+          isMyCloudinaryUrl(selectedSpeaker.value.image),
+          speakerStore.deleteSpeaker(selectedSpeaker.value.id),
         ]);
-        await speakerStore.getSpeakers(route.params.id as string);
+        await speakerStore.getSpeakers(eventId as string);
       },
     },
   ];
@@ -166,12 +164,46 @@ const isSpeakerDetailChanged = computed(() => {
 
 async function updateSpeaker() {
   if (!isSpeakerDetailChanged.value)
-    return false;
+    return;
+
+  const updateData = {
+    name: selectedSpeaker.value.name,
+    title: selectedSpeaker.value.title ?? null,
+    company: selectedSpeaker.value.company ?? null,
+    bio: selectedSpeaker.value.bio ?? null,
+    socialLinks: selectedSpeaker.value.socialLinks ?? null,
+  };
+
+  const uploadPromises = [];
+
+  if (selectedSpeakerImage.value.length !== 0) {
+    uploadPromises.push(Promise.all([
+      isMyCloudinaryUrl(selectedSpeaker.value.image),
+      cloudinaryStore.upload(selectedSpeakerImage.value[0]),
+    ]).then(([, uploadResult]) => {
+      updateData.image = uploadResult.url;
+      selectedSpeakerImage.value = [];
+    }));
+  }
+
+  if (uploadPromises.length > 0) {
+    await Promise.all(uploadPromises);
+  }
+
+  await speakerStore.updateSpeaker(
+    Number.parseInt(selectedSpeaker.value.id),
+    updateData,
+  );
+
+  if (speakerStore.success) {
+    await speakerStore.getSpeakers(eventId as string);
+    toggleEditModal();
+  }
 }
 
 onMounted(async () => {
   if (eventStore.event?.hasSpeakers) {
-    await speakerStore.getSpeakers(route.params.eventId as string);
+    await speakerStore.getSpeakers(eventId as string);
   }
 });
 </script>
@@ -283,6 +315,7 @@ onMounted(async () => {
     <AppModal
       v-model:open="editSpeakerModal"
       title="Edit Speaker Detail"
+      :loading="speakerStore.loading || cloudinaryStore.loading"
     >
       <template #body>
         <div class="flex flex-col gap-3">
@@ -298,24 +331,28 @@ onMounted(async () => {
             <AppInput
               v-model="selectedSpeaker.name"
               placeholder="Enter Speaker's name"
+              :disabled="speakerStore.loading || cloudinaryStore.loading"
             />
           </AppFormField>
           <AppFormField label="Title">
             <AppInput
               v-model="selectedSpeaker.title"
               placeholder="Enter Speaker's title"
+              :disabled="speakerStore.loading || cloudinaryStore.loading"
             />
           </AppFormField>
           <AppFormField label="Company">
             <AppInput
               v-model="selectedSpeaker.company"
               placeholder="Enter Speaker's company"
+              :disabled="speakerStore.loading || cloudinaryStore.loading"
             />
           </AppFormField>
           <AppFormField label="Bio">
             <AppTextarea
               v-model="selectedSpeaker.bio"
               placeholder="Enter Speaker's bio"
+              :disabled="speakerStore.loading || cloudinaryStore.loading"
             />
           </AppFormField>
           <AppFormField label="Image">
@@ -334,12 +371,14 @@ onMounted(async () => {
               v-model="selectedSpeakerImage"
               :max-files="1"
               :max-file-size="1 * 1024 * 1024"
+              :disabled="speakerStore.loading || cloudinaryStore.loading"
             />
           </AppFormField>
           <EventSocialLinksMenu v-model="selectedSpeaker.socialLinks" />
           <AppButton
             label="Update"
             class="flex items-center justify-center"
+            :loading="speakerStore.loading || cloudinaryStore.loading"
             @click="updateSpeaker"
           />
         </div>

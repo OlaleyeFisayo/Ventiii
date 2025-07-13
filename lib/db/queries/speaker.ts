@@ -4,6 +4,7 @@ import {
 
 import type {
   InsertSpeaker,
+  UpdateSpeaker,
 } from "../schema";
 
 import db from "..";
@@ -34,9 +35,21 @@ export async function getSpeakers(eventId: string) {
   return result;
 }
 
-export async function deleteSpeakers(speakerId: number) {
+export async function deleteSpeaker(speakerId: number) {
   await db.delete(speaker).where(eq(
     speaker.id,
     speakerId,
   ));
+}
+
+export async function updateSpeaker(
+  data: UpdateSpeaker,
+  speakerId: number,
+) {
+  const result = await db.update(speaker).set(data).where(eq(
+    speaker.id,
+    speakerId,
+  )).returning();
+
+  return result;
 }

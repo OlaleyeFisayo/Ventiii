@@ -62,6 +62,30 @@ export const InsertSpeaker = createInsertSchema(
     bio: z.optional(z.string().transform((val) => {
       return val.trim();
     })),
+    image: z.url(),
+  },
+).omit({
+  id: true,
+  eventId: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const UpdateSpeaker = createInsertSchema(
+  speaker,
+  {
+    name: z.optional(z.string().min(1).transform((val) => {
+      return val.trim();
+    })),
+    title: z.optional(z.string().transform((val) => {
+      return val.trim();
+    })),
+    company: z.optional(z.string().transform((val) => {
+      return val.trim();
+    })),
+    bio: z.optional(z.string().transform((val) => {
+      return val.trim();
+    })),
     image: z.optional(z.url()),
   },
 ).omit({
@@ -87,3 +111,4 @@ export const speakerRelations = relations(
 );
 
 export type InsertSpeaker = z.infer<typeof InsertSpeaker>;
+export type UpdateSpeaker = z.infer<typeof UpdateSpeaker>;

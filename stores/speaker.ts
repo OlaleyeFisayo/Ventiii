@@ -53,6 +53,19 @@ export const useSpeakerStore = defineStore(
       ));
     }
 
+    async function updateSpeaker(
+      speakerId: number,
+      data: any,
+    ) {
+      await execute(() => $csrfFetch(
+        `/api/speaker/${speakerId}`,
+        {
+          method: "patch",
+          body: data,
+        },
+      ));
+    }
+
     return {
       createSpeaker,
       loading,
@@ -60,6 +73,7 @@ export const useSpeakerStore = defineStore(
       speakers,
       getSpeakers,
       deleteSpeaker,
+      updateSpeaker,
     };
   },
 );
