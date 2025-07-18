@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: "auth",
+});
+
 const authStore = useAuthStore();
 
 const loginForm = ref<AppFormItems[]>([
@@ -16,7 +20,7 @@ const loginForm = ref<AppFormItems[]>([
 </script>
 
 <template>
-  <section class="text-black pt-8">
+  <section class="text-black flex w-full h-[100dvh]  items-center flex-col justify-center">
     <h1 class="text-3xl font-bold text-center">
       Welcome back
     </h1>

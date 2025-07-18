@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: "auth",
+});
+
 const authStore = useAuthStore();
 
 const registerForm = ref<AppFormItems[]>([
@@ -22,7 +26,7 @@ const registerForm = ref<AppFormItems[]>([
 </script>
 
 <template>
-  <section class="text-black pt-8">
+  <section class="text-black pt-8 flex flex-col justify-center h-[100dvh]">
     <h1 class="text-3xl font-bold text-center">
       Sign up
     </h1>

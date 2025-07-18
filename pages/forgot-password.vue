@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: "auth",
+});
+
 const authStore = useAuthStore();
 
 const forgotPasswordForm = ref<AppFormItems[]>([
@@ -11,11 +15,11 @@ const forgotPasswordForm = ref<AppFormItems[]>([
 </script>
 
 <template>
-  <section class="text-black pt-8">
+  <section class="text-black pt-8 flex flex-col justify-center h-[100dvh]">
     <h1 class="text-3xl font-bold text-center">
       Forgot your password?
     </h1>
-    <p class="text-lg mt-2 text-center">
+    <p class="w-full max-w-[500px] mx-auto text-lg mt-2 text-center">
       Enter the email address associated with your account and we will send a an otp code
     </p>
     <section

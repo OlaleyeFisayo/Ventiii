@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: "auth",
+});
+
 const authStore = useAuthStore();
 
 const resetPasswordForm = ref<AppFormItems[]>([
@@ -43,7 +47,7 @@ async function resetPassword(state: {
 </script>
 
 <template>
-  <section class="text-black pt-8">
+  <section class="text-black pt-8 flex flex-col justify-center h-[100dvh]">
     <h1 class="text-3xl font-bold text-center">
       Reset your password
     </h1>
