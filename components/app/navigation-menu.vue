@@ -10,6 +10,9 @@ defineProps({
     type: String as PropType<"vertical" | "horizontal">,
     default: "vertical",
   },
+  linkClass: String,
+  linkLeadingIconClass: String,
+  listClass: String,
 });
 </script>
 
@@ -22,8 +25,9 @@ defineProps({
     variant="link"
     :ui="{
       label: 'text-sm',
-      link: 'text-xl',
-      linkLeadingIcon: 'size-7',
+      list: `${listClass}`,
+      link: `text-xl ${linkClass}`,
+      linkLeadingIcon: `size-7 ${linkLeadingIconClass}`,
     }"
   />
 </template>

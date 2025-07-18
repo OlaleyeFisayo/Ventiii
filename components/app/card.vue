@@ -9,7 +9,7 @@ const isErrorTheme = computed(() => props.theme === "error");
 <template>
   <UCard
     :ui="isErrorTheme ? {
-      root: 'ring-red-300',
+      root: 'ring-red-300 w-full',
     } : {}"
   >
     <template
