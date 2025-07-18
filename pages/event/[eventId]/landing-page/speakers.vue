@@ -11,10 +11,17 @@ onMounted(async () => {
 
 <template>
   <section class="flex flex-col gap-2">
-    <h1 class="text-2xl text-black font-bold">
-      Speakers
-    </h1>
-    <div class="flex flex-col gap-2">
+    <template v-if="speakerStore.loading">
+      <AppSkeleton
+        v-for="i in 2"
+        :key="i"
+        class="w-full h-20"
+      />
+    </template>
+    <div
+      v-else
+      class="flex flex-col gap-2"
+    >
       <LandingPageSpeakersCard
         v-for="speaker in speakerStore.speakers"
         :key="speaker.id"

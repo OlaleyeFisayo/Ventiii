@@ -45,36 +45,51 @@ onMounted(async () => {
       <NuxtImg
         :src="eventStore.event?.coverPictureUrl"
         class="w-full rounded-2xl h-[300px] object-fit"
+        alt="Event Cover"
       />
-      <div>
-        <h1 class="text-3xl font-bold">
-          {{ eventStore.event?.title }}
-        </h1>
-        <p
-          v-if="eventStore.event?.description"
-          class="text-muted text-base"
-          v-html="eventStore.event?.description.replace(/\n/g, '<br>')"
+      <section class="flex gap-2 items-center">
+        <NuxtImg
+          v-if="eventStore.event?.logoUrl"
+          :src="eventStore.event?.logoUrl"
+          :width="100"
+          class="object-fit"
+          alt="Event Logo"
         />
-      </div>
-      <div class="flex gap-4 flex-wrap items-center text-lg">
-        <p class="flex items-center gap-1">
-          <UIcon name="i-tabler-calendar-event" />
-          <template v-if="areDatesSame">
-            {{ startDate }}
-          </template>
-          <template v-else>
-            {{ startDate }} - {{ endDate }}
-          </template>
-        </p>
-        <p class="flex items-center gap-1">
-          <UIcon name="i-tabler-clock" />
-          {{ eventStore.event?.startTime }} - {{ eventStore.event?.endTime }}
-        </p>
-        <p class="flex items-center gap-1">
-          <UIcon name="i-tabler-map-pin" />
-          {{ eventStore.event?.location }}
-        </p>
-      </div>
+        <div>
+          <h1 class="text-3xl font-bold">
+            {{ eventStore.event?.title }}
+          </h1>
+          <div class="flex gap-4 flex-wrap items-center text-lg">
+            <p class="flex items-center gap-1">
+              <UIcon name="i-tabler-calendar-event" />
+              <span
+                v-if="areDatesSame"
+                class="text-muted"
+              >
+                {{ startDate }}
+              </span>
+              <span
+                v-else
+                class="text-muted"
+              >
+                {{ startDate }} - {{ endDate }}
+              </span>
+            </p>
+            <p class="flex items-center gap-1">
+              <UIcon name="i-tabler-clock" />
+              <span class="text-muted">
+                {{ eventStore.event?.startTime }} - {{ eventStore.event?.endTime }}
+              </span>
+            </p>
+            <p class="flex items-center gap-1">
+              <UIcon name="i-tabler-map-pin" />
+              <span class="text-muted">
+                {{ eventStore.event?.location }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
     </section>
     <section class="container mx-auto flex gap-2 mt-6">
       <div>

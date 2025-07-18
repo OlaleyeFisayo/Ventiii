@@ -1,16 +1,16 @@
-<script setup>
-import {
-  UIcon,
-} from "#components";
+<script setup lang="ts">
+type SocialLinks = {
+  [key: string]: string;
+};
 
 defineProps({
   socialLinks: {
-    type: Object,
+    type: Object as PropType<SocialLinks>,
     required: true,
   },
 });
 
-const iconMap = {
+const iconMap: Record<string, string> = {
   "LinkedIn": "tabler:brand-linkedin",
   "Facebook": "tabler:brand-facebook",
   "WhatsApp": "tabler:brand-whatsapp",
@@ -26,7 +26,7 @@ const iconMap = {
   "Personal Blog": "tabler:edit",
 };
 
-const colorMap = {
+const colorMap: Record<string, string> = {
   "LinkedIn": "bg-blue-600 hover:bg-blue-700",
   "Facebook": "bg-blue-500 hover:bg-blue-600",
   "WhatsApp": "bg-green-500 hover:bg-green-600",
@@ -42,68 +42,86 @@ const colorMap = {
   "Personal Blog": "bg-indigo-600 hover:bg-indigo-700",
 };
 
-function getIconName(platform) {
+const urlPatterns: Record<string, string> = {
+  "LinkedIn": "https://linkedin.com/in/",
+  "Facebook": "https://facebook.com/",
+  "WhatsApp": "https://wa.me/",
+  "Twitter / X": "https://x.com/",
+  "Instagram": "https://instagram.com/",
+  "YouTube": "https://youtube.com/@",
+  "TikTok": "https://tiktok.com/@",
+  "GitHub": "https://github.com/",
+  "Behance": "https://behance.net/",
+  "Dribbble": "https://dribbble.com/",
+  "Medium": "https://medium.com/@",
+  "Personal Blog": "",
+};
+
+function getIconName(platform: string): string {
   return iconMap[platform] || "tabler:link";
 }
 
-function getIconBackgroundClass(platform) {
+function getIconBackgroundClass(platform: string): string {
   return colorMap[platform] || "bg-gray-500 hover:bg-gray-600";
 }
 
-function getPlatformDisplayName(platform) {
-  // Handle special cases for display names
+function getPlatformDisplayName(platform: string): string {
   if (platform === "Twitter / X")
     return "X";
   if (platform === "Personal Blog")
     return "Blog";
   return platform;
 }
+
+function buildUrl(
+  platform: string,
+  value: string,
+): string {
+  if (value.startsWith("http://") || value.startsWith("https://")) {
+    return value;
+  }
+
+  const baseUrl = urlPatterns[platform];
+  if (!baseUrl) {
+    return value.startsWith("http") ? value : `https://${value}`;
+  }
+
+  const cleanUsername = value.startsWith("@") ? value.slice(1) : value;
+
+  return `${baseUrl}${cleanUsername}`;
+}
 </script>
 
 <template>
-  <div class="social-links-container">
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-      <a
-        v-for="(link, platform) in socialLinks"
-        :key="platform"
-        :href="link"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="social-link-item group"
+  <div class="flex flex-wrap gap-3 mt-2">
+    <a
+      v-for="(link, platform) in socialLinks"
+      :key="platform"
+      :href="buildUrl(platform, link)"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="social-icon-link group"
+      :title="`Visit ${getPlatformDisplayName(platform)}`"
+    >
+      <div
+        class="w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 transform hover:scale-110 shadow-md"
+        :class="getIconBackgroundClass(platform)"
       >
-        <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-          <div
-            class="w-12 h-12 mb-3 flex items-center justify-center rounded-full transition-colors duration-300"
-            :class="getIconBackgroundClass(platform)"
-          >
-            <UIcon
-              :name="getIconName(platform)"
-              class="w-6 h-6 text-white"
-            />
-          </div>
-          <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900 transition-colors duration-300">
-            {{ getPlatformDisplayName(platform) }}
-          </span>
-        </div>
-      </a>
-    </div>
+        <UIcon
+          :name="getIconName(platform)"
+          class="w-5 h-5 text-white"
+        />
+      </div>
+    </a>
   </div>
 </template>
 
-<style scoped lang="scss">
-.social-links-container {
-  @apply max-w-4xl mx-auto p-6;
-}
-
-.social-link-item {
+<style scoped>
+.social-icon-link {
   @apply block no-underline;
 }
 
-.social-link-item:hover {
-  @apply no-underline;
-}
-
-.social-link-item:hover .bg-gradient-to-r {
+.social-icon-link:hover .bg-gradient-to-r {
   background-size: 150% 150%;
   animation: gradient-shift 2s ease infinite;
 }
